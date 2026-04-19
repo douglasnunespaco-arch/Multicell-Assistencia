@@ -1,0 +1,239 @@
+/* ============================================================
+   Multi Cell Assistência Técnica — base.css
+   Tokens e reset. CSS completo premium chega na Fase 2.
+   ============================================================ */
+
+:root {
+    --bg-0:   #0A0A0B;
+    --bg-1:   #111113;
+    --bg-2:   #17171A;
+    --fg-0:   #F5F6F7;
+    --fg-1:   #A7A8AC;
+    --brand:  #14F195;
+    --brand-600: #0FD585;
+    --brand-700: #0BB672;
+    --border: rgba(255,255,255,0.08);
+    --ring:   rgba(20,241,149,0.35);
+
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 8px;
+
+    --font-display: 'Sora', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-body:    'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+[data-theme="light"] {
+    --bg-0: #FFFFFF;
+    --bg-1: #F5F6F7;
+    --bg-2: #FFFFFF;
+    --fg-0: #0A0A0B;
+    --fg-1: #4B4D52;
+    --brand: #0FB878;
+    --brand-600: #0EA86C;
+    --brand-700: #0D955F;
+    --border: rgba(0,0,0,0.08);
+    --ring: rgba(15,184,120,0.35);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+    background: var(--bg-0);
+    color: var(--fg-0);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+a { color: var(--brand); text-decoration: none; }
+h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.02em; margin: 0 0 .4em; }
+img { max-width: 100%; display: block; }
+
+/* ---- Botões base ---- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .85rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color .2s, transform .2s, box-shadow .2s;
+}
+.btn--primary {
+    background: var(--brand);
+    color: #06140C;
+}
+.btn--primary:hover {
+    background: var(--brand-600);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 30px -10px var(--ring);
+}
+.btn--ghost {
+    background: transparent;
+    color: var(--fg-0);
+    border-color: var(--border);
+}
+.btn--ghost:hover { border-color: var(--brand); color: var(--brand); }
+
+/* ---- Welcome Fase 1 ---- */
+.phase1-welcome {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 40px 20px;
+    background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(20,241,149,0.12), transparent 60%),
+        radial-gradient(800px 400px at 0% 110%,  rgba(20,241,149,0.08), transparent 60%),
+        var(--bg-0);
+}
+.phase1-welcome__card {
+    max-width: 640px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 48px 40px;
+    box-shadow: 0 30px 80px -40px rgba(0,0,0,.6);
+}
+.phase1-welcome__eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: .15em;
+    color: var(--brand);
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+.phase1-welcome h1 {
+    font-size: clamp(28px, 4.5vw, 44px);
+    font-weight: 700;
+}
+.phase1-welcome p { color: var(--fg-1); }
+.phase1-welcome ul {
+    list-style: none;
+    padding: 0;
+    margin: 24px 0;
+    display: grid;
+    gap: 8px;
+}
+.phase1-welcome ul li {
+    padding: 12px 16px;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+}
+.phase1-welcome__next {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border);
+    font-size: 14px;
+    color: var(--fg-1);
+}
+
+/* ---- Páginas de erro ---- */
+.error-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    background: var(--bg-0);
+}
+.error-page__code {
+    font-family: var(--font-display);
+    font-size: clamp(80px, 15vw, 160px);
+    font-weight: 700;
+    color: var(--brand);
+    line-height: 1;
+}
+.error-page h1 {
+    font-size: clamp(24px, 3.5vw, 36px);
+    margin-top: 12px;
+}
+.error-page p { color: var(--fg-1); max-width: 420px; margin: 8px auto 24px; }
+
+/* ---- Instalador ---- */
+.install-shell {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 40px 20px;
+    background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(20,241,149,0.12), transparent 60%),
+        var(--bg-0);
+}
+.install-card {
+    width: 100%;
+    max-width: 560px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 40px;
+}
+.install-card h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+.install-card .eyebrow {
+    font-size: 12px;
+    letter-spacing: .15em;
+    color: var(--brand);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.install-card .field {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+.install-card label {
+    font-size: 13px;
+    color: var(--fg-1);
+}
+.install-card input {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-1);
+    color: var(--fg-0);
+    border: 1px solid var(--border);
+    font-family: inherit;
+    font-size: 14px;
+}
+.install-card input:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px var(--ring);
+}
+.install-card .alert {
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+    font-size: 14px;
+    border: 1px solid var(--border);
+}
+.install-card .alert--error   { border-color: #FF5A5F; color: #FF9499; background: rgba(255,90,95,.06); }
+.install-card .alert--success { border-color: var(--brand); color: var(--brand); background: rgba(20,241,149,.06); }
+.install-card .alert--warning { border-color: #FFB547; color: #FFB547; background: rgba(255,181,71,.06); }
+.install-card .row2 { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+@media (max-width: 520px) {
+    .install-card .row2 { grid-template-columns: 1fr; }
+    .install-card { padding: 28px 20px; }
+}
+.install-card .submit {
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+}
+.install-steps {
+    list-style: decimal;
+    padding-left: 18px;
+    color: var(--fg-1);
+    font-size: 14px;
+    margin: 16px 0 0;
+}
+.install-steps li { margin-bottom: 6px; }

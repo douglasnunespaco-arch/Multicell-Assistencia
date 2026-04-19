@@ -1,0 +1,77 @@
+# ==============================================================
+# Multi Cell Assistência Técnica — front controller + segurança
+# Compatível com Apache em shared hosting (Hostinger)
+# ==============================================================
+
+# -------- Opções básicas --------
+Options -Indexes -MultiViews
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Forçar HTTPS (comente se estiver testando em HTTP local)
+    # RewriteCond %{HTTPS} !=on
+    # RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+    # RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Bloquear acesso direto a arquivos/pastas sensíveis
+    RewriteRule ^\.git(/|$)         - [F,L]
+    RewriteRule ^app(/|$)           - [F,L]
+    RewriteRule ^config(/|$)        - [F,L]
+    RewriteRule ^storage(/|$)       - [F,L]
+    RewriteRule ^database(/|$)      - [F,L]
+    RewriteRule \.(sql|md|log|lock|ini|bak|swp)$ - [F,L]
+    RewriteRule (^|/)\.             - [F,L]
+
+    # Permitir arquivos físicos em /assets e /uploads sem passar pelo router
+    RewriteCond %{REQUEST_URI} ^/(assets|uploads)/ [OR]
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -l
+    RewriteRule ^ - [L]
+
+    # Permitir install.php direto enquanto não instalado
+    RewriteRule ^install\.php$ - [L]
+
+    # Tudo o resto -> front controller
+    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+</IfModule>
+
+# -------- Cache de estáticos --------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css                "access plus 30 days"
+    ExpiresByType application/javascript  "access plus 30 days"
+    ExpiresByType image/png               "access plus 60 days"
+    ExpiresByType image/jpeg              "access plus 60 days"
+    ExpiresByType image/webp              "access plus 60 days"
+    ExpiresByType image/svg+xml           "access plus 60 days"
+    ExpiresByType font/woff2              "access plus 180 days"
+    ExpiresByType font/woff               "access plus 180 days"
+</IfModule>
+
+# -------- Compressão --------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css \
+        text/javascript application/javascript application/json application/xml \
+        image/svg+xml font/ttf font/otf
+</IfModule>
+
+# -------- Security headers --------
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    Header unset X-Powered-By
+    Header always unset Server
+</IfModule>
+
+# -------- PHP hardening --------
+<IfModule mod_php.c>
+    php_flag display_errors Off
+    php_flag expose_php Off
+</IfModule>
+
+# -------- Páginas de erro --------
+ErrorDocument 404 /index.php?url=_errors/404
+ErrorDocument 500 /index.php?url=_errors/500

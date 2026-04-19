@@ -1,0 +1,22 @@
+# /uploads: apenas arquivos de imagem podem ser servidos.
+# Nunca executar PHP ou qualquer script nesta pasta.
+Options -Indexes -ExecCGI
+RemoveHandler .php .phtml .phar .pl .py .sh .cgi
+
+<FilesMatch "\.(php|phtml|phar|pl|py|sh|cgi|htaccess|ini)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<IfModule mod_mime.c>
+    AddType image/jpeg .jpg .jpeg
+    AddType image/png  .png
+    AddType image/webp .webp
+    AddType image/gif  .gif
+    AddType image/svg+xml .svg
+</IfModule>
