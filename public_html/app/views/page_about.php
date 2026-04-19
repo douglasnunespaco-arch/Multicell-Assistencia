@@ -1,3 +1,0 @@
-<?php $aboutBlocks = fetch_all_active('about_blocks'); ?>
-<section class="page-hero compact"><div class="container"><span class="eyebrow">Sobre a loja</span><h1>Uma estrutura feita para vender, atender e acompanhar resultados.</h1><p>A Multi Cell combina assistência técnica, produtos e promoções em uma presença digital organizada.</p></div></section>
-<section class="section"><div class="container grid cards-3"><?php foreach ($aboutBlocks as $item): ?><article class="card"><h2><?= htmlspecialchars($item['title'] ?? '') ?></h2><p><?= nl2br(htmlspecialchars($item['content'] ?? '')) ?></p></article><?php endforeach; ?></div></section>
