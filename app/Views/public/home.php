@@ -24,6 +24,8 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
             if (!empty($s['image_path'])) {
                 $bgStyle = 'background-image:url(' . e('/' . ltrim($s['image_path'], '/')) . ');';
             } else {
+                // Slide sem image_path: imagem premium coerente (stock) + variante de gradiente como apoio
+                $bgStyle = 'background-image:url(' . e(hero_slide_image($i + 1)) . ');';
                 $variantClass = $fallbacks[$i % count($fallbacks)];
             }
             $ctaUrl   = !empty($s['cta_url']) ? $s['cta_url'] : whatsapp_link('home_hero_slide_' . ($i + 1));
@@ -38,6 +40,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
             <div class="hero__slide <?= $variantClass ?> <?= $i === 0 ? 'is-active' : '' ?>"
                  data-slide-index="<?= $i ?>"
                  style="<?= $bgStyle ?>">
+                <?= circuit_overlay('hero') ?>
                 <div class="container hero__content">
                     <div class="hero__text">
                         <span class="hero__eyebrow">Assistência técnica especializada</span>
@@ -52,7 +55,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
                             <a href="<?= e($ctaUrl) ?>" class="btn btn--primary btn--lg"
                                data-track="whatsapp_click" data-track-source="home_hero_slide_<?= (int) ($i + 1) ?>"
                                data-track-ref-type="slide" data-track-ref-id="<?= (int) ($s['id'] ?? 0) ?>">
-                                <?= icon('phone', 18) ?> <?= e($ctaLabel) ?>
+                                <?= icon('whatsapp', 18) ?> <?= e($ctaLabel) ?>
                             </a>
                             <a href="<?= e($secondaryUrl) ?>" class="btn btn--ghost btn--lg"
                                data-track="<?= e($secondaryTrack) ?>" data-track-source="<?= e($secondarySrc) ?>">
@@ -60,10 +63,10 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
                             </a>
                         </div>
                         <div class="hero__trust">
-                            <span class="hero__trust-item"><?= icon('shield', 16) ?> Garantia de 90 dias</span>
-                            <span class="hero__trust-item"><?= icon('check', 16) ?> Orçamento grátis</span>
+                            <span class="hero__trust-item"><?= icon('shield-check', 16) ?> Garantia de 90 dias</span>
+                            <span class="hero__trust-item"><?= icon('check-circle', 16) ?> Orçamento grátis</span>
                             <span class="hero__trust-item"><?= icon('award', 16) ?> Técnicos certificados</span>
-                            <span class="hero__trust-item"><?= icon('bolt', 16) ?> Atendimento rápido</span>
+                            <span class="hero__trust-item"><?= icon('zap', 16) ?> Atendimento rápido</span>
                         </div>
                     </div>
                 </div>
@@ -83,10 +86,10 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
                 </div>
                 <div class="hero__arrows">
                     <button type="button" class="hero__arrow" data-slide-prev aria-label="Slide anterior">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                        <?= icon('chevron-left', 18) ?>
                     </button>
                     <button type="button" class="hero__arrow" data-slide-next aria-label="Próximo slide">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        <?= icon('chevron-right', 18) ?>
                     </button>
                 </div>
             </div>
@@ -196,7 +199,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
         </div>
         <div class="diffs-grid">
             <div class="diff" data-reveal>
-                <div class="diff__icon"><?= icon('shield', 22) ?></div>
+                <div class="diff__icon"><?= icon('shield-check', 22) ?></div>
                 <h3>Garantia real</h3>
                 <p>Toda peça e serviço com garantia registrada.</p>
             </div>
@@ -206,7 +209,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
                 <p>Originais ou OEM premium, testadas antes da entrega.</p>
             </div>
             <div class="diff" data-reveal>
-                <div class="diff__icon"><?= icon('chip', 22) ?></div>
+                <div class="diff__icon"><?= icon('cpu', 22) ?></div>
                 <h3>Técnicos experientes</h3>
                 <p>Equipe treinada em micro-solda e software.</p>
             </div>
@@ -242,8 +245,8 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
                     <div><strong>Atendimento</strong><span><?= e(\App\Models\Setting::get('phone', 'Consulte no WhatsApp')) ?></span></div>
                 </div>
                 <div class="locate-card__ctas">
-                    <a href="/go/map" class="btn btn--ghost btn--sm" data-track="map_click" data-track-source="home_location"><?= icon('pin', 16) ?> Ver no mapa</a>
-                    <a href="<?= whatsapp_link('home_location') ?>" class="btn btn--primary btn--sm" data-track="whatsapp_click" data-track-source="home_location"><?= icon('phone', 16) ?> Falar no WhatsApp</a>
+                    <a href="/go/map" class="btn btn--ghost btn--sm" data-track="map_click" data-track-source="home_location"><?= icon('map', 16) ?> Ver no mapa</a>
+                    <a href="<?= whatsapp_link('home_location') ?>" class="btn btn--primary btn--sm" data-track="whatsapp_click" data-track-source="home_location"><?= icon('whatsapp', 16) ?> Falar no WhatsApp</a>
                 </div>
             </div>
             <div class="map-wrap" data-reveal>
@@ -260,6 +263,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
 
 <!-- ================= CTA FINAL ================= -->
 <section class="final-cta">
+    <?= circuit_overlay('final-cta') ?>
     <div class="container">
         <span class="eyebrow" data-reveal>Atendimento rápido</span>
         <h2 data-reveal>Seu celular com problema? <em>A gente resolve hoje.</em></h2>
@@ -267,11 +271,11 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
         <div class="final-cta__ctas" data-reveal>
             <a href="<?= whatsapp_link('home_final_cta') ?>" class="btn btn--primary btn--lg"
                data-track="whatsapp_click" data-track-source="home_final_cta">
-                <?= icon('phone', 18) ?> Falar no WhatsApp agora
+                <?= icon('whatsapp', 18) ?> Falar no WhatsApp agora
             </a>
             <a href="/reservar" class="btn btn--ghost btn--lg"
                data-track="cta_click" data-track-source="home_final_reserve">
-                Reservar horário
+                <?= icon('calendar', 18) ?> Reservar horário
             </a>
         </div>
     </div>

@@ -15,17 +15,15 @@ if (!empty($promo['ends_at'])) {
     } catch (\Throwable $e) {}
 }
 $img = $promo['image_path'] ?? '';
+$imgSrc = $img ? '/' . ltrim($img, '/') : promo_image($promo['slug'] ?? null);
 ?>
 <article class="promo-card" data-reveal>
     <div class="promo-card__media">
-        <?php if ($img): ?>
-            <img src="<?= e('/' . ltrim($img, '/')) ?>" alt="<?= e($promo['title']) ?>" style="width:100%;height:100%;object-fit:cover;">
-        <?php else: ?>
-            <?= icon('tag', 52) ?>
-        <?php endif; ?>
+        <img src="<?= e($imgSrc) ?>" alt="<?= e($promo['title']) ?>" loading="lazy">
+        <span class="promo-card__tag"><?= icon('tag', 14) ?> Promo</span>
     </div>
     <div class="promo-card__body">
-        <?php if ($deadline): ?><span class="promo-card__deadline"><?= e($deadline) ?></span><?php endif; ?>
+        <?php if ($deadline): ?><span class="promo-card__deadline"><?= icon('clock', 12, 'inline-ic') ?> <?= e($deadline) ?></span><?php endif; ?>
         <h3 class="promo-card__title"><?= e($promo['title']) ?></h3>
         <?php if (!empty($promo['description'])): ?>
             <p style="margin:0;color:var(--fg-1);font-size:14px;"><?= e($promo['description']) ?></p>
@@ -42,7 +40,7 @@ $img = $promo['image_path'] ?? '';
             <a href="<?= e($waHref) ?>" class="btn btn--primary"
                data-track="promotion_click" data-track-ref-type="promotion" data-track-ref-id="<?= (int) $promo['id'] ?>"
                data-track-source="card_cta">
-                <?= e($promo['cta_label'] ?: 'Aproveitar no WhatsApp') ?>
+                <?= icon('whatsapp', 16) ?> <?= e($promo['cta_label'] ?: 'Aproveitar no WhatsApp') ?>
             </a>
             <a href="<?= e($href) ?>" class="btn btn--ghost">Ver detalhes</a>
         </div>

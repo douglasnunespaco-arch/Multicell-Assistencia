@@ -27,8 +27,8 @@
         <h2 data-reveal>Não encontrou o que precisa?</h2>
         <p data-reveal>Fale com nossa equipe — temos técnicos prontos para avaliar seu caso.</p>
         <div class="final-cta__ctas" data-reveal>
-            <a href="<?= whatsapp_link('services_cta') ?>" class="btn btn--primary btn--lg" data-track="whatsapp_click" data-track-source="services_cta"><?= icon('phone', 18) ?> Chamar no WhatsApp</a>
-            <a href="/reservar" class="btn btn--ghost btn--lg" data-track="cta_click" data-track-source="services_reserve">Reservar atendimento</a>
+            <a href="<?= whatsapp_link('services_cta') ?>" class="btn btn--primary btn--lg" data-track="whatsapp_click" data-track-source="services_cta"><?= icon('whatsapp', 18) ?> Chamar no WhatsApp</a>
+            <a href="/reservar" class="btn btn--ghost btn--lg" data-track="cta_click" data-track-source="services_reserve"><?= icon('calendar', 18) ?> Reservar atendimento</a>
         </div>
     </div>
 </section>

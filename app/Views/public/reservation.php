@@ -66,14 +66,14 @@
                 <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;align-items:center;">
                     <button type="submit" class="btn btn--primary btn--lg"
                             data-track="cta_click" data-track-source="reserve_submit">
-                        <?= icon('phone', 18) ?> Reservar e abrir WhatsApp
+                        <?= icon('whatsapp', 18) ?> Reservar e abrir WhatsApp
                     </button>
                     <small style="color:var(--fg-2);font-size:12px;max-width:260px;">
                         Seus dados serão enviados apenas à nossa equipe para agendar o atendimento.
                     </small>
                 </div>
-                <p style="color:var(--warning);font-size:13px;margin-top:18px;">
-                    <?= icon('clock', 14) ?> O envio completo do formulário é processado na próxima fase. Por enquanto, use o botão do WhatsApp para agilizar o contato.
+                <p style="color:var(--warning);font-size:13px;margin-top:18px;display:flex;gap:8px;align-items:center;">
+                    <?= icon('clock', 14) ?> <span>O envio completo do formulário é processado na próxima fase. Por enquanto, use o botão do WhatsApp para agilizar o contato.</span>
                 </p>
             </form>
 
@@ -81,7 +81,7 @@
                 <h3>Por que reservar?</h3>
                 <ul>
                     <li><?= icon('clock', 18) ?> <span>Atendimento ágil, sem espera.</span></li>
-                    <li><?= icon('shield', 18) ?> <span>Orçamento grátis antes de iniciar.</span></li>
+                    <li><?= icon('shield-check', 18) ?> <span>Orçamento grátis antes de iniciar.</span></li>
                     <li><?= icon('award', 18) ?> <span>Garantia de 90 dias em serviços.</span></li>
                     <li><?= icon('heart', 18) ?> <span>Atendimento humano e transparente.</span></li>
                 </ul>
@@ -95,7 +95,7 @@
                     </div>
                 <?php endif; ?>
                 <a href="<?= whatsapp_link('reserve_aside') ?>" class="btn btn--primary btn--block" data-track="whatsapp_click" data-track-source="reserve_aside">
-                    <?= icon('phone', 16) ?> Prefiro já falar no WhatsApp
+                    <?= icon('whatsapp', 16) ?> Prefiro já falar no WhatsApp
                 </a>
             </aside>
         </div>

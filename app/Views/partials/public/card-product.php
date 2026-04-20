@@ -5,17 +5,14 @@ $price  = $product['price'] ?? null;
 $promo  = $product['promo_price'] ?? null;
 $hasPromo = $promo !== null && $price !== null && (float) $promo < (float) $price;
 $img = $product['image_path'] ?? '';
+$imgSrc = $img ? '/' . ltrim($img, '/') : product_image($product['category'] ?? null, $product['slug'] ?? null);
 $msg = 'Olá! Tenho interesse no produto: ' . $product['name'] . '. Poderia me passar mais informações?';
 $waHref = '/go/whatsapp?src=product_card&msg=' . urlencode($msg);
 ?>
 <article class="card" data-reveal>
     <?php if ($hasPromo): ?><span class="card__badge">Promo</span><?php endif; ?>
-    <div class="card__media <?= $img ? '' : 'card__media--empty' ?>">
-        <?php if ($img): ?>
-            <img src="<?= e('/' . ltrim($img, '/')) ?>" alt="<?= e($product['name']) ?>" loading="lazy">
-        <?php else: ?>
-            <?= icon('image', 44) ?>
-        <?php endif; ?>
+    <div class="card__media">
+        <img src="<?= e($imgSrc) ?>" alt="<?= e($product['name']) ?>" loading="lazy">
     </div>
     <div class="card__body">
         <h3 class="card__title"><?= e($product['name']) ?></h3>
@@ -34,7 +31,7 @@ $waHref = '/go/whatsapp?src=product_card&msg=' . urlencode($msg);
             <a href="<?= e($waHref) ?>" class="btn btn--primary btn--sm"
                data-track="product_click" data-track-ref-type="product" data-track-ref-id="<?= (int) $product['id'] ?>"
                data-track-source="card">
-                Consultar
+                <?= icon('whatsapp', 14) ?> Consultar
             </a>
         </div>
     </div>

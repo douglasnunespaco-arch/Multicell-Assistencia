@@ -27,13 +27,13 @@
                     <div><strong>Telefone</strong><span><?= e(\App\Models\Setting::get('phone', 'Consulte no WhatsApp')) ?></span></div>
                 </div>
                 <div class="locate-card__row">
-                    <?= icon('users', 20) ?>
+                    <?= icon('mail', 20) ?>
                     <div><strong>E-mail</strong><span><?= e(\App\Models\Setting::get('email', 'contato@multicell.local')) ?></span></div>
                 </div>
                 <div class="locate-card__ctas">
-                    <a href="<?= whatsapp_link('contact_cta') ?>" class="btn btn--primary" data-track="whatsapp_click" data-track-source="contact_cta"><?= icon('phone', 16) ?> WhatsApp</a>
-                    <a href="/go/map" class="btn btn--ghost" data-track="map_click" data-track-source="contact_map"><?= icon('pin', 16) ?> Ver no mapa</a>
-                    <a href="/reservar" class="btn btn--ghost">Reservar atendimento</a>
+                    <a href="<?= whatsapp_link('contact_cta') ?>" class="btn btn--primary" data-track="whatsapp_click" data-track-source="contact_cta"><?= icon('whatsapp', 16) ?> WhatsApp</a>
+                    <a href="/go/map" class="btn btn--ghost" data-track="map_click" data-track-source="contact_map"><?= icon('map', 16) ?> Ver no mapa</a>
+                    <a href="/reservar" class="btn btn--ghost"><?= icon('calendar', 16) ?> Reservar atendimento</a>
                 </div>
             </div>
             <div class="map-wrap" data-reveal>
