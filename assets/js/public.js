@@ -62,6 +62,8 @@
     if (slider) {
         var slides = slider.querySelectorAll('.hero__slide');
         var dots   = slider.querySelectorAll('.hero__dots button');
+        var prev   = slider.querySelector('[data-slide-prev]');
+        var next   = slider.querySelector('[data-slide-next]');
         var cur = 0, timer = null;
         var autoplayMs = parseInt(slider.getAttribute('data-autoplay') || '6000', 10);
 
@@ -70,20 +72,37 @@
             slides.forEach(function (s, idx) { s.classList.toggle('is-active', idx === cur); });
             dots.forEach(function (d, idx) { d.classList.toggle('is-active', idx === cur); });
         }
-        function next() { go(cur + 1); }
+        function nextSlide() { go(cur + 1); }
+        function prevSlide() { go(cur - 1); }
         function start() {
             if (slides.length <= 1) return;
             stop();
-            timer = setInterval(next, autoplayMs);
+            timer = setInterval(nextSlide, autoplayMs);
         }
         function stop() { if (timer) { clearInterval(timer); timer = null; } }
 
         dots.forEach(function (d, idx) {
             d.addEventListener('click', function () { go(idx); start(); });
         });
+        if (prev) prev.addEventListener('click', function () { prevSlide(); start(); });
+        if (next) next.addEventListener('click', function () { nextSlide(); start(); });
+
+        // Swipe touch básico
+        var startX = null;
+        slider.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+        slider.addEventListener('touchend', function (e) {
+            if (startX === null) return;
+            var dx = e.changedTouches[0].clientX - startX;
+            if (Math.abs(dx) > 40) {
+                if (dx < 0) nextSlide(); else prevSlide();
+                start();
+            }
+            startX = null;
+        });
+
         slider.addEventListener('mouseenter', stop);
         slider.addEventListener('mouseleave', start);
-        // Pausa quando fora da viewport
+
         if ('IntersectionObserver' in window) {
             var io = new IntersectionObserver(function (entries) {
                 entries.forEach(function (ent) { ent.isIntersecting ? start() : stop(); });

@@ -4,74 +4,94 @@ $avgRating    = \App\Models\Setting::get('avg_rating', '4.9');
 $totalReviews = \App\Models\Setting::get('total_reviews', '120');
 ?>
 
-<!-- ================= HERO ================= -->
-<section class="hero" aria-label="Apresentação">
-    <div class="container">
-        <div class="hero__slides" data-hero-slider data-autoplay="6500">
-            <?php if (!empty($slides)): ?>
-                <?php foreach ($slides as $i => $s): ?>
-                    <div class="hero__slide <?= $i === 0 ? 'is-active' : '' ?>">
-                        <div class="hero__grid">
-                            <div class="hero__content">
-                                <span class="eyebrow" data-reveal>Assistência técnica especializada</span>
-                                <h1 data-reveal>
-                                    <?= e($s['title']) ?>
-                                    <?php if (!empty($s['subtitle'])): ?>
-                                        <br><em style="font-size:.65em;font-weight:400;color:var(--fg-1);letter-spacing:-0.01em;"><?= e($s['subtitle']) ?></em>
-                                    <?php endif; ?>
-                                </h1>
-                                <p class="lede" data-reveal>Troca de tela, bateria, placa e acessórios em Várzea Grande/MT. Orçamento grátis, peças selecionadas e garantia real.</p>
-                                <div class="hero__ctas" data-reveal>
-                                    <a href="<?= whatsapp_link('home_hero_slide_' . ($i + 1)) ?>" class="btn btn--primary btn--lg"
-                                       data-track="whatsapp_click" data-track-source="home_hero_slide_<?= (int) ($i + 1) ?>"
-                                       data-track-ref-type="slide" data-track-ref-id="<?= (int) $s['id'] ?>">
-                                        <?= icon('phone', 18) ?> Chamar no WhatsApp
-                                    </a>
-                                    <a href="/reservar" class="btn btn--ghost btn--lg"
-                                       data-track="cta_click" data-track-source="home_hero_reserve">
-                                        Reservar atendimento
-                                    </a>
-                                </div>
-                                <div class="hero__trust" data-reveal>
-                                    <div class="hero__trust-item"><?= icon('shield', 18) ?> Garantia de 90 dias</div>
-                                    <div class="hero__trust-item"><?= icon('check', 18) ?> Orçamento grátis</div>
-                                    <div class="hero__trust-item"><?= icon('award', 18) ?> Técnicos certificados</div>
-                                    <div class="hero__trust-item"><?= icon('bolt', 18) ?> Atendimento rápido</div>
-                                </div>
-                            </div>
-                            <div class="hero__visual" data-reveal>
-                                <?php if (!empty($s['image_path'])): ?>
-                                    <img src="<?= e('/' . ltrim($s['image_path'], '/')) ?>" alt="<?= e($s['title']) ?>" class="hero__visual-img">
-                                <?php endif; ?>
-                                <div class="hero__visual-badge"><?= icon('bolt', 16) ?> Entrega em até 24h</div>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-                <?php if (count($slides) > 1): ?>
-                    <div class="hero__dots" role="tablist" aria-label="Slides">
-                        <?php foreach ($slides as $i => $_): ?>
-                            <button type="button" class="<?= $i === 0 ? 'is-active' : '' ?>" aria-label="Slide <?= $i + 1 ?>"></button>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
-            <?php else: ?>
-                <!-- Fallback sem slides configurados -->
-                <div class="hero__grid">
-                    <div>
-                        <span class="eyebrow">Assistência técnica especializada</span>
-                        <h1>Seu celular em boas <em>mãos</em>.</h1>
-                        <p class="lede">Reparo rápido, peças originais e garantia real. Atendimento em Várzea Grande/MT.</p>
+<!-- ================= HERO FULL-BLEED ================= -->
+<section class="hero" aria-label="Apresentação" data-hero-slider data-autoplay="6500">
+    <div class="hero__track">
+        <?php
+        $fallbacks = ['hero__slide--v1', 'hero__slide--v2', 'hero__slide--v3'];
+        $slidesList = !empty($slides) ? $slides : [[
+            'id' => 0,
+            'title' => 'Seu celular em boas mãos.',
+            'subtitle' => 'Reparo rápido, peças originais e garantia real em Várzea Grande/MT.',
+            'image_path' => '',
+            'cta_label' => 'Chamar no WhatsApp',
+            'cta_url' => '',
+        ]];
+        ?>
+        <?php foreach ($slidesList as $i => $s):
+            $bgStyle = '';
+            $variantClass = '';
+            if (!empty($s['image_path'])) {
+                $bgStyle = 'background-image:url(' . e('/' . ltrim($s['image_path'], '/')) . ');';
+            } else {
+                $variantClass = $fallbacks[$i % count($fallbacks)];
+            }
+            $ctaUrl   = !empty($s['cta_url']) ? $s['cta_url'] : whatsapp_link('home_hero_slide_' . ($i + 1));
+            $ctaLabel = !empty($s['cta_label']) ? $s['cta_label'] : 'Chamar no WhatsApp';
+            // Secundário inteligente: se o primário já é reservar, secundário vira WhatsApp (e vice-versa)
+            $isReserve = str_contains(strtolower($ctaUrl), '/reservar');
+            $secondaryUrl   = $isReserve ? whatsapp_link('home_hero_slide_' . ($i + 1) . '_alt') : '/reservar';
+            $secondaryLabel = $isReserve ? 'Chamar no WhatsApp' : 'Reservar atendimento';
+            $secondaryTrack = $isReserve ? 'whatsapp_click' : 'cta_click';
+            $secondarySrc   = $isReserve ? 'home_hero_alt_wa' : 'home_hero_reserve';
+        ?>
+            <div class="hero__slide <?= $variantClass ?> <?= $i === 0 ? 'is-active' : '' ?>"
+                 data-slide-index="<?= $i ?>"
+                 style="<?= $bgStyle ?>">
+                <div class="container hero__content">
+                    <div class="hero__text">
+                        <span class="hero__eyebrow">Assistência técnica especializada</span>
+                        <h1>
+                            <?= e($s['title']) ?>
+                            <?php if (!empty($s['subtitle'])): ?>
+                                <small><?= e($s['subtitle']) ?></small>
+                            <?php endif; ?>
+                        </h1>
+                        <p class="hero__lede">Troca de tela, bateria, placa e acessórios — com orçamento grátis e garantia real. Atendimento em Várzea Grande/MT.</p>
                         <div class="hero__ctas">
-                            <a href="<?= whatsapp_link('home_hero_fallback') ?>" class="btn btn--primary btn--lg" data-track="whatsapp_click" data-track-source="home_hero_fallback"><?= icon('phone', 18) ?> Chamar no WhatsApp</a>
-                            <a href="/reservar" class="btn btn--ghost btn--lg">Reservar atendimento</a>
+                            <a href="<?= e($ctaUrl) ?>" class="btn btn--primary btn--lg"
+                               data-track="whatsapp_click" data-track-source="home_hero_slide_<?= (int) ($i + 1) ?>"
+                               data-track-ref-type="slide" data-track-ref-id="<?= (int) ($s['id'] ?? 0) ?>">
+                                <?= icon('phone', 18) ?> <?= e($ctaLabel) ?>
+                            </a>
+                            <a href="<?= e($secondaryUrl) ?>" class="btn btn--ghost btn--lg"
+                               data-track="<?= e($secondaryTrack) ?>" data-track-source="<?= e($secondarySrc) ?>">
+                                <?= e($secondaryLabel) ?>
+                            </a>
+                        </div>
+                        <div class="hero__trust">
+                            <span class="hero__trust-item"><?= icon('shield', 16) ?> Garantia de 90 dias</span>
+                            <span class="hero__trust-item"><?= icon('check', 16) ?> Orçamento grátis</span>
+                            <span class="hero__trust-item"><?= icon('award', 16) ?> Técnicos certificados</span>
+                            <span class="hero__trust-item"><?= icon('bolt', 16) ?> Atendimento rápido</span>
                         </div>
                     </div>
-                    <div class="hero__visual"><div class="hero__visual-badge"><?= icon('bolt', 16) ?> Entrega em até 24h</div></div>
                 </div>
-            <?php endif; ?>
-        </div>
+            </div>
+        <?php endforeach; ?>
     </div>
+
+    <?php if (count($slidesList) > 1): ?>
+        <div class="hero__nav">
+            <div class="container">
+                <div class="hero__dots" role="tablist" aria-label="Slides">
+                    <?php foreach ($slidesList as $i => $_): ?>
+                        <button type="button" class="<?= $i === 0 ? 'is-active' : '' ?>"
+                                aria-label="Ir para slide <?= $i + 1 ?>"
+                                data-slide-target="<?= $i ?>"></button>
+                    <?php endforeach; ?>
+                </div>
+                <div class="hero__arrows">
+                    <button type="button" class="hero__arrow" data-slide-prev aria-label="Slide anterior">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <button type="button" class="hero__arrow" data-slide-next aria-label="Próximo slide">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
 </section>
 
 <!-- ================= SERVIÇOS ================= -->
