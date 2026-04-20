@@ -54,11 +54,3 @@ $router->get('/_errors/500', function () {
  * Fase 6 — SEO
  *   $router->get('/sitemap.xml',                'Public\\HomeController@sitemap');
  */
-tController@whatsapp');
- *   $router->get('/go/phone',                   'Public\\RedirectController@phone');
- *   $router->get('/go/map',                     'Public\\RedirectController@map');
- *   $router->post('/api/track',                 'Public\\TrackController@store');
- *
- * Fase 6 — SEO
- *   $router->get('/sitemap.xml',                'Public\\HomeController@sitemap');
- */
