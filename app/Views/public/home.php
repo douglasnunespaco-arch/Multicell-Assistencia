@@ -5,7 +5,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
 ?>
 
 <!-- ================= HERO FULL-BLEED ================= -->
-<section class="hero" aria-label="Apresentação" data-hero-slider data-autoplay="6500">
+<section id="hero" class="hero" aria-label="Apresentação" data-hero-slider data-autoplay="6500">
     <div class="hero__track">
         <?php
         $fallbacks = ['hero__slide--v1', 'hero__slide--v2', 'hero__slide--v3'];
@@ -98,7 +98,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
 </section>
 
 <!-- ================= SERVIÇOS ================= -->
-<section class="section">
+<section id="services" class="section">
     <div class="container">
         <div class="section__head" data-reveal>
             <span class="eyebrow">Serviços</span>
@@ -123,7 +123,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
 </section>
 
 <!-- ================= PRODUTOS ================= -->
-<section class="section section--tight" style="background:var(--bg-1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+<section id="products" class="section section--tight" style="background:var(--bg-1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
     <div class="container">
         <div class="section__head" data-reveal>
             <span class="eyebrow">Loja</span>
@@ -149,7 +149,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
 
 <!-- ================= PROMOÇÕES ================= -->
 <?php if (!empty($promotions)): ?>
-<section class="section">
+<section id="promotions" class="section">
     <div class="container">
         <div class="section__head" data-reveal>
             <span class="eyebrow">Promoções ativas</span>
@@ -167,7 +167,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
 
 <!-- ================= PROVA SOCIAL ================= -->
 <?php if (!empty($testimonials)): ?>
-<section class="section" style="background:var(--bg-1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+<section id="testimonials" class="section" style="background:var(--bg-1);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
     <div class="container">
         <div class="testimonials-head" data-reveal>
             <div>
@@ -191,7 +191,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
 <?php endif; ?>
 
 <!-- ================= DIFERENCIAIS ================= -->
-<section class="section diffs">
+<section id="diffs" class="section diffs">
     <div class="container">
         <div class="section__head" data-reveal>
             <span class="eyebrow">Por que a Multi Cell</span>
@@ -224,7 +224,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
 
 <!-- ================= LOCALIZAÇÃO ================= -->
 <?php if (!empty($branch)): ?>
-<section class="section">
+<section id="units" class="section">
     <div class="container">
         <div class="section__head" data-reveal>
             <span class="eyebrow">Onde estamos</span>
@@ -262,7 +262,7 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
 <?php endif; ?>
 
 <!-- ================= CTA FINAL ================= -->
-<section class="final-cta">
+<section id="cta" class="final-cta">
     <?= circuit_overlay('final-cta') ?>
     <div class="container">
         <span class="eyebrow" data-reveal>Atendimento rápido</span>

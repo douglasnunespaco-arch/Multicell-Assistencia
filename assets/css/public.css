@@ -1290,6 +1290,9 @@ button { font-family: inherit; }
     margin: 0;
 }
 
+/* ---------- Preview/âncoras: compensar header fixo (72px) ---------- */
+section[id] { scroll-margin-top: 80px; }
+
 
 /* ---------- Instalador + erro (mantidos da Fase 1) ---------- */
 .phase1-welcome { display: none; } /* stub Fase 1 — ocultado após Fase 2 */

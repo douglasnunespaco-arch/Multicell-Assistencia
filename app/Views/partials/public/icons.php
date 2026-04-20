@@ -279,3 +279,60 @@ SVG;
         return $svg;
     }
 }
+
+/* =============================================================================
+ *  PREVIEW URL HELPER (Fase 2.5 · rota A · econômica)
+ *  -----------------------------------------------------------------------------
+ *  Gera URL pública para preview por contexto. Usa rotas reais quando existem;
+ *  senão, faz fallback para a home com âncora da seção. Respeita APP_URL
+ *  (via url() do Core/Helpers.php) para produção / shared hosting.
+ *
+ *  Uso:
+ *    preview_url('home')                          → /
+ *    preview_url('hero')                          → /#hero
+ *    preview_url('services')                      → /assistencia-tecnica
+ *    preview_url('service', 'troca-de-tela')      → /assistencia-tecnica/troca-de-tela
+ *    preview_url('products')                      → /produtos
+ *    preview_url('product', 'capa-anti-impacto')  → /produtos/capa-anti-impacto
+ *    preview_url('promotions')                    → /promocoes
+ *    preview_url('promotion', 'combo-total')      → /promocoes/combo-total
+ *    preview_url('testimonials')                  → /#testimonials
+ *    preview_url('diffs')                         → /#diffs
+ *    preview_url('units')                         → /contato#units
+ *    preview_url('about')                         → /sobre
+ *    preview_url('contact')                       → /contato
+ *    preview_url('reservation')                   → /reservar
+ *    preview_url('links')                         → /links
+ *    preview_url('slide')                         → /#hero
+ * ========================================================================== */
+if (!function_exists('preview_url')) {
+    function preview_url(string $context, ?string $slug = null): string
+    {
+        $base = function_exists('url') ? url('/') : '/';
+        $base = rtrim($base, '/');
+        $slug = $slug ? trim($slug, '/') : null;
+
+        switch ($context) {
+            case 'home':                                   return $base . '/';
+            case 'services':                               return $base . '/assistencia-tecnica';
+            case 'service':
+                return $slug ? $base . '/assistencia-tecnica/' . $slug : $base . '/assistencia-tecnica';
+            case 'products':                               return $base . '/produtos';
+            case 'product':
+                return $slug ? $base . '/produtos/' . $slug : $base . '/produtos';
+            case 'promotions':                             return $base . '/promocoes';
+            case 'promotion':
+                return $slug ? $base . '/promocoes/' . $slug : $base . '/promocoes';
+            case 'about':                                  return $base . '/sobre';
+            case 'contact':                                return $base . '/contato';
+            case 'reservation': case 'reserve':            return $base . '/reservar';
+            case 'links': case 'bio':                      return $base . '/links';
+            case 'hero': case 'slide': case 'hero_slide':  return $base . '/#hero';
+            case 'testimonials': case 'testimonial':       return $base . '/#testimonials';
+            case 'diffs': case 'differentials':            return $base . '/#diffs';
+            case 'units': case 'unit': case 'branch': case 'branches':
+                return $base . '/contato#units';
+            default:                                       return $base . '/';
+        }
+    }
+}
