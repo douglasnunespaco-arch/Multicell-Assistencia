@@ -1091,7 +1091,7 @@ button { font-family: inherit; }
 /* Theme toggle com ícone Lucide */
 .theme-toggle .icon { width: 18px; height: 18px; }
 
-/* ---------- Circuit overlay (assinatura visual PCB) ---------- */
+/* ---------- Circuit overlay (assinatura visual PCB · refinado Jan/2026) ---------- */
 .circuit-overlay {
     position: absolute;
     inset: 0;
@@ -1100,13 +1100,16 @@ button { font-family: inherit; }
     pointer-events: none;
     color: var(--brand);
     z-index: 2;
-    opacity: .08;
+    opacity: .045;                    /* mais sutil · traços finos */
     mix-blend-mode: screen;
+    stroke-width: 0.6;                /* afina traços quando suportado */
 }
-[data-theme="light"] .circuit-overlay { opacity: .10; mix-blend-mode: multiply; }
-.circuit-overlay--hero      { opacity: .11; }
-.circuit-overlay--final-cta { opacity: .09; }
-.circuit-overlay--banner    { opacity: .07; }
+.circuit-overlay path { stroke-width: 0.6; }
+.circuit-overlay circle { r: 1.2; }
+[data-theme="light"] .circuit-overlay { opacity: .055; mix-blend-mode: multiply; }
+.circuit-overlay--hero      { opacity: .055; }
+.circuit-overlay--final-cta { opacity: .045; }
+.circuit-overlay--banner    { opacity: .035; }
 
 /* Mascarar circuito para desaparecer sob blocos de texto (bordas desbotam) */
 .hero__slide .circuit-overlay--hero {

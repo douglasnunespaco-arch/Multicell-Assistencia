@@ -131,15 +131,16 @@ if (!function_exists('mc_img')) {
 if (!function_exists('hero_slide_image')) {
     function hero_slide_image(int $sortOrderOrIndex): string
     {
-        // Mapeamento pela ordem (1..n) ou fallback em rotação
+        // Pool premium por marca/contexto — alinhado a Apple, Xiaomi, OPPO, QCY, assistência.
+        // Quando admin cadastrar mais slides sem image_path, eles puxam esta rotação.
         $pool = [
-            1 => '1574944985070-8f3ebc6b79d2', // bancada técnica com celular
-            2 => '1512499617640-c74ae3a79d37', // mãos reparando tela
-            3 => '1606820854416-439b3305ff39', // acessórios/fones premium
-            4 => '1526406915894-7bcd65f60845', // componentes eletrônicos
-            5 => '1580910051074-3eb694886505', // celular moderno close-up
+            1 => '1511707171634-5f897ff02aa9', // Apple · ecossistema iPhone em bancada dark
+            2 => '1580910051074-3eb694886505', // Xiaomi/Android · smartphone moderno close-up
+            3 => '1526406915894-7bcd65f60845', // OPPO · flat-lay premium de celular
+            4 => '1606220588913-b3aacb4d2f46', // QCY · fones bluetooth/earbuds premium
+            5 => '1593305841991-05c297ba4575', // Assistência · bancada técnica profissional
         ];
-        $k = max(1, $sortOrderOrIndex);
+        $k  = max(1, $sortOrderOrIndex);
         $id = $pool[$k] ?? $pool[(($k - 1) % count($pool)) + 1];
         return mc_img($id, 1920, 78);
     }
@@ -148,24 +149,24 @@ if (!function_exists('hero_slide_image')) {
 if (!function_exists('service_image')) {
     function service_image(?string $slug, ?string $iconHint = null): string
     {
+        // Imagens 1:1 com o que o card descreve (trocar tela, bateria, etc).
         $map = [
-            'troca-de-tela'          => '1580910051074-3eb694886505',
-            'troca-de-bateria'       => '1616348436168-de43ad0db179',
-            'conector-de-carga'      => '1591337676887-a217a6970a8a',
-            'reparo-de-placa'        => '1583394838336-acd977736f90',
-            'software-e-desbloqueio' => '1511707171634-5f897ff02aa9',
-            'limpeza-interna'        => '1546435770-a3e426bf472b',
+            'troca-de-tela'          => '1601784551446-20c9e07cdbdb', // tela trincada de smartphone
+            'troca-de-bateria'       => '1609692814858-f7cd2f0afa4f', // bateria sendo trocada em bancada
+            'conector-de-carga'      => '1583863788434-e58a36330cf0', // carregador USB-C em bancada (conector)
+            'reparo-de-placa'        => '1518770660439-4636190af475', // placa-mãe / microeletrônica
+            'software-e-desbloqueio' => '1517430816045-df4b7de11d1d', // laptop + celular / software
+            'limpeza-interna'        => '1588508065123-287b28e013da', // ferramenta de precisão / limpeza
         ];
         if ($slug && isset($map[$slug])) return mc_img($map[$slug], 900, 78);
 
-        // Fallback por ícone
         $iconMap = [
-            'screen'   => '1580910051074-3eb694886505',
-            'battery'  => '1616348436168-de43ad0db179',
-            'plug'     => '1591337676887-a217a6970a8a',
-            'chip'     => '1583394838336-acd977736f90',
-            'code'     => '1511707171634-5f897ff02aa9',
-            'sparkle'  => '1546435770-a3e426bf472b',
+            'screen'   => '1601784551446-20c9e07cdbdb',
+            'battery'  => '1609692814858-f7cd2f0afa4f',
+            'plug'     => '1583863788434-e58a36330cf0',
+            'chip'     => '1518770660439-4636190af475',
+            'code'     => '1517430816045-df4b7de11d1d',
+            'sparkle'  => '1588508065123-287b28e013da',
             'wrench'   => '1593305841991-05c297ba4575',
         ];
         if ($iconHint && isset($iconMap[$iconHint])) return mc_img($iconMap[$iconHint], 900, 78);
@@ -176,32 +177,33 @@ if (!function_exists('service_image')) {
 if (!function_exists('product_image')) {
     function product_image(?string $category, ?string $slug = null): string
     {
+        // Cada slug puxa uma imagem coerente com o produto real.
         $slugMap = [
-            'capa-anti-impacto-premium'   => '1617043786394-f977fa12eddf',
-            'pelicula-3d-ceramica'        => '1611532736597-de2d4265fba3',
-            'carregador-rapido-30w'       => '1572044162444-ad60f128bdea',
-            'fone-bluetooth-pro'          => '1496181133206-80ce9b88a853',
-            'cabo-usb-c-reforcado'        => '1591337676887-a217a6970a8a',
-            'carregador-veicular-20w'     => '1558618666-fcd25c85cd64',
-            'smartwatch-multi-fit'        => '1567721913486-6585f069b332',
-            'suporte-magnetico-veicular'  => '1621330396173-e41b1cafd17f',
+            'capa-anti-impacto-premium'   => '1556656793-08538906a9f8', // celular com capa robusta
+            'pelicula-3d-ceramica'        => '1585060544812-6b45742d762f', // película/vidro sendo aplicada
+            'carregador-rapido-30w'       => '1583863788434-e58a36330cf0', // carregador USB-C premium
+            'fone-bluetooth-pro'          => '1606220588913-b3aacb4d2f46', // earbuds premium (QCY-style)
+            'cabo-usb-c-reforcado'        => '1588362951121-3ee319b018b2', // cabo USB-C trançado
+            'carregador-veicular-20w'     => '1581594549595-35f6edc7b762', // celular carregando no carro
+            'smartwatch-multi-fit'        => '1523275335684-37898b6baf30', // smartwatch no pulso
+            'suporte-magnetico-veicular'  => '1558618666-fcd25c85cd64',   // suporte no painel do carro
         ];
         if ($slug && isset($slugMap[$slug])) return mc_img($slugMap[$slug], 900, 78);
 
         $cat = mb_strtolower($category ?? '');
         $catMap = [
-            'capas'         => '1617043786394-f977fa12eddf',
-            'películas'     => '1611532736597-de2d4265fba3',
-            'peliculas'     => '1611532736597-de2d4265fba3',
-            'carregadores'  => '1572044162444-ad60f128bdea',
-            'fones'         => '1496181133206-80ce9b88a853',
-            'cabos'         => '1591337676887-a217a6970a8a',
-            'wearables'     => '1567721913486-6585f069b332',
-            'acessórios'    => '1621330396173-e41b1cafd17f',
-            'acessorios'    => '1621330396173-e41b1cafd17f',
+            'capas'         => '1556656793-08538906a9f8',
+            'películas'     => '1585060544812-6b45742d762f',
+            'peliculas'     => '1585060544812-6b45742d762f',
+            'carregadores'  => '1583863788434-e58a36330cf0',
+            'fones'         => '1606220588913-b3aacb4d2f46',
+            'cabos'         => '1588362951121-3ee319b018b2',
+            'wearables'     => '1523275335684-37898b6baf30',
+            'acessórios'    => '1558618666-fcd25c85cd64',
+            'acessorios'    => '1558618666-fcd25c85cd64',
         ];
         foreach ($catMap as $k => $id) if ($cat !== '' && str_contains($cat, $k)) return mc_img($id, 900, 78);
-        return mc_img('1621330396173-e41b1cafd17f', 900, 78);
+        return mc_img('1558618666-fcd25c85cd64', 900, 78);
     }
 }
 
