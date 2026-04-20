@@ -1,0 +1,17 @@
+# Arquivos gerados em runtime (NÃO commitar)
+/config/config.php
+/storage/install.lock
+/storage/logs/*.log
+/install.php.done
+/_dev_router.php
+
+# Uploads do admin (ambiente local)
+/uploads/*/*
+!/uploads/*/.gitkeep
+
+# Dev/local
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/

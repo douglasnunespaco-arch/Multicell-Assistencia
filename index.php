@@ -38,6 +38,7 @@ require $configFile;
 
 // Helpers globais
 require APP_DIR . '/Core/Helpers.php';
+require APP_DIR . '/Views/partials/public/icons.php';
 
 // Modo produção: suprime erros da tela, registra no log
 if (defined('APP_ENV') && APP_ENV === 'production') {
