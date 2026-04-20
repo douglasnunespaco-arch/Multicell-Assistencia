@@ -1,4 +1,11 @@
-<?php /** @var ?array $branch */ ?>
+<?php
+/** @var ?array $branch */
+/** @var array $errors */
+/** @var array $old */
+$errors = $errors ?? [];
+$old    = $old ?? [];
+$flash  = \App\Core\Flash::pull();
+?>
 <section class="page-banner">
     <div class="container">
         <nav class="breadcrumb"><a href="/">Início</a> / <span>Reservar</span></nav>
@@ -11,55 +18,63 @@
 <section class="section">
     <div class="container">
         <div class="reserve-grid">
-            <form class="form-card" method="post" action="/reservar" data-reveal>
+            <form id="form" class="form-card" method="post" action="/reservar" data-reveal novalidate>
                 <?= \App\Core\Csrf::field() ?>
                 <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;" aria-hidden="true">
+
+                <?php foreach ($flash as $f): ?>
+                    <div class="alert alert--<?= e($f['type']) ?>" role="alert" style="margin-bottom:14px;padding:10px 14px;border-radius:8px;font-size:14px;<?= $f['type']==='error' ? 'background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.35);color:#ffb3c1;' : 'background:rgba(20,241,149,.08);border:1px solid rgba(20,241,149,.35);color:#b5f7d3;' ?>">
+                        <?= e($f['message']) ?>
+                    </div>
+                <?php endforeach; ?>
 
                 <div class="form-grid">
                     <div class="field full">
                         <label>Nome <span class="req">*</span></label>
-                        <input type="text" name="customer_name" required maxlength="160" placeholder="Seu nome completo">
+                        <input type="text" name="customer_name" required maxlength="160" placeholder="Seu nome completo" value="<?= e($old['customer_name'] ?? '') ?>">
+                        <?php if (!empty($errors['customer_name'])): ?><small class="field-error" style="color:#ff4d6d;font-size:12px;"><?= e($errors['customer_name']) ?></small><?php endif; ?>
                     </div>
                     <div class="field">
                         <label>Telefone / WhatsApp <span class="req">*</span></label>
-                        <input type="tel" name="phone" required maxlength="20" placeholder="(65) 90000-0000" inputmode="tel">
+                        <input type="tel" name="phone" required maxlength="20" placeholder="(65) 90000-0000" inputmode="tel" value="<?= e($old['phone'] ?? '') ?>">
+                        <?php if (!empty($errors['phone'])): ?><small class="field-error" style="color:#ff4d6d;font-size:12px;"><?= e($errors['phone']) ?></small><?php endif; ?>
                     </div>
                     <div class="field">
                         <label>Tipo de atendimento</label>
                         <select name="service_type">
-                            <option value="loja">Levar na loja</option>
-                            <option value="retirar">Solicitar retirada</option>
-                            <option value="expressa">Atendimento expresso</option>
+                            <?php foreach (['loja'=>'Levar na loja','retirar'=>'Solicitar retirada','expressa'=>'Atendimento expresso'] as $k => $lbl): ?>
+                                <option value="<?= e($k) ?>" <?= (($old['service_type'] ?? '') === $k) ? 'selected' : '' ?>><?= e($lbl) ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="field">
                         <label>Marca do aparelho</label>
-                        <input type="text" name="device_brand" maxlength="80" placeholder="Ex: Samsung, Apple, Xiaomi">
+                        <input type="text" name="device_brand" maxlength="80" placeholder="Ex: Samsung, Apple, Xiaomi" value="<?= e($old['device_brand'] ?? '') ?>">
                     </div>
                     <div class="field">
                         <label>Modelo</label>
-                        <input type="text" name="device_model" maxlength="120" placeholder="Ex: Galaxy S22, iPhone 13">
+                        <input type="text" name="device_model" maxlength="120" placeholder="Ex: Galaxy S22, iPhone 13" value="<?= e($old['device_model'] ?? '') ?>">
                     </div>
                     <div class="field full">
                         <label>Qual o problema?</label>
-                        <textarea name="issue_description" rows="3" placeholder="Descreva brevemente o defeito ou serviço desejado."></textarea>
+                        <textarea name="issue_description" rows="3" placeholder="Descreva brevemente o defeito ou serviço desejado."><?= e($old['issue_description'] ?? '') ?></textarea>
                     </div>
                     <div class="field">
                         <label>Dia desejado</label>
-                        <input type="date" name="preferred_date" min="<?= date('Y-m-d') ?>">
+                        <input type="date" name="preferred_date" min="<?= date('Y-m-d') ?>" value="<?= e($old['preferred_date'] ?? '') ?>">
+                        <?php if (!empty($errors['preferred_date'])): ?><small class="field-error" style="color:#ff4d6d;font-size:12px;"><?= e($errors['preferred_date']) ?></small><?php endif; ?>
                     </div>
                     <div class="field">
                         <label>Período</label>
                         <select name="preferred_period">
-                            <option value="">Sem preferência</option>
-                            <option value="manha">Manhã</option>
-                            <option value="tarde">Tarde</option>
-                            <option value="noite">Noite</option>
+                            <?php foreach (['' => 'Sem preferência', 'manha' => 'Manhã', 'tarde' => 'Tarde', 'noite' => 'Noite'] as $k => $lbl): ?>
+                                <option value="<?= e($k) ?>" <?= (($old['preferred_period'] ?? '') === $k) ? 'selected' : '' ?>><?= e($lbl) ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div class="field full">
                         <label>Observação</label>
-                        <textarea name="notes" rows="2" placeholder="Algo mais que a equipe precisa saber?"></textarea>
+                        <textarea name="notes" rows="2" placeholder="Algo mais que a equipe precisa saber?"><?= e($old['notes'] ?? '') ?></textarea>
                     </div>
                 </div>
 
@@ -72,9 +87,6 @@
                         Seus dados serão enviados apenas à nossa equipe para agendar o atendimento.
                     </small>
                 </div>
-                <p style="color:var(--warning);font-size:13px;margin-top:18px;display:flex;gap:8px;align-items:center;">
-                    <?= icon('clock', 14) ?> <span>O envio completo do formulário é processado na próxima fase. Por enquanto, use o botão do WhatsApp para agilizar o contato.</span>
-                </p>
             </form>
 
             <aside class="reserve-aside" data-reveal>

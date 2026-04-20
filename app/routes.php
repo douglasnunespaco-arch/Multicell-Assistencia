@@ -36,15 +36,19 @@ $router->get('/_errors/500', function () {
 /*
  * Pendente para próximas fases:
  *
- * Fase 3 — Reserva (POST)
- *   $router->post('/reservar',                  'Public\\ReservationController@store');
- *   $router->get('/reservar/sucesso',           'Public\\ReservationController@success');
- *
  * Fase 4 — Admin
  *   $router->get('/admin/login', ...); ... demais rotas /admin/*
  *
  * Fase 5 — Analytics endpoints
  *   $router->get('/go/whatsapp',                'Public\\RedirectController@whatsapp');
+ *   $router->get('/go/phone',                   'Public\\RedirectController@phone');
+ *   $router->get('/go/map',                     'Public\\RedirectController@map');
+ *   $router->post('/api/track',                 'Public\\TrackController@store');
+ *
+ * Fase 6 — SEO
+ *   $router->get('/sitemap.xml',                'Public\\HomeController@sitemap');
+ */
+tController@whatsapp');
  *   $router->get('/go/phone',                   'Public\\RedirectController@phone');
  *   $router->get('/go/map',                     'Public\\RedirectController@map');
  *   $router->post('/api/track',                 'Public\\TrackController@store');
