@@ -19,6 +19,12 @@ final class Auth
         if (!password_verify($password, $row['password_hash'])) {
             return false;
         }
+        // Rehash transparente caso o cost tenha evoluído
+        if (password_needs_rehash($row['password_hash'], PASSWORD_BCRYPT, ['cost' => 12])) {
+            Database::update('admins', [
+                'password_hash' => password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]),
+            ], ['id' => $row['id']]);
+        }
         Session::regenerate();
         $_SESSION['admin'] = [
             'id'   => (int) $row['id'],

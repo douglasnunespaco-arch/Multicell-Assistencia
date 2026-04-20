@@ -18,6 +18,12 @@ $router->get('/sobre',                        'Public\\AboutController@index');
 $router->get('/contato',                      'Public\\ContactController@index');
 $router->get('/links',                        'Public\\LinksController@index');
 
+// -------- Admin (Sub-rodada 3A: Auth + Dashboard) --------
+$router->get('/admin/login',                  'Admin\\AuthController@showLogin');
+$router->post('/admin/login',                 'Admin\\AuthController@login');
+$router->post('/admin/logout',                'Admin\\AuthController@logout');
+$router->get('/admin',                        'Admin\\DashboardController@index');
+
 // Redirecionamentos rastreados (CTA → canal externo)
 $router->get('/go/whatsapp',                  'Public\\RedirectController@whatsapp');
 $router->get('/go/phone',                     'Public\\RedirectController@phone');
