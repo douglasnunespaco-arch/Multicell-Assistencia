@@ -165,6 +165,24 @@ Ver `/app/memory/imagens-por-contexto.md` para catálogo completo.
 
 ---
 
+## ✅ Rodada cirúrgica · ajustes visuais (JAN 2026)
+
+### Entregas
+1. **Botão `.btn--ghost` light theme** — 4 estados (default, hover, focus-visible, active) + regra específica dentro do hero para contraste sobre imagem.
+2. **Depoimentos filtrados** — `rating >= 5 AND source IN ('google','instagram','facebook','tiktok')`. Schema não tocado.
+3. **Ícone de mapa no footer alinhado** — novo `.footer-address` com flex `align-items: flex-start` + `margin-top: 3px` no svg.
+4. **Faixa de marcas** — marquee CSS-only com 10 marcas (Apple · Samsung · Xiaomi · Motorola · OPPO · Realme · JBL · QCY · Asus · Lenovo); mask-image lateral; pausa no hover; `prefers-reduced-motion` suportado.
+5. **Link "Painel"** no `footer-bottom` · discreto (opacity .55, 11px, cinza) · verde marca no hover · `rel="nofollow"`.
+
+### Arquivos (5)
+**Criado**: `app/Views/partials/public/brands-strip.php`
+**Alterados**: `app/Views/public/home.php` · `app/Views/partials/public/footer.php` · `app/Models/Testimonial.php` · `assets/css/public.css`
+
+### Preservado
+- Hero full-bleed · 5 slides · badge "Promoção" · admin 3C · schema · seed · rotas públicas.
+
+---
+
 ## Próximas ações (prioridade)
 1. **Fase 3C primeiro** — ROI via leads (captura + fluxo WhatsApp otimizado)
 2. **Fase 3B depois** — Edição de conteúdo via painel admin (assume os slides sintéticos nativamente)

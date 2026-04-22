@@ -61,9 +61,12 @@ $tt = \App\Models\Setting::get('tiktok_url');
                 <?= icon('mail', 14, 'inline-ic') ?> <?= e(\App\Models\Setting::get('email', 'contato@multicell.local')) ?>
             </a>
             <?php if ($branch): ?>
-                <a href="/go/map" data-track="map_click" data-track-source="footer">
-                    <?= icon('pin', 14, 'inline-ic') ?> <?= e($branch['address']) ?><br>
-                    <span style="margin-left:22px;display:block;"><?= e($branch['city']) ?>/<?= e($branch['state']) ?></span>
+                <a href="/go/map" class="footer-address" data-track="map_click" data-track-source="footer">
+                    <?= icon('pin', 14, 'inline-ic') ?>
+                    <span>
+                        <?= e($branch['address']) ?><br>
+                        <?= e($branch['city']) ?>/<?= e($branch['state']) ?>
+                    </span>
                 </a>
             <?php endif; ?>
         </div>
@@ -82,6 +85,10 @@ $tt = \App\Models\Setting::get('tiktok_url');
 
     <div class="container footer-bottom">
         <span>© <?= date('Y') ?> <?= e(\App\Models\Setting::get('site_name', 'Multi Cell Assistência Técnica')) ?>. Todos os direitos reservados.</span>
-        <span>Feito com cuidado em Várzea Grande/MT</span>
+        <span class="footer-bottom__right">
+            Feito com cuidado em Várzea Grande/MT
+            <span class="footer-bottom__sep" aria-hidden="true">·</span>
+            <a href="/admin/login" class="footer-admin-link" rel="nofollow" data-testid="footer-admin-link">Painel</a>
+        </span>
     </div>
 </footer>

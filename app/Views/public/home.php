@@ -138,6 +138,8 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
     <?php endif; ?>
 </section>
 
+<?= \App\Core\View::capture('partials/public/brands-strip') ?>
+
 <!-- ================= SERVIÇOS ================= -->
 <section id="services" class="section">
     <div class="container">
