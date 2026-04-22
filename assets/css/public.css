@@ -1181,17 +1181,18 @@ button { font-family: inherit; }
 .promo-card__tag {
     position: absolute;
     top: 12px; left: 12px;
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 5px 10px;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px;
     border-radius: 999px;
-    background: rgba(10,10,11,.75);
-    border: 1px solid rgba(20,241,149,.4);
-    color: var(--brand);
-    font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    background: var(--brand);
+    border: none;
+    color: #0A0A0B;
+    font-size: 12px; font-weight: 700; letter-spacing: .01em; text-transform: none;
+    line-height: 1;
+    box-shadow: 0 4px 14px rgba(0,0,0,.18);
     z-index: 2;
 }
+.promo-card__tag svg { width: 12px; height: 12px; stroke: #0A0A0B; }
 .promo-card__deadline { display: inline-flex; align-items: center; gap: 6px; }
 .promo-card__deadline::before { display: none; } /* agora temos o ícone do clock inline */
 

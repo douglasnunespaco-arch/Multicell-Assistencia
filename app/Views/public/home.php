@@ -17,6 +17,47 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
             'cta_label' => 'Chamar no WhatsApp',
             'cta_url' => '',
         ]];
+
+        // Garante 5 slides visíveis hoje sem depender do banco/admin.
+        // Slides sintéticos ficam com image_path='' e caem no pool premium
+        // de hero_slide_image() (Apple · Xiaomi · OPPO · QCY · Assistência).
+        $syntheticSlides = [
+            [
+                'id' => 0,
+                'title' => 'iPhone como novo.',
+                'subtitle' => 'Troca de tela, bateria e placa com peças de alta qualidade e garantia real.',
+                'image_path' => '', 'cta_label' => '', 'cta_url' => '',
+            ],
+            [
+                'id' => 0,
+                'title' => 'Xiaomi e Android na mão certa.',
+                'subtitle' => 'Diagnóstico técnico preciso e reparo com acabamento de loja oficial.',
+                'image_path' => '', 'cta_label' => '', 'cta_url' => '',
+            ],
+            [
+                'id' => 0,
+                'title' => 'OPPO e linha premium.',
+                'subtitle' => 'Acessórios selecionados e serviços especializados para smartphones topo de linha.',
+                'image_path' => '', 'cta_label' => '', 'cta_url' => '',
+            ],
+            [
+                'id' => 0,
+                'title' => 'Fones QCY e áudio premium.',
+                'subtitle' => 'Earbuds bluetooth com curadoria técnica — som, bateria e conforto testados.',
+                'image_path' => '', 'cta_label' => '', 'cta_url' => '',
+            ],
+            [
+                'id' => 0,
+                'title' => 'Bancada técnica profissional.',
+                'subtitle' => 'Micro-solda, software e reparo de placa — do diagnóstico à entrega, sem enrolação.',
+                'image_path' => '', 'cta_label' => '', 'cta_url' => '',
+            ],
+        ];
+        $__pad = 0;
+        while (count($slidesList) < 5 && $__pad < count($syntheticSlides)) {
+            $slidesList[] = $syntheticSlides[$__pad];
+            $__pad++;
+        }
         ?>
         <?php foreach ($slidesList as $i => $s):
             $bgStyle = '';

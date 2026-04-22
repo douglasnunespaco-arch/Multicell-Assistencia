@@ -20,7 +20,7 @@ $imgSrc = $img ? '/' . ltrim($img, '/') : promo_image($promo['slug'] ?? null);
 <article class="promo-card" data-reveal>
     <div class="promo-card__media">
         <img src="<?= e($imgSrc) ?>" alt="<?= e($promo['title']) ?>" loading="lazy">
-        <span class="promo-card__tag"><?= icon('tag', 14) ?> Promo</span>
+        <span class="promo-card__tag"><?= icon('tag', 12) ?> Promoção</span>
     </div>
     <div class="promo-card__body">
         <?php if ($deadline): ?><span class="promo-card__deadline"><?= icon('clock', 12, 'inline-ic') ?> <?= e($deadline) ?></span><?php endif; ?>
