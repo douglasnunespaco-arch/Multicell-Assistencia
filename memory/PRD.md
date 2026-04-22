@@ -113,13 +113,32 @@ Ver `/app/memory/imagens-por-contexto.md` para catálogo completo.
 
 ---
 
+---
+
+## ✅ Fase 2.5.1 — Fechamento visual (JAN 2026)
+
+### Entregas
+1. **Hero com 5 slides garantidos hoje** — padding sintético em `home.php`
+   (só entra se o banco retornar < 5); cai automaticamente no pool premium
+   `hero_slide_image()` (Apple · Xiaomi · OPPO · QCY · Assistência). Solução
+   econômica aprovada como temporária até o admin nativo assumir (Fase 4).
+2. **Badge de promoção premium/comercial** — pílula verde sólida,
+   texto preto "Promoção", ícone `tag` 12px, sem neon/borda/CAPS/blur.
+3. **Opção A aprovada** para imagens: premium/coerentes, não-oficiais.
+4. **Hero full-bleed 100% preservado** · backend/admin/SQL intactos.
+
+### Arquivos alterados
+- `app/Views/public/home.php` — `$syntheticSlides` + loop padding até 5
+- `app/Views/partials/public/card-promotion.php` — "Promo" → "Promoção" · ícone 12px
+- `assets/css/public.css` — regra `.promo-card__tag` reescrita (verde sólido · preto · sem borda/blur)
+
+---
+
 ## Próximas ações (prioridade)
-1. **Cliente confirmar**: endereço oficial + telefone WhatsApp definitivos
-   (há 3 fontes públicas com dados divergentes)
-2. **Cliente subir fotos reais**: bancada, loja, equipe, produtos em estoque
-   via upload no admin (Fase 4)
-3. **Fase 3** — Reserva de Atendimento backend (quando usuário autorizar)
-4. **Fase 4** — Painel Admin completo (quando usuário autorizar)
+1. **Fase 3C primeiro** — ROI via leads (captura + fluxo WhatsApp otimizado)
+2. **Fase 3B depois** — Edição de conteúdo via painel admin (assume os slides sintéticos nativamente)
+3. **Cliente confirmar**: endereço oficial + telefone WhatsApp definitivos
+4. **Cliente subir fotos reais**: bancada, loja, equipe, produtos em estoque
 
 ## Backlog / Futuro
 - P1: Fase 3 (form de reserva → grava em DB + abre WhatsApp) + listagem admin
