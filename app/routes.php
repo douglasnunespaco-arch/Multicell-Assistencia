@@ -24,6 +24,11 @@ $router->post('/admin/login',                 'Admin\\AuthController@login');
 $router->post('/admin/logout',                'Admin\\AuthController@logout');
 $router->get('/admin',                        'Admin\\DashboardController@index');
 
+// -------- Admin (Sub-rodada 3C: Leads / Reservas) --------
+$router->get('/admin/leads',                  'Admin\\LeadsController@index');
+$router->get('/admin/leads/{id}',             'Admin\\LeadsController@show');
+$router->post('/admin/leads/{id}/status',     'Admin\\LeadsController@updateStatus');
+
 // Redirecionamentos rastreados (CTA → canal externo)
 $router->get('/go/whatsapp',                  'Public\\RedirectController@whatsapp');
 $router->get('/go/phone',                     'Public\\RedirectController@phone');

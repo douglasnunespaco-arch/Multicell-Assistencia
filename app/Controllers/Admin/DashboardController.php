@@ -27,6 +27,10 @@ final class DashboardController
                 "SELECT COUNT(*) AS c FROM lead_reservations WHERE created_at >= :d",
                 [':d' => $weekAgo . ' 00:00:00']
             )['c'],
+            'leads_today'      => (int) Database::fetch(
+                "SELECT COUNT(*) AS c FROM lead_reservations WHERE created_at >= :d",
+                [':d' => $today . ' 00:00:00']
+            )['c'],
             'pageviews_today'  => (int) Database::fetch(
                 "SELECT COUNT(*) AS c FROM analytics_events WHERE event_type = 'page_view' AND created_at >= :d",
                 [':d' => $today . ' 00:00:00']

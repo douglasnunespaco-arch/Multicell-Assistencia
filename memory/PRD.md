@@ -134,6 +134,37 @@ Ver `/app/memory/imagens-por-contexto.md` para catálogo completo.
 
 ---
 
+## ✅ Sub-rodada 3C — Gestão de Reservas/Leads no admin (JAN 2026)
+
+### Entregas
+1. **Módulo Reservas** (`/admin/leads`) com listagem, filtro por status, paginação 20/página.
+2. **Detalhe da reserva** (`/admin/leads/{id}`) com os 12 campos + botão WhatsApp direto.
+3. **Update de status server-side** (whitelist: novo · em_atendimento · concluido · cancelado) com CSRF.
+4. **Dashboard refletindo o módulo**: cards "Reservas novas", "Reservas hoje", "Reservas totais" viraram links clicáveis; `leads_today` calculado direto da tabela `lead_reservations`.
+5. **Sidebar**: item Reservas ativo (era placeholder `is-disabled` da Fase 3A).
+
+### Arquivos (8)
+**Criados**
+- `app/Controllers/Admin/LeadsController.php` · 100 linhas (index/show/updateStatus)
+- `app/Views/admin/leads/index.php` · listagem + filtros + paginação
+- `app/Views/admin/leads/show.php` · detalhe + form de status + botão WA
+
+**Alterados**
+- `app/routes.php` · +3 rotas admin
+- `app/Views/partials/admin/sidebar.php` · Reservas ativo
+- `app/Controllers/Admin/DashboardController.php` · +1 query `leads_today`
+- `app/Views/admin/dashboard.php` · cards linkados · roadmap atualizado
+- `assets/css/admin.css` · +2 tags (em_atendimento, concluido) · bloco "Leads · 3C"
+
+### Fora de escopo (economia aprovada)
+- Sem busca textual, filtros avançados, exportação, charts, automação externa, WhatsApp Business API, CRUDs 3B.
+- Campo `admin_note` existe no schema mas não exposto (futuro, se pedido).
+
+### Preservado
+- Front público, hero full-bleed, `database/schema.sql`, `database/seed.sql`, rotas públicas, todos os helpers/overlays/imagens.
+
+---
+
 ## Próximas ações (prioridade)
 1. **Fase 3C primeiro** — ROI via leads (captura + fluxo WhatsApp otimizado)
 2. **Fase 3B depois** — Edição de conteúdo via painel admin (assume os slides sintéticos nativamente)

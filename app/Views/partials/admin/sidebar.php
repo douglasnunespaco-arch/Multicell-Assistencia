@@ -19,10 +19,10 @@ $current = $_SERVER['REQUEST_URI'] ?? '';
 
         <div class="admin-nav__section">Gestão</div>
 
-        <span class="admin-nav__item is-disabled" data-testid="nav-leads-placeholder" title="Disponível na Sub-rodada 3C">
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/leads') ? ' is-active' : '' ?>"
+           href="/admin/leads" data-testid="nav-leads">
             <?= icon('calendar', 18) ?> <span>Reservas</span>
-            <small class="admin-badge">em breve · 3C</small>
-        </span>
+        </a>
         <span class="admin-nav__item is-disabled" title="Disponível na Sub-rodada 3B">
             <?= icon('image', 18) ?> <span>Slides (Hero)</span>
             <small class="admin-badge">3B</small>
