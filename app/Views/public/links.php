@@ -14,6 +14,19 @@ foreach (preg_split('/\s+/', trim((string) $siteName)) as $w) {
     if ($w !== '' && mb_strlen($initials) < 2) $initials .= mb_strtoupper(mb_substr($w, 0, 1));
 }
 if ($initials === '') $initials = 'MC';
+
+// Divide o site_name em "marca forte" + "descritor" para a hierarquia do header.
+// Ex.: "Multi Cell Assistência Técnica" → ["Multi Cell", "Assistência Técnica"].
+$parts = preg_split('/\s+/', trim((string) $siteName)) ?: [];
+$brandMain = '';
+$brandSub  = '';
+if (count($parts) >= 3) {
+    $brandMain = implode(' ', array_slice($parts, 0, 2));
+    $brandSub  = implode(' ', array_slice($parts, 2));
+} else {
+    $brandMain = (string) $siteName;
+    $brandSub  = '';
+}
 ?>
 <main class="bio-shell">
     <div class="bio-bg" aria-hidden="true">
@@ -32,7 +45,10 @@ if ($initials === '') $initials = 'MC';
                 <?php endif; ?>
                 <span class="bio-avatar__badge" aria-hidden="true"><?= icon('check', 12) ?></span>
             </div>
-            <h1 class="bio-title"><?= e($siteName) ?></h1>
+            <h1 class="bio-title"><?= e($brandMain) ?></h1>
+            <?php if ($brandSub !== ''): ?>
+                <p class="bio-title-sub"><?= e($brandSub) ?></p>
+            <?php endif; ?>
             <p class="bio-sub"><?= e($tagline) ?></p>
         </header>
 
