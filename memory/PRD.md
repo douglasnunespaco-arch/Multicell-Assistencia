@@ -201,6 +201,25 @@ Hero full-bleed · 5 slides · badge Promoção · Painel footer · admin 3C · 
 
 ---
 
+## ✅ Rodada cirúrgica · "Avisar cliente" no detalhe da reserva (JAN 2026)
+
+### Entregas
+- Card **"Avisar cliente"** adicionado ao `/admin/leads/{id}` com 3 templates WhatsApp contextuais:
+  - Recebemos sua reserva (recomendado para `novo`)
+  - Estamos em atendimento (recomendado para `em_atendimento`)
+  - Aparelho pronto para retirada (recomendado para `concluido`)
+- Destaque automático do template recomendado conforme status atual (`admin-btn--primary` + "· recomendado").
+- Mensagens montadas com dados reais do lead (primeiro nome, marca+modelo, tipo de serviço).
+- Empty state quando telefone inválido/ausente.
+
+### Arquivo (1)
+- `app/Views/admin/leads/show.php` · ~55 linhas novas
+
+### Preservado
+Zero mexida em: CSS, controller, rotas, schema, seed, front público, home, hero, brands strip, admin 3C existente (listagem, dashboard, update de status).
+
+---
+
 ## Próximas ações (prioridade)
 1. **Fase 3C primeiro** — ROI via leads (captura + fluxo WhatsApp otimizado)
 2. **Fase 3B depois** — Edição de conteúdo via painel admin (assume os slides sintéticos nativamente)

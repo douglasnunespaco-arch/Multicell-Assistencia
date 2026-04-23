@@ -81,3 +81,53 @@ $preferredDate = !empty($lead['preferred_date']) ? date('d/m/Y', strtotime($lead
         </button>
     </form>
 </section>
+
+<?php
+// ------- Card "Avisar cliente" · templates contextuais de WhatsApp -------
+// Mensagens curtas, humanas, comerciais. Cada template recomenda um status.
+$firstName = trim(strtok($lead['customer_name'] ?? '', ' ')) ?: 'cliente';
+$deviceLabel = $device !== '' ? $device : 'seu aparelho';
+$serviceLabel = !empty($lead['service_type']) ? $lead['service_type'] : 'o serviço solicitado';
+
+$tplReceived = "Olá, {$firstName}! Aqui é da Multi Cell Assistência Técnica. Recebemos sua reserva para {$serviceLabel} ({$deviceLabel}) e já entramos em contato para confirmar os detalhes. Qualquer dúvida, pode responder por aqui.";
+$tplInService = "Olá, {$firstName}! Tudo bem? Informamos que {$deviceLabel} já está em atendimento pela nossa equipe técnica. Assim que concluirmos, avisamos por aqui.";
+$tplReady = "Olá, {$firstName}! Boa notícia: {$deviceLabel} está pronto para retirada na Multi Cell. Estamos te esperando no nosso horário de funcionamento — qualquer coisa, é só responder esta mensagem.";
+
+$templates = [
+    'received'   => ['label' => 'Recebemos sua reserva',       'text' => $tplReceived,  'rec_for' => 'novo'],
+    'in_service' => ['label' => 'Estamos em atendimento',      'text' => $tplInService, 'rec_for' => 'em_atendimento'],
+    'ready'      => ['label' => 'Aparelho pronto para retirada','text' => $tplReady,    'rec_for' => 'concluido'],
+];
+$waBase = $phoneDigits !== '' ? 'https://wa.me/55' . $phoneDigits . '?text=' : '';
+?>
+<section class="admin-card" data-testid="lead-notify-card">
+    <header class="admin-card__head">
+        <h2>Avisar cliente</h2>
+        <small class="admin-card__hint">mensagens prontas · abre WhatsApp com o texto preenchido</small>
+    </header>
+
+    <?php if ($waBase === ''): ?>
+        <div class="admin-empty" data-testid="lead-notify-no-phone">
+            <?= icon('phone', 22) ?>
+            <p>Telefone indisponível</p>
+            <small>Sem número válido, não é possível enviar pelo WhatsApp.</small>
+        </div>
+    <?php else: ?>
+        <div class="admin-form-inline" data-testid="lead-notify-templates">
+            <?php foreach ($templates as $key => $tpl):
+                $isRecommended = ($tpl['rec_for'] === $lead['status']);
+                $btnClass = $isRecommended ? 'admin-btn admin-btn--primary' : 'admin-btn admin-btn--wa';
+            ?>
+                <a href="<?= e($waBase . rawurlencode($tpl['text'])) ?>"
+                   target="_blank" rel="noopener"
+                   class="<?= $btnClass ?>"
+                   data-testid="lead-notify-<?= e($key) ?>"
+                   title="<?= e($tpl['text']) ?>">
+                    <?= icon('whatsapp', 14) ?>
+                    <?= e($tpl['label']) ?>
+                    <?php if ($isRecommended): ?> <small style="margin-left:6px;opacity:.75;font-weight:600;">· recomendado</small><?php endif; ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</section>
