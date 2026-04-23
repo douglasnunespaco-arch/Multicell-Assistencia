@@ -32,15 +32,16 @@ INSERT IGNORE INTO bio_links (id, title, url, icon, sort_order, is_active, open_
   (3, 'Promoções ativas',  '/promocoes',                  'tag',      30, 1, 0),
   (4, 'Como chegar',       '/go/map',                     'map',      40, 1, 1);
 
--- +3 Promoções (completa 6 na home) ----------------------------------------------
+-- +3 Promoções (completa 6 na home)
+-- image_path fica NULL de propósito: o sistema resolve via promo_image($slug) -> Unsplash por slug
 INSERT IGNORE INTO promotions (id, title, slug, image_path, description, old_price, new_price, starts_at, ends_at, cta_label, cta_url, is_active, sort_order) VALUES
-(4, 'Película 3D + Instalação Grátis', 'pelicula-3d-instalacao-gratis', '/assets/img/prod-film.jpg',
+(4, 'Película 3D + Instalação Grátis', 'pelicula-3d-instalacao-gratis', NULL,
  'Película 3D cerâmica premium com instalação grátis na loja. Garantia de encaixe e resistência.',
  79.90, 39.90, NULL, NULL, 'Quero essa', NULL, 1, 40),
-(5, 'Bateria Original + Troca no Mesmo Dia', 'bateria-original-troca-mesmo-dia', '/assets/img/prod-battery.jpg',
+(5, 'Bateria Original + Troca no Mesmo Dia', 'bateria-original-troca-mesmo-dia', NULL,
  'Bateria original com diagnóstico completo e troca concluída em até 2h. 90 dias de garantia.',
  199.00, 149.00, NULL, NULL, 'Aproveitar', NULL, 1, 50),
-(6, 'Kit Fone Bluetooth + Carregador USB-C', 'kit-fone-bluetooth-carregador', '/assets/img/prod-combo.jpg',
+(6, 'Kit Fone Bluetooth + Carregador USB-C', 'kit-fone-bluetooth-carregador', NULL,
  'Fone TWS com cancelamento + carregador 20W USB-C. Combo ideal para quem quer praticidade.',
  299.00, 199.00, NULL, NULL, 'Pegar combo', NULL, 1, 60);
 

@@ -211,9 +211,12 @@ if (!function_exists('promo_image')) {
     function promo_image(?string $slug): string
     {
         $map = [
-            'combo-protecao-total'         => '1610945415295-d9bbf067e59c',
-            'troca-de-tela-mais-bateria'   => '1512499617640-c74ae3a79d37',
-            'promo-carregador-rapido'      => '1572044162444-ad60f128bdea',
+            'combo-protecao-total'              => '1610945415295-d9bbf067e59c', // celular com capa/acessórios
+            'troca-de-tela-mais-bateria'        => '1512499617640-c74ae3a79d37', // iPhone tela iluminada
+            'promo-carregador-rapido'           => '1588362951121-3ee319b018b2', // cabo/carregador USB-C
+            'pelicula-3d-instalacao-gratis'     => '1585060544812-6b45742d762f', // iPhone em superfície
+            'bateria-original-troca-mesmo-dia'  => '1556656793-08538906a9f8',    // celular com capa (serviço)
+            'kit-fone-bluetooth-carregador'     => '1606220588913-b3aacb4d2f46', // earbuds TWS
         ];
         if ($slug && isset($map[$slug])) return mc_img($map[$slug], 1200, 80);
         return mc_img('1606820854416-439b3305ff39', 1200, 80);

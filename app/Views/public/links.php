@@ -24,46 +24,43 @@ try { $bioLinks = \App\Models\BioLink::active(); } catch (\Throwable $e) { $bioL
                     $target   = $openNew || $isExt ? ' target="_blank" rel="noopener"' : '';
                 ?>
                     <a href="<?= e($bl['url']) ?>" class="link-btn" data-track="cta_click" data-track-source="links_<?= e($iconSlug ?: 'item') ?>"<?= $target ?>>
-                        <?php if ($iconSlug): ?><?= icon($iconSlug, 18) ?><?php endif; ?>
-                        <?= e($bl['title']) ?>
+                        <span class="link-btn__icon" aria-hidden="true">
+                            <?php if ($iconSlug): ?><?= icon($iconSlug, 18) ?><?php endif; ?>
+                        </span>
+                        <span class="link-btn__label"><?= e($bl['title']) ?></span>
                     </a>
                 <?php endforeach; ?>
             <?php else: ?>
-                <!-- Fallback: conteúdo estático (usado antes da Fase C1 ou caso nenhum link esteja ativo) -->
-                <a href="<?= whatsapp_link('links_whatsapp') ?>" class="link-btn link-btn--primary" data-track="whatsapp_click" data-track-source="links_main">
-                    <?= icon('whatsapp', 18) ?> Falar no WhatsApp
-                </a>
-                <a href="/reservar" class="link-btn" data-track="cta_click" data-track-source="links_reserve">
-                    <?= icon('calendar', 18) ?> Reservar atendimento
+                <!-- Fallback estático -->
+                <a href="<?= whatsapp_link('links_whatsapp') ?>" class="link-btn" data-track="whatsapp_click" data-track-source="links_main">
+                    <span class="link-btn__icon" aria-hidden="true"><?= icon('whatsapp', 18) ?></span>
+                    <span class="link-btn__label">Falar no WhatsApp</span>
                 </a>
                 <a href="/produtos" class="link-btn" data-track="cta_click" data-track-source="links_products">
-                    <?= icon('package', 18) ?> Ver produtos e acessórios
+                    <span class="link-btn__icon" aria-hidden="true"><?= icon('package', 18) ?></span>
+                    <span class="link-btn__label">Ver produtos e acessórios</span>
                 </a>
                 <a href="/promocoes" class="link-btn" data-track="cta_click" data-track-source="links_promos">
-                    <?= icon('tag', 18) ?> Promoções ativas
+                    <span class="link-btn__icon" aria-hidden="true"><?= icon('tag', 18) ?></span>
+                    <span class="link-btn__label">Promoções ativas</span>
                 </a>
-                <a href="/assistencia-tecnica" class="link-btn" data-track="cta_click" data-track-source="links_services">
-                    <?= icon('wrench', 18) ?> Nossos serviços
+                <a href="/go/map" class="link-btn" data-track="map_click" data-track-source="links_map">
+                    <span class="link-btn__icon" aria-hidden="true"><?= icon('map', 18) ?></span>
+                    <span class="link-btn__label">Como chegar</span>
                 </a>
                 <?php if ($ig): ?>
-                    <a href="<?= e($ig) ?>" target="_blank" rel="noopener" class="link-btn" data-track="cta_click" data-track-source="links_instagram"><?= icon('instagram', 18) ?> Instagram</a>
-                <?php endif; ?>
-                <?php if ($fb): ?>
-                    <a href="<?= e($fb) ?>" target="_blank" rel="noopener" class="link-btn" data-track="cta_click" data-track-source="links_facebook"><?= icon('facebook', 18) ?> Facebook</a>
-                <?php endif; ?>
-                <?php if ($tt): ?>
-                    <a href="<?= e($tt) ?>" target="_blank" rel="noopener" class="link-btn" data-track="cta_click" data-track-source="links_tiktok"><?= icon('tiktok', 18) ?> TikTok</a>
-                <?php endif; ?>
-                <a href="/go/map" class="link-btn" data-track="map_click" data-track-source="links_map">
-                    <?= icon('map', 18) ?> Como chegar
-                </a>
-                <?php if ($reviews): ?>
-                    <a href="<?= e($reviews) ?>" target="_blank" rel="noopener" class="link-btn" data-track="cta_click" data-track-source="links_reviews">
-                        <?= icon('star', 18) ?> Avaliações no Google
+                    <a href="<?= e($ig) ?>" target="_blank" rel="noopener" class="link-btn" data-track="cta_click" data-track-source="links_instagram">
+                        <span class="link-btn__icon" aria-hidden="true"><?= icon('instagram', 18) ?></span>
+                        <span class="link-btn__label">Instagram</span>
                     </a>
                 <?php endif; ?>
             <?php endif; ?>
         </div>
+
+        <a href="/" class="link-btn link-btn--back" data-track="cta_click" data-track-source="links_back_to_site">
+            <span class="link-btn__icon" aria-hidden="true"><?= icon('arrow-right', 16) ?></span>
+            <span class="link-btn__label">Voltar ao site</span>
+        </a>
 
         <div class="links-footer">
             © <?= date('Y') ?> Multi Cell · <?= e($branch['city'] ?? 'Várzea Grande') ?>/<?= e($branch['state'] ?? 'MT') ?>
