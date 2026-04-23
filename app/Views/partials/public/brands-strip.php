@@ -29,7 +29,7 @@ $brands = [
     </div>
     <div class="brands-strip__viewport">
         <div class="brands-strip__track">
-            <?php for ($pass = 0; $pass < 4; $pass++): ?>
+            <?php for ($pass = 0; $pass < 6; $pass++): ?>
                 <div class="brands-strip__group"<?= $pass === 1 ? ' aria-hidden="true"' : '' ?>>
                     <?php foreach ($brands as $b): ?>
                         <span class="brands-strip__item" title="<?= e($b['name']) ?>" aria-label="<?= e($b['name']) ?>">
