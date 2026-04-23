@@ -23,6 +23,11 @@ $labels = [
     'youtube_url'            => 'YouTube',
     'links_rating_label'     => 'Selo de avaliação (ex.: 4,9★ no Google)',
     'links_social_proof'     => 'Prova social (ex.: +1.200 clientes atendidos)',
+    'delivery_hero_title'        => 'Título do hero (Delivery)',
+    'delivery_hero_subtitle'     => 'Subtítulo do hero (Delivery)',
+    'delivery_area'              => 'Área atendida',
+    'delivery_hours'             => 'Horário de atendimento (Delivery)',
+    'delivery_whatsapp_message'  => 'Mensagem pré-preenchida no WhatsApp',
 ];
 $imgLabels = [
     'site_logo_path'    => ['Logo do site',   'PNG/SVG · fundo transparente (até 5MB)'],
@@ -80,6 +85,15 @@ $longFields = ['contact_address','business_hours','site_description','google_map
             <?= F::text('links_rating_label', $labels['links_rating_label'], $values['links_rating_label'] ?? '', ['placeholder' => '4,9★ no Google', 'hint' => 'Deixe em branco para ocultar.']) ?>
             <?= F::text('links_social_proof', $labels['links_social_proof'], $values['links_social_proof'] ?? '', ['placeholder' => '+1.200 clientes atendidos', 'hint' => 'Aparece ao lado do selo, abaixo do avatar.']) ?>
         </div>
+
+        <h3 class="admin-form__section">Página /delivery · Compre pelo WhatsApp</h3>
+        <?= F::text('delivery_hero_title', $labels['delivery_hero_title'], $values['delivery_hero_title'] ?? '', ['placeholder' => 'Compre sem sair de casa']) ?>
+        <?= F::textarea('delivery_hero_subtitle', $labels['delivery_hero_subtitle'], $values['delivery_hero_subtitle'] ?? '', ['rows' => 2, 'placeholder' => 'Escolha no catálogo, finalize pelo WhatsApp e receba na porta de casa.']) ?>
+        <div class="admin-form__row">
+            <?= F::text('delivery_area',  $labels['delivery_area'],  $values['delivery_area']  ?? '', ['placeholder' => 'Várzea Grande e Cuiabá / MT']) ?>
+            <?= F::text('delivery_hours', $labels['delivery_hours'], $values['delivery_hours'] ?? '', ['placeholder' => 'Seg a Sáb · 9h às 18h']) ?>
+        </div>
+        <?= F::textarea('delivery_whatsapp_message', $labels['delivery_whatsapp_message'], $values['delivery_whatsapp_message'] ?? '', ['rows' => 2, 'placeholder' => 'Olá! Quero fazer um pedido com entrega.', 'hint' => 'Texto que já vai preenchido no WhatsApp ao clicar em "Fazer pedido".']) ?>
 
         <div class="admin-form__actions">
             <button type="submit" class="admin-btn admin-btn--primary" data-testid="settings-save">Salvar configurações</button>

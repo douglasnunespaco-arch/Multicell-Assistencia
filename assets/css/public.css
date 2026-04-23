@@ -1999,3 +1999,112 @@ body { padding-bottom: env(safe-area-inset-bottom); }
     .bio-link__sub   { font-size: 12.5px; }
 }
 
+
+/* ==============================================================
+   Páginas-catálogo · Seminovos · Acessórios · Delivery
+   ============================================================== */
+
+/* Trust bar — usada no topo de Seminovos (garantia · revisão · IMEI) */
+.catalog-perks { padding: 28px 0 0; }
+.catalog-perks__grid {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.catalog-perks__item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    transition: border-color .25s var(--ease), transform .25s var(--ease);
+}
+.catalog-perks__item:hover { border-color: color-mix(in srgb, var(--brand) 45%, transparent); transform: translateY(-2px); }
+.catalog-perks__item strong { display: block; font-weight: 700; color: var(--fg-0); font-size: 15px; }
+.catalog-perks__item small  { display: block; color: var(--fg-2); font-size: 13px; margin-top: 2px; }
+.catalog-perks__icon {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: color-mix(in srgb, var(--brand) 12%, transparent);
+    color: var(--brand);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+}
+
+/* CTA inferior reutilizável — Seminovos / Acessórios / Delivery */
+.catalog-cta { padding-top: 16px; }
+.catalog-cta__box {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap; justify-content: space-between;
+    padding: 28px 32px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+}
+.catalog-cta__box h2 { margin: 0 0 6px; font-size: clamp(20px, 2.2vw, 26px); letter-spacing: -.015em; }
+.catalog-cta__box p  { margin: 0; color: var(--fg-1); max-width: 56ch; }
+[data-theme="light"] .catalog-cta__box p { color: rgba(10,10,11,.72); }
+
+/* Hero CTA inline (Delivery) */
+.page-banner__cta { margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* Delivery · trinca de info (área · horário · forma de pedido) */
+.delivery-info { padding-top: 24px; }
+.delivery-info__grid {
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+.delivery-info__card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 18px 20px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    transition: border-color .25s var(--ease);
+}
+.delivery-info__card:hover { border-color: color-mix(in srgb, var(--brand) 45%, transparent); }
+.delivery-info__card strong { display: block; color: var(--fg-0); font-size: 15px; font-weight: 700; }
+.delivery-info__card p { margin: 2px 0 0; color: var(--fg-1); font-size: 14px; }
+[data-theme="light"] .delivery-info__card p { color: rgba(10,10,11,.72); }
+.delivery-info__icon {
+    width: 40px; height: 40px; border-radius: 999px;
+    background: color-mix(in srgb, var(--brand) 14%, transparent);
+    color: var(--brand);
+    display: grid; place-items: center; flex-shrink: 0;
+}
+
+/* Delivery · timeline de 4 passos */
+.delivery-steps { padding-top: 28px; }
+.delivery-steps__list {
+    list-style: none; margin: 28px 0 0; padding: 0;
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    counter-reset: step;
+}
+.delivery-steps__item {
+    position: relative;
+    display: flex; align-items: flex-start; gap: 16px;
+    padding: 22px 22px 22px 22px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    transition: border-color .25s var(--ease), transform .25s var(--ease);
+}
+.delivery-steps__item:hover { border-color: color-mix(in srgb, var(--brand) 45%, transparent); transform: translateY(-2px); }
+.delivery-steps__item strong { display: block; color: var(--fg-0); font-size: 16px; font-weight: 700; letter-spacing: -.01em; }
+.delivery-steps__item p { margin: 4px 0 0; color: var(--fg-1); font-size: 14px; line-height: 1.55; }
+[data-theme="light"] .delivery-steps__item p { color: rgba(10,10,11,.72); }
+.delivery-steps__item a { color: var(--brand); text-decoration: none; font-weight: 600; }
+.delivery-steps__item a:hover { text-decoration: underline; }
+.delivery-steps__num {
+    width: 36px; height: 36px; flex-shrink: 0;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--brand) 16%, transparent);
+    color: var(--brand);
+    font-family: var(--font-display); font-weight: 800; font-size: 16px;
+    display: grid; place-items: center;
+    border: 1px solid color-mix(in srgb, var(--brand) 35%, transparent);
+}
+
+@media (max-width: 640px) {
+    .catalog-cta__box { padding: 22px 20px; }
+    .delivery-steps__item { padding: 18px; }
+}

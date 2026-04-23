@@ -22,6 +22,7 @@ final class SettingsController
         'business_hours','google_maps_url',
         'instagram_url','facebook_url','tiktok_url','youtube_url',
         'links_rating_label','links_social_proof',
+        'delivery_hero_title','delivery_hero_subtitle','delivery_area','delivery_hours','delivery_whatsapp_message',
     ];
     /** @var string[] Campos de imagem (upload) suportados. */
     private const IMAGE_KEYS = ['site_logo_path','site_favicon_path','site_og_path'];

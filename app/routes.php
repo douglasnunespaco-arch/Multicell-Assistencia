@@ -11,6 +11,9 @@ $router->get('/assistencia-tecnica',          'Public\\ServicesController@index'
 $router->get('/assistencia-tecnica/{slug}',   'Public\\ServicesController@show');
 $router->get('/produtos',                     'Public\\ProductsController@index');
 $router->get('/produtos/{slug}',              'Public\\ProductsController@show');
+$router->get('/acessorios',                   'Public\\AcessoriosController@index');
+$router->get('/seminovos',                    'Public\\SeminovosController@index');
+$router->get('/delivery',                     'Public\\DeliveryController@index');
 $router->get('/promocoes',                    'Public\\PromotionsController@index');
 $router->get('/promocoes/{slug}',             'Public\\PromotionsController@show');
 $router->get('/reservar',                     'Public\\ReservationController@create');

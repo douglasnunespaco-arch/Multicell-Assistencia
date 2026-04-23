@@ -20,7 +20,9 @@ $isActive = function (string $match) use ($currentPath): string {
         <nav class="main-nav" aria-label="Principal">
             <a href="/" class="<?= $isActive('/') ?>">Início</a>
             <a href="/assistencia-tecnica" class="<?= $isActive('/assistencia-tecnica') ?>">Assistência</a>
-            <a href="/produtos" class="<?= $isActive('/produtos') ?>">Produtos</a>
+            <a href="/seminovos" class="<?= $isActive('/seminovos') ?>">Seminovos</a>
+            <a href="/acessorios" class="<?= $isActive('/acessorios') ?>">Acessórios</a>
+            <a href="/delivery" class="<?= $isActive('/delivery') ?>">Delivery</a>
             <a href="/promocoes" class="<?= $isActive('/promocoes') ?>">Promoções</a>
             <a href="/sobre" class="<?= $isActive('/sobre') ?>">Sobre</a>
             <a href="/contato" class="<?= $isActive('/contato') ?>">Contato</a>
@@ -50,7 +52,9 @@ $isActive = function (string $match) use ($currentPath): string {
     <nav aria-label="Principal (mobile)">
         <a href="/" class="<?= $isActive('/') ?>">Início</a>
         <a href="/assistencia-tecnica" class="<?= $isActive('/assistencia-tecnica') ?>">Assistência Técnica</a>
-        <a href="/produtos" class="<?= $isActive('/produtos') ?>">Produtos</a>
+        <a href="/seminovos" class="<?= $isActive('/seminovos') ?>">Seminovos</a>
+        <a href="/acessorios" class="<?= $isActive('/acessorios') ?>">Acessórios</a>
+        <a href="/delivery" class="<?= $isActive('/delivery') ?>">Delivery · WhatsApp</a>
         <a href="/promocoes" class="<?= $isActive('/promocoes') ?>">Promoções</a>
         <a href="/reservar" class="<?= $isActive('/reservar') ?>">Reservar</a>
         <a href="/sobre" class="<?= $isActive('/sobre') ?>">Sobre</a>
