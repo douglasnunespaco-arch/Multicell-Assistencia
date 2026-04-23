@@ -84,6 +84,28 @@ $router->get('/_errors/500', function () {
     return \App\Core\View::render('public/500', [], '');
 });
 
+// -------- Admin (Fase C1 · Sobre / Links / Unidades) --------
+$router->get ('/admin/about',                       'Admin\\AboutController@index');
+$router->get ('/admin/about/new',                   'Admin\\AboutController@create');
+$router->post('/admin/about/store',                 'Admin\\AboutController@store');
+$router->get ('/admin/about/{id}/edit',             'Admin\\AboutController@edit');
+$router->post('/admin/about/{id}/update',           'Admin\\AboutController@update');
+$router->post('/admin/about/{id}/delete',           'Admin\\AboutController@delete');
+
+$router->get ('/admin/links',                       'Admin\\LinksController@index');
+$router->get ('/admin/links/new',                   'Admin\\LinksController@create');
+$router->post('/admin/links/store',                 'Admin\\LinksController@store');
+$router->get ('/admin/links/{id}/edit',             'Admin\\LinksController@edit');
+$router->post('/admin/links/{id}/update',           'Admin\\LinksController@update');
+$router->post('/admin/links/{id}/delete',           'Admin\\LinksController@delete');
+
+$router->get ('/admin/units',                       'Admin\\UnitsController@index');
+$router->get ('/admin/units/new',                   'Admin\\UnitsController@create');
+$router->post('/admin/units/store',                 'Admin\\UnitsController@store');
+$router->get ('/admin/units/{id}/edit',             'Admin\\UnitsController@edit');
+$router->post('/admin/units/{id}/update',           'Admin\\UnitsController@update');
+$router->post('/admin/units/{id}/delete',           'Admin\\UnitsController@delete');
+
 /*
  * Pendente para próximas fases:
  *

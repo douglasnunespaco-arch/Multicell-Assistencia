@@ -43,6 +43,18 @@ $current = $_SERVER['REQUEST_URI'] ?? '';
            href="/admin/testimonials" data-testid="nav-testimonials">
             <?= icon('award', 18) ?> <span>Depoimentos</span>
         </a>
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/about') ? ' is-active' : '' ?>"
+           href="/admin/about" data-testid="nav-about">
+            <?= icon('info', 18) ?> <span>Sobre</span>
+        </a>
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/links') ? ' is-active' : '' ?>"
+           href="/admin/links" data-testid="nav-links">
+            <?= icon('globe', 18) ?> <span>Links / Bio</span>
+        </a>
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/units') ? ' is-active' : '' ?>"
+           href="/admin/units" data-testid="nav-units">
+            <?= icon('pin', 18) ?> <span>Unidades</span>
+        </a>
 
         <div class="admin-nav__section">Sistema</div>
 
