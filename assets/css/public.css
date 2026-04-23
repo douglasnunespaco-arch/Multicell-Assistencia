@@ -1555,7 +1555,7 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 .footer-address:hover { color: var(--brand); }
 .footer-address:hover svg { color: var(--brand); }
 
-/* --- 4) Faixa de marcas · símbolos + wordmarks tipografados (premium minimalista) --- */
+/* --- 4) Faixa de marcas · 10 logos monocromáticos · loop contínuo sem buraco --- */
 .brands-strip {
     padding: 22px 0 24px;
     border-top: 1px solid var(--border);
@@ -1582,13 +1582,21 @@ body { padding-bottom: env(safe-area-inset-bottom); }
     -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
             mask-image: linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%);
 }
+/* Track = contêiner com 2 grupos espelhados. Largura natural (max-content),
+   animação translateX(-50%) → fim do grupo 1 encaixa exatamente no início do grupo 2. */
 .brands-strip__track {
-    display: inline-flex;
-    align-items: center;
-    gap: 48px;
-    white-space: nowrap;
-    animation: brands-marquee 58s linear infinite;
+    display: flex;
+    width: max-content;
+    animation: brands-marquee 42s linear infinite;
     will-change: transform;
+}
+/* Grupo = uma cópia da lista. padding-right = gap interno para fechar o loop sem buraco. */
+.brands-strip__group {
+    display: flex;
+    align-items: center;
+    gap: 56px;
+    padding-right: 56px;
+    flex-shrink: 0;
 }
 .brands-strip__item {
     display: inline-flex;
@@ -1597,7 +1605,7 @@ body { padding-bottom: env(safe-area-inset-bottom); }
     color: var(--fg-1);
     opacity: .78;
     transition: color .25s ease, opacity .25s ease, transform .25s ease;
-    height: 26px;                   /* baseline uniforme para todos os itens */
+    height: 26px;                   /* baseline óptico uniforme */
     line-height: 1;
 }
 .brands-strip__item:hover {
@@ -1605,28 +1613,11 @@ body { padding-bottom: env(safe-area-inset-bottom); }
     opacity: 1;
     transform: translateY(-1px);
 }
-.brands-strip__item--logo svg {
-    width: 22px;                    /* explícito — evita width:0 quando 'auto' não computa do viewBox */
-    height: 22px;
+.brands-strip__item svg {
     display: block;
     flex: 0 0 auto;
+    /* width/height vêm dos atributos inline (variam por marca p/ equilíbrio óptico) */
 }
-.brands-strip__item--word {
-    font-family: 'Sora', 'Manrope', system-ui, sans-serif;
-    font-weight: 600;
-    font-size: 15px;
-    letter-spacing: .06em;
-    font-feature-settings: "ss01", "cv11";
-}
-/* ajuste ótico para marcas com peso visual diferente */
-.brands-strip__item--word[title="LG"],
-.brands-strip__item--word[title="ASUS"],
-.brands-strip__item--word[title="POCO"],
-.brands-strip__item--word[title="TECNO"]   { letter-spacing: .14em; font-weight: 700; }
-.brands-strip__item--word[title="realme"]  { text-transform: lowercase; letter-spacing: .02em; }
-.brands-strip__item--word[title="Samsung"],
-.brands-strip__item--word[title="Multilaser"],
-.brands-strip__item--word[title="Infinix"] { letter-spacing: .03em; }
 
 [data-theme="light"] .brands-strip__item      { color: #22252b; opacity: .82; }
 [data-theme="light"] .brands-strip__item:hover{ color: #0A0A0B; opacity: 1; }
@@ -1637,13 +1628,14 @@ body { padding-bottom: env(safe-area-inset-bottom); }
     to   { transform: translateX(-50%); }
 }
 @media (prefers-reduced-motion: reduce) {
-    .brands-strip__track { animation: none; transform: none; flex-wrap: wrap; justify-content: center; gap: 28px 40px; }
+    .brands-strip__track { animation: none; transform: none; flex-wrap: wrap; justify-content: center; width: auto; }
+    .brands-strip__group { flex-wrap: wrap; justify-content: center; gap: 28px 40px; padding-right: 0; }
+    .brands-strip__group[aria-hidden="true"] { display: none; }
     .brands-strip__viewport { -webkit-mask-image: none; mask-image: none; }
 }
 @media (max-width: 640px) {
-    .brands-strip__track { gap: 34px; }
-    .brands-strip__item--logo svg { width: 20px; height: 20px; }
-    .brands-strip__item--word { font-size: 14px; }
+    .brands-strip__group { gap: 38px; padding-right: 38px; }
+    .brands-strip__item svg { transform: scale(.9); transform-origin: center; }
 }
 
 /* --- 5) Link Painel no footer-bottom · discreto --- */
