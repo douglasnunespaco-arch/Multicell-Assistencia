@@ -220,6 +220,28 @@ Zero mexida em: CSS, controller, rotas, schema, seed, front público, home, hero
 
 ---
 
+## ✅ Sub-rodada 3D — Rankings, metas e confete (JAN 2026)
+
+### Entregas
+1. **Footer**: ícone de mapa removido de `.footer-social` (duplicava o link do `.footer-address`).
+2. **Dashboard "Rankings e metas"** com 4 period-cards (Hoje · Semana · Mês · Ano):
+   - Total vs meta com **barra de progresso animada**.
+   - **Troféu** pulsante quando meta é batida (`is-hit`); glow intenso + shimmer se superada (`is-super`).
+   - **Top 5 ranking** por período via agregado `COALESCE(source, ref_type:ref_id)`.
+3. **Confete vanilla** (42 partículas, 4 cores, 1× por sessão via `sessionStorage`, respeita `prefers-reduced-motion`).
+
+### Metas default
+- day=20 · week=100 · month=400 · year=4500 (hardcoded; sobrescreve via `settings`).
+
+### Arquivos (6)
+**Criado**: `assets/js/admin-confetti.js` (54 linhas)
+**Alterados**: `footer.php` · `DashboardController.php` · `admin/dashboard.php` · `admin.css` · `layouts/admin.php`
+
+### Preservado
+`schema.sql` · `seed.sql` · hero · brands strip · grids home · admin 3C · "Avisar cliente" · rotas · models.
+
+---
+
 ## Próximas ações (prioridade)
 1. **Fase 3C primeiro** — ROI via leads (captura + fluxo WhatsApp otimizado)
 2. **Fase 3B depois** — Edição de conteúdo via painel admin (assume os slides sintéticos nativamente)

@@ -74,6 +74,76 @@
     <?php endif; ?>
 </section>
 
+<?php
+// ------- Bloco "Rankings e metas" · cliques por período -------
+$periodKeys = ['day','week','month','year'];
+$periodIcons = ['day'=>'bolt','week'=>'calendar','month'=>'award','year'=>'shield-check'];
+?>
+<section class="admin-card admin-rankings-card" data-testid="rankings-card">
+    <header class="admin-card__head">
+        <h2>Rankings e metas</h2>
+        <small class="admin-card__hint">cliques reais por período · troféu acende quando a meta é batida</small>
+    </header>
+
+    <div class="rankings-grid" data-testid="rankings-grid">
+        <?php foreach ($periodKeys as $pk):
+            $r = $rankings[$pk] ?? ['label'=>ucfirst($pk),'total'=>0,'goal'=>0,'top'=>[]];
+            $total = (int) $r['total'];
+            $goal  = max(1, (int) $r['goal']);
+            $pct   = min(100, (int) round(($total * 100) / $goal));
+            $hit   = $total >= $goal;
+            $super = $total >= ($goal * 2);
+            $stateClass = $hit ? ($super ? ' is-super' : ' is-hit') : '';
+        ?>
+            <article class="period-card<?= $stateClass ?>"
+                     data-period="<?= e($pk) ?>"
+                     data-goal-hit="<?= $hit ? '1' : '0' ?>"
+                     data-testid="period-<?= e($pk) ?>">
+                <header class="period-card__head">
+                    <span class="period-card__eyebrow"><?= icon($periodIcons[$pk] ?? 'bolt', 14) ?> <?= e($r['label']) ?></span>
+                    <span class="trophy" aria-hidden="true" title="Meta <?= $hit ? 'batida' : 'em andamento' ?>">
+                        <?= icon('award', 18) ?>
+                    </span>
+                </header>
+                <div class="period-card__totals">
+                    <strong class="period-card__value" data-testid="period-<?= e($pk) ?>-total"><?= number_format($total, 0, ',', '.') ?></strong>
+                    <small class="period-card__goal">/ meta <?= number_format($goal, 0, ',', '.') ?></small>
+                </div>
+                <div class="period-card__progress" role="progressbar" aria-valuenow="<?= $pct ?>" aria-valuemin="0" aria-valuemax="100">
+                    <span class="period-card__bar" style="width: <?= $pct ?>%"></span>
+                </div>
+                <p class="period-card__state">
+                    <?php if ($super): ?>
+                        <strong style="color:var(--brand);">Meta superada · dobro batido</strong>
+                    <?php elseif ($hit): ?>
+                        <strong style="color:var(--brand);">Meta batida · 🎉</strong>
+                    <?php else: ?>
+                        <span><?= $pct ?>% da meta · faltam <?= number_format(max(0, $goal - $total), 0, ',', '.') ?></span>
+                    <?php endif; ?>
+                </p>
+
+                <?php if (empty($r['top'])): ?>
+                    <div class="period-card__empty">sem cliques registrados ainda</div>
+                <?php else: ?>
+                    <ol class="period-card__ranking" data-testid="period-<?= e($pk) ?>-ranking">
+                        <?php foreach ($r['top'] as $i => $row):
+                            $label = (string) ($row['bucket'] ?? '—');
+                            if ($label === '') $label = '—';
+                            $count = (int) ($row['c'] ?? 0);
+                        ?>
+                            <li>
+                                <span class="period-card__rank-n">#<?= $i + 1 ?></span>
+                                <span class="period-card__rank-label" title="<?= e($label) ?>"><?= e($label) ?></span>
+                                <span class="period-card__rank-count"><?= number_format($count, 0, ',', '.') ?></span>
+                            </li>
+                        <?php endforeach; ?>
+                    </ol>
+                <?php endif; ?>
+            </article>
+        <?php endforeach; ?>
+    </div>
+</section>
+
 <section class="admin-card admin-card--info" data-testid="roadmap-card">
     <header class="admin-card__head">
         <h2>Próximos passos do painel</h2>

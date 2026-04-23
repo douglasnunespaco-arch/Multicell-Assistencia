@@ -31,10 +31,6 @@ $tt = \App\Models\Setting::get('tiktok_url');
                         <?= icon('tiktok', 18) ?>
                     </a>
                 <?php endif; ?>
-                <a href="<?= e(\App\Models\Setting::get('google_maps_url', '#')) ?>" target="_blank" rel="noopener" aria-label="Google Maps"
-                   data-track="cta_click" data-track-source="footer_maps">
-                    <?= icon('map', 18) ?>
-                </a>
             </div>
         </div>
 

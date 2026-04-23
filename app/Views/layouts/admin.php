@@ -33,5 +33,6 @@ $user  = \App\Core\Auth::user();
 </div>
 
 <script src="/assets/js/admin.js" defer></script>
+<script src="/assets/js/admin-confetti.js" defer></script>
 </body>
 </html>

@@ -321,3 +321,104 @@
 .admin-empty small { color: var(--fg-2, #9aa0a6); font-size: 12px; }
 
 .admin-field__error { color: #ff4d6d; font-size: 12px; }
+
+/* =====================================================================
+ * Rankings e metas · Sub-rodada 3D
+ * ===================================================================== */
+.admin-rankings-card { position: relative; overflow: hidden; }
+.rankings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+}
+.period-card {
+    background: #0f1012;
+    border: 1px solid var(--border, #22252b);
+    border-radius: 12px;
+    padding: 14px 16px 16px;
+    display: flex; flex-direction: column; gap: 10px;
+    position: relative;
+    transition: border-color .2s ease, box-shadow .25s ease, transform .25s ease;
+}
+.period-card.is-hit   { border-color: rgba(20,241,149,.45); box-shadow: 0 0 0 1px rgba(20,241,149,.15), 0 14px 40px -20px rgba(20,241,149,.3); }
+.period-card.is-super { border-color: rgba(20,241,149,.75); box-shadow: 0 0 0 1px rgba(20,241,149,.35), 0 20px 50px -18px rgba(20,241,149,.55); transform: translateY(-1px); }
+
+.period-card__head { display: flex; justify-content: space-between; align-items: center; }
+.period-card__eyebrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--fg-2, #9aa0a6);
+    font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+}
+.period-card__eyebrow svg { color: var(--brand, #14F195); }
+
+/* Troféu · estado default apagado; acende + pulsa quando is-hit */
+.trophy {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px; border-radius: 999px;
+    background: rgba(255,255,255,.04);
+    color: var(--fg-2, #9aa0a6);
+    transition: color .25s ease, background .25s ease, transform .2s ease;
+}
+.trophy svg { width: 16px; height: 16px; }
+.period-card.is-hit .trophy,
+.period-card.is-super .trophy {
+    color: #0A0A0B;
+    background: var(--brand, #14F195);
+    animation: trophy-pulse 2.2s ease-in-out infinite;
+}
+.period-card.is-super .trophy { animation: trophy-pulse 1.5s ease-in-out infinite; }
+@keyframes trophy-pulse {
+    0%,100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(20,241,149,.55); }
+    50%     { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(20,241,149,0); }
+}
+
+.period-card__totals { display: flex; align-items: baseline; gap: 8px; }
+.period-card__value { font-family: 'Sora', sans-serif; font-size: 28px; font-weight: 700; color: var(--fg-0, #e7e9ee); line-height: 1; }
+.period-card__goal  { color: var(--fg-2, #9aa0a6); font-size: 12px; }
+
+.period-card__progress {
+    height: 6px;
+    background: rgba(255,255,255,.06);
+    border-radius: 999px;
+    overflow: hidden;
+}
+.period-card__bar {
+    display: block; height: 100%;
+    background: linear-gradient(90deg, var(--brand, #14F195), #0FD585);
+    border-radius: 999px;
+    transition: width .6s cubic-bezier(.25,1,.3,1);
+}
+.period-card.is-super .period-card__bar { background: linear-gradient(90deg, #14F195, #0FD585, #14F195); background-size: 200% 100%; animation: bar-shimmer 2s linear infinite; }
+@keyframes bar-shimmer { from { background-position: 0 0; } to { background-position: -200% 0; } }
+
+.period-card__state { margin: 0; font-size: 12px; color: var(--fg-2, #9aa0a6); }
+.period-card__empty { color: var(--fg-2, #9aa0a6); font-size: 12px; padding: 8px 0 0; border-top: 1px solid var(--border, #22252b); }
+
+.period-card__ranking {
+    list-style: none; padding: 0; margin: 4px 0 0;
+    display: flex; flex-direction: column; gap: 6px;
+    border-top: 1px solid var(--border, #22252b); padding-top: 10px;
+}
+.period-card__ranking li { display: grid; grid-template-columns: 28px 1fr auto; gap: 8px; align-items: center; font-size: 13px; }
+.period-card__rank-n     { color: var(--fg-2, #9aa0a6); font-weight: 700; font-size: 11px; letter-spacing: .04em; }
+.period-card__rank-label { color: var(--fg-0, #e7e9ee); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.period-card__rank-count { color: var(--brand, #14F195); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Confetti · partículas geradas pelo JS, cai + rotaciona, somem no fim */
+.confetti-layer { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 9999; }
+.confetti-piece {
+    position: absolute; top: -12px; width: 8px; height: 12px;
+    opacity: 0; will-change: transform, opacity;
+    animation: confetti-fall 3.2s cubic-bezier(.2,.6,.35,1) forwards;
+}
+@keyframes confetti-fall {
+    0%   { opacity: 0; transform: translate3d(0,-20px,0) rotate(0deg); }
+    10%  { opacity: 1; }
+    100% { opacity: 0; transform: translate3d(var(--cx,0), 100vh, 0) rotate(var(--rot,540deg)); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .trophy, .period-card.is-super .trophy { animation: none; }
+    .period-card.is-super .period-card__bar { animation: none; }
+    .confetti-piece { animation: none; display: none; }
+}
+
