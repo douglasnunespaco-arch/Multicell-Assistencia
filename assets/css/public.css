@@ -1625,7 +1625,7 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 .brands-strip:hover .brands-strip__track { animation-play-state: paused; }
 @keyframes brands-marquee {
     from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
+    to   { transform: translateX(-25%); }
 }
 @media (prefers-reduced-motion: reduce) {
     .brands-strip__track { animation: none; transform: none; flex-wrap: wrap; justify-content: center; width: auto; }
