@@ -17,4 +17,25 @@ final class Testimonial
              ORDER BY sort_order ASC, id ASC LIMIT " . (int) $limit
         );
     }
+
+    public static function all(): array
+    {
+        return Database::fetchAll('SELECT * FROM testimonials ORDER BY sort_order ASC, id ASC');
+    }
+    public static function find(int $id): ?array
+    {
+        return Database::fetch('SELECT * FROM testimonials WHERE id = :id', ['id' => $id]);
+    }
+    public static function create(array $data): int
+    {
+        return Database::insert('testimonials', $data);
+    }
+    public static function update(int $id, array $data): int
+    {
+        return Database::update('testimonials', $data, ['id' => $id]);
+    }
+    public static function delete(int $id): void
+    {
+        Database::query('DELETE FROM testimonials WHERE id = :id', ['id' => $id]);
+    }
 }

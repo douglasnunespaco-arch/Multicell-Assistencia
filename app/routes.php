@@ -29,6 +29,46 @@ $router->get('/admin/leads',                  'Admin\\LeadsController@index');
 $router->get('/admin/leads/{id}',             'Admin\\LeadsController@show');
 $router->post('/admin/leads/{id}/status',     'Admin\\LeadsController@updateStatus');
 
+// -------- Admin (B2 reduzida · CRUDs de conteúdo) --------
+// Slides
+$router->get ('/admin/slides',                      'Admin\\SlidesController@index');
+$router->get ('/admin/slides/new',                  'Admin\\SlidesController@create');
+$router->post('/admin/slides/store',                'Admin\\SlidesController@store');
+$router->get ('/admin/slides/{id}/edit',            'Admin\\SlidesController@edit');
+$router->post('/admin/slides/{id}/update',          'Admin\\SlidesController@update');
+$router->post('/admin/slides/{id}/delete',          'Admin\\SlidesController@delete');
+// Services
+$router->get ('/admin/services',                    'Admin\\ServicesController@index');
+$router->get ('/admin/services/new',                'Admin\\ServicesController@create');
+$router->post('/admin/services/store',              'Admin\\ServicesController@store');
+$router->get ('/admin/services/{id}/edit',          'Admin\\ServicesController@edit');
+$router->post('/admin/services/{id}/update',        'Admin\\ServicesController@update');
+$router->post('/admin/services/{id}/delete',        'Admin\\ServicesController@delete');
+// Products
+$router->get ('/admin/products',                    'Admin\\ProductsController@index');
+$router->get ('/admin/products/new',                'Admin\\ProductsController@create');
+$router->post('/admin/products/store',              'Admin\\ProductsController@store');
+$router->get ('/admin/products/{id}/edit',          'Admin\\ProductsController@edit');
+$router->post('/admin/products/{id}/update',        'Admin\\ProductsController@update');
+$router->post('/admin/products/{id}/delete',        'Admin\\ProductsController@delete');
+// Promotions
+$router->get ('/admin/promotions',                  'Admin\\PromotionsController@index');
+$router->get ('/admin/promotions/new',              'Admin\\PromotionsController@create');
+$router->post('/admin/promotions/store',            'Admin\\PromotionsController@store');
+$router->get ('/admin/promotions/{id}/edit',        'Admin\\PromotionsController@edit');
+$router->post('/admin/promotions/{id}/update',      'Admin\\PromotionsController@update');
+$router->post('/admin/promotions/{id}/delete',      'Admin\\PromotionsController@delete');
+// Testimonials
+$router->get ('/admin/testimonials',                'Admin\\TestimonialsController@index');
+$router->get ('/admin/testimonials/new',            'Admin\\TestimonialsController@create');
+$router->post('/admin/testimonials/store',          'Admin\\TestimonialsController@store');
+$router->get ('/admin/testimonials/{id}/edit',      'Admin\\TestimonialsController@edit');
+$router->post('/admin/testimonials/{id}/update',    'Admin\\TestimonialsController@update');
+$router->post('/admin/testimonials/{id}/delete',    'Admin\\TestimonialsController@delete');
+// Settings
+$router->get ('/admin/settings',                    'Admin\\SettingsController@index');
+$router->post('/admin/settings/update',             'Admin\\SettingsController@update');
+
 // Redirecionamentos rastreados (CTA → canal externo)
 $router->get('/go/whatsapp',                  'Public\\RedirectController@whatsapp');
 $router->get('/go/phone',                     'Public\\RedirectController@phone');

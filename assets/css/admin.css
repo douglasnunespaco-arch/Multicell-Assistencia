@@ -422,3 +422,106 @@
     .confetti-piece { animation: none; display: none; }
 }
 
+
+/* =====================================================================
+ * CRUDs B2 · forms, tables e elementos de gestão de conteúdo
+ * ===================================================================== */
+
+/* Thumb na listagem */
+.admin-thumb {
+    display: inline-block; width: 52px; height: 40px;
+    object-fit: cover; border-radius: 6px;
+    background: #161719; border: 1px solid var(--border, #22252b);
+}
+.admin-thumb--empty {
+    color: var(--fg-2, #9aa0a6); font-size: 14px;
+    text-align: center; line-height: 40px;
+}
+
+/* Form layout */
+.admin-form { display: flex; flex-direction: column; gap: 14px; margin-top: 6px; }
+.admin-form__section {
+    font-family: 'Sora', sans-serif;
+    font-size: 13px; text-transform: uppercase; letter-spacing: .12em;
+    color: var(--fg-2, #9aa0a6); margin: 14px 0 -2px;
+    padding-top: 14px; border-top: 1px solid var(--border, #22252b);
+}
+.admin-form__section:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.admin-form__hint {
+    background: rgba(20,241,149,.06);
+    border: 1px solid rgba(20,241,149,.22);
+    color: var(--fg-0, #e7e9ee);
+    padding: 10px 12px; border-radius: 8px; font-size: 13px;
+}
+.admin-form__row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+.admin-form__grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+}
+.admin-form__actions {
+    display: flex; justify-content: flex-end; gap: 10px; padding-top: 10px;
+    border-top: 1px solid var(--border, #22252b); margin-top: 8px;
+}
+
+/* Campo genérico */
+.admin-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.admin-field label {
+    font-size: 12px; font-weight: 600;
+    color: var(--fg-1, #b8bcc4); letter-spacing: .02em;
+}
+.admin-field__req { color: var(--brand, #14F195); }
+.admin-field__hint { color: var(--fg-2, #9aa0a6); font-size: 11px; margin-top: -2px; }
+
+/* admin-input já existe para select/text · complemento p/ textarea e file */
+textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit; }
+.admin-input--file {
+    padding: 7px 8px;
+    background: #0c0d0f;
+    cursor: pointer;
+}
+.admin-input--file::file-selector-button {
+    background: #161719; color: var(--fg-0, #e7e9ee);
+    border: 1px solid var(--border, #22252b);
+    padding: 5px 10px; border-radius: 6px; cursor: pointer;
+    margin-right: 10px; font: inherit;
+}
+.admin-input--file::file-selector-button:hover {
+    border-color: rgba(20,241,149,.5); color: var(--brand, #14F195);
+}
+
+/* Imagem atual no form com remoção */
+.admin-field__current {
+    margin-top: 8px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 10px; background: #0c0d0f; border: 1px solid var(--border, #22252b); border-radius: 8px;
+}
+.admin-field__current img {
+    width: 72px; height: 54px; object-fit: cover;
+    border-radius: 6px; border: 1px solid var(--border, #22252b);
+}
+
+/* Checkbox styled */
+.admin-checkbox {
+    display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+    color: var(--fg-0, #e7e9ee); font-size: 13px;
+    padding: 10px 0;
+}
+.admin-checkbox input[type="checkbox"] {
+    width: 18px; height: 18px; accent-color: var(--brand, #14F195); cursor: pointer;
+}
+.admin-checkbox--sm { font-size: 12px; padding: 4px 0; }
+.admin-field--checkbox { justify-content: center; }
+
+/* Botão danger (excluir) */
+.admin-btn--danger {
+    background: rgba(255,77,109,.08);
+    color: #ffb3c1;
+    border-color: rgba(255,77,109,.3);
+}
+.admin-btn--danger:hover {
+    background: rgba(255,77,109,.18);
+    border-color: #ff4d6d; color: #fff;
+}
+

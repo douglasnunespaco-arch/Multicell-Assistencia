@@ -27,4 +27,25 @@ final class Service
             ['s' => $slug]
         );
     }
+
+    public static function all(): array
+    {
+        return Database::fetchAll('SELECT * FROM services ORDER BY sort_order ASC, id ASC');
+    }
+    public static function find(int $id): ?array
+    {
+        return Database::fetch('SELECT * FROM services WHERE id = :id', ['id' => $id]);
+    }
+    public static function create(array $data): int
+    {
+        return Database::insert('services', $data);
+    }
+    public static function update(int $id, array $data): int
+    {
+        return Database::update('services', $data, ['id' => $id]);
+    }
+    public static function delete(int $id): void
+    {
+        Database::query('DELETE FROM services WHERE id = :id', ['id' => $id]);
+    }
 }

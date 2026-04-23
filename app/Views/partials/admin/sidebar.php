@@ -23,29 +23,33 @@ $current = $_SERVER['REQUEST_URI'] ?? '';
            href="/admin/leads" data-testid="nav-leads">
             <?= icon('calendar', 18) ?> <span>Reservas</span>
         </a>
-        <span class="admin-nav__item is-disabled" title="Disponível na Sub-rodada 3B">
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/slides') ? ' is-active' : '' ?>"
+           href="/admin/slides" data-testid="nav-slides">
             <?= icon('image', 18) ?> <span>Slides (Hero)</span>
-            <small class="admin-badge">3B</small>
-        </span>
-        <span class="admin-nav__item is-disabled" title="Disponível na Sub-rodada 3B">
+        </a>
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/services') ? ' is-active' : '' ?>"
+           href="/admin/services" data-testid="nav-services">
             <?= icon('wrench', 18) ?> <span>Serviços</span>
-            <small class="admin-badge">3B</small>
-        </span>
-        <span class="admin-nav__item is-disabled" title="Disponível na Sub-rodada 3B">
+        </a>
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/products') ? ' is-active' : '' ?>"
+           href="/admin/products" data-testid="nav-products">
             <?= icon('package', 18) ?> <span>Produtos</span>
-            <small class="admin-badge">3B</small>
-        </span>
-        <span class="admin-nav__item is-disabled" title="Disponível na Sub-rodada 3B">
+        </a>
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/promotions') ? ' is-active' : '' ?>"
+           href="/admin/promotions" data-testid="nav-promotions">
             <?= icon('tag', 18) ?> <span>Promoções</span>
-            <small class="admin-badge">3B</small>
-        </span>
+        </a>
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/testimonials') ? ' is-active' : '' ?>"
+           href="/admin/testimonials" data-testid="nav-testimonials">
+            <?= icon('award', 18) ?> <span>Depoimentos</span>
+        </a>
 
         <div class="admin-nav__section">Sistema</div>
 
-        <span class="admin-nav__item is-disabled" title="Disponível na Sub-rodada 3B">
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/settings') ? ' is-active' : '' ?>"
+           href="/admin/settings" data-testid="nav-settings">
             <?= icon('tools', 18) ?> <span>Configurações</span>
-            <small class="admin-badge">3B</small>
-        </span>
+        </a>
 
         <form method="post" action="/admin/logout" class="admin-logout" data-testid="admin-logout-form">
             <?= \App\Core\Csrf::field() ?>

@@ -26,4 +26,25 @@ final class Promotion
             ['s' => $slug]
         );
     }
+
+    public static function all(): array
+    {
+        return Database::fetchAll('SELECT * FROM promotions ORDER BY sort_order ASC, id ASC');
+    }
+    public static function find(int $id): ?array
+    {
+        return Database::fetch('SELECT * FROM promotions WHERE id = :id', ['id' => $id]);
+    }
+    public static function create(array $data): int
+    {
+        return Database::insert('promotions', $data);
+    }
+    public static function update(int $id, array $data): int
+    {
+        return Database::update('promotions', $data, ['id' => $id]);
+    }
+    public static function delete(int $id): void
+    {
+        Database::query('DELETE FROM promotions WHERE id = :id', ['id' => $id]);
+    }
 }

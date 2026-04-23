@@ -260,6 +260,22 @@ Hero estrutural · 5 slides · admin 3C · 3D (rankings/confetti) · grids home 
 
 ---
 
+## ✅ Sub-rodada 3B reduzida · CMS operável (JAN 2026)
+
+### Entregas
+- 6 CRUDs completos: **Slides** (texto opcional) · **Serviços** · **Produtos** · **Promoções** · **Depoimentos** · **Configurações** (branding + contato + redes).
+- `FormField` helper central · upload reaproveitado do `Core/Upload` existente.
+- Sidebar admin com 6 itens ativos (placeholder "3B" removido).
+
+### Arquivos (26)
+- **21 novos**: 1 helper (`Core/FormField`), 6 controllers admin, 11 views admin, 2 models reescritos (`HeroSlide`, `Setting`), 1 upsert em `Setting::set()`.
+- **5 alterados**: 4 models (+CRUD methods), `routes.php` (+32 rotas), `sidebar.php`, `admin.css` (+140 linhas), `admin.js` (+22 linhas file preview).
+
+### Preservado
+`schema.sql` · `seed.sql` · front público · hero · brands strip · badge Promoção · admin 3C (Reservas + Avisar cliente) · admin 3D (Rankings + confetti) · grids home.
+
+---
+
 ## Próximas ações (prioridade)
 1. **Fase 3C primeiro** — ROI via leads (captura + fluxo WhatsApp otimizado)
 2. **Fase 3B depois** — Edição de conteúdo via painel admin (assume os slides sintéticos nativamente)

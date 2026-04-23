@@ -23,4 +23,27 @@
             if (!confirm('Encerrar sessão?')) e.preventDefault();
         });
     }
+
+    // Preview de imagem em inputs file do admin
+    document.querySelectorAll('input[type=file][data-file-preview]').forEach(function (inp) {
+        inp.addEventListener('change', function () {
+            var file = inp.files && inp.files[0];
+            if (!file) return;
+            var wrap = inp.closest('.admin-field');
+            if (!wrap) return;
+            var current = wrap.querySelector('[data-file-preview-current]');
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                if (current) { current.src = e.target.result; return; }
+                var host = wrap.querySelector('.admin-field__current');
+                if (!host) {
+                    host = document.createElement('div');
+                    host.className = 'admin-field__current';
+                    wrap.appendChild(host);
+                }
+                host.innerHTML = '<img src="' + e.target.result + '" alt="" data-file-preview-current>';
+            };
+            reader.readAsDataURL(file);
+        });
+    });
 })();
