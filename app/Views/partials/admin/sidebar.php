@@ -58,6 +58,18 @@ $current = $_SERVER['REQUEST_URI'] ?? '';
 
         <div class="admin-nav__section">Sistema</div>
 
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/theme') ? ' is-active' : '' ?>"
+           href="/admin/theme" data-testid="nav-theme">
+            <?= icon('sparkle', 18) ?> <span>Tema</span>
+        </a>
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/seo') ? ' is-active' : '' ?>"
+           href="/admin/seo" data-testid="nav-seo">
+            <?= icon('search', 18) ?> <span>SEO</span>
+        </a>
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/sections') ? ' is-active' : '' ?>"
+           href="/admin/sections" data-testid="nav-sections">
+            <?= icon('bolt', 18) ?> <span>Seções da home</span>
+        </a>
         <a class="admin-nav__item<?= str_starts_with($current, '/admin/settings') ? ' is-active' : '' ?>"
            href="/admin/settings" data-testid="nav-settings">
             <?= icon('tools', 18) ?> <span>Configurações</span>

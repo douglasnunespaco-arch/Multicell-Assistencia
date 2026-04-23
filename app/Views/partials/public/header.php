@@ -24,6 +24,7 @@ $isActive = function (string $match) use ($currentPath): string {
             <a href="/promocoes" class="<?= $isActive('/promocoes') ?>">Promoções</a>
             <a href="/sobre" class="<?= $isActive('/sobre') ?>">Sobre</a>
             <a href="/contato" class="<?= $isActive('/contato') ?>">Contato</a>
+            <a href="/links" class="<?= $isActive('/links') ?>">Links</a>
         </nav>
 
         <div class="header-actions">
@@ -54,6 +55,7 @@ $isActive = function (string $match) use ($currentPath): string {
         <a href="/reservar" class="<?= $isActive('/reservar') ?>">Reservar</a>
         <a href="/sobre" class="<?= $isActive('/sobre') ?>">Sobre</a>
         <a href="/contato" class="<?= $isActive('/contato') ?>">Contato</a>
+        <a href="/links" class="<?= $isActive('/links') ?>">Links</a>
     </nav>
     <div class="drawer-cta">
         <a href="<?= whatsapp_link('drawer') ?>" class="btn btn--primary btn--block"

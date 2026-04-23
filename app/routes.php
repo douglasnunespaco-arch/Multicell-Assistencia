@@ -106,6 +106,16 @@ $router->get ('/admin/units/{id}/edit',             'Admin\\UnitsController@edit
 $router->post('/admin/units/{id}/update',           'Admin\\UnitsController@update');
 $router->post('/admin/units/{id}/delete',           'Admin\\UnitsController@delete');
 
+// -------- Admin (Fase C2 · Tema / SEO / Seções) --------
+$router->get ('/admin/theme',                       'Admin\\ThemeController@index');
+$router->post('/admin/theme/update',                'Admin\\ThemeController@update');
+
+$router->get ('/admin/seo',                         'Admin\\SeoController@index');
+$router->post('/admin/seo/update',                  'Admin\\SeoController@update');
+
+$router->get ('/admin/sections',                    'Admin\\SectionsController@index');
+$router->post('/admin/sections/update',             'Admin\\SectionsController@update');
+
 /*
  * Pendente para próximas fases:
  *
