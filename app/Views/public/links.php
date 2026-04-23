@@ -3,6 +3,8 @@
 $siteName = \App\Models\Setting::get('site_name', 'Multi Cell');
 $tagline  = \App\Models\Setting::get('tagline', 'Assistência técnica + acessórios premium');
 $logoPath = \App\Models\Setting::get('logo_path', '');
+$rating   = trim((string) \App\Models\Setting::get('links_rating_label', ''));
+$proof    = trim((string) \App\Models\Setting::get('links_social_proof', ''));
 
 // Links dinâmicos do painel (Fase C1). Se a tabela ainda não existir, falha silenciosamente.
 $bioLinks = [];
@@ -48,6 +50,20 @@ if (count($parts) >= 3) {
             <h1 class="bio-title"><?= e($brandMain) ?></h1>
             <?php if ($brandSub !== ''): ?>
                 <p class="bio-title-sub"><?= e($brandSub) ?></p>
+            <?php endif; ?>
+            <?php if ($rating !== '' || $proof !== ''): ?>
+                <div class="bio-trust" aria-label="Selo de confiança">
+                    <?php if ($rating !== ''): ?>
+                        <span class="bio-trust__pill">
+                            <?= icon('star', 13) ?>
+                            <span><?= e($rating) ?></span>
+                        </span>
+                    <?php endif; ?>
+                    <?php if ($proof !== ''): ?>
+                        <?php if ($rating !== ''): ?><span class="bio-trust__dot" aria-hidden="true"></span><?php endif; ?>
+                        <span class="bio-trust__text"><?= e($proof) ?></span>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
             <p class="bio-sub"><?= e($tagline) ?></p>
         </header>

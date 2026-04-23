@@ -21,6 +21,8 @@ $labels = [
     'facebook_url'           => 'Facebook',
     'tiktok_url'             => 'TikTok',
     'youtube_url'            => 'YouTube',
+    'links_rating_label'     => 'Selo de avaliação (ex.: 4,9★ no Google)',
+    'links_social_proof'     => 'Prova social (ex.: +1.200 clientes atendidos)',
 ];
 $imgLabels = [
     'site_logo_path'    => ['Logo do site',   'PNG/SVG · fundo transparente (até 5MB)'],
@@ -71,6 +73,12 @@ $longFields = ['contact_address','business_hours','site_description','google_map
             <?= F::url('facebook_url',  $labels['facebook_url'],  $values['facebook_url'] ?? '') ?>
             <?= F::url('tiktok_url',    $labels['tiktok_url'],    $values['tiktok_url'] ?? '') ?>
             <?= F::url('youtube_url',   $labels['youtube_url'],   $values['youtube_url'] ?? '') ?>
+        </div>
+
+        <h3 class="admin-form__section">Página /links · selo de confiança</h3>
+        <div class="admin-form__row">
+            <?= F::text('links_rating_label', $labels['links_rating_label'], $values['links_rating_label'] ?? '', ['placeholder' => '4,9★ no Google', 'hint' => 'Deixe em branco para ocultar.']) ?>
+            <?= F::text('links_social_proof', $labels['links_social_proof'], $values['links_social_proof'] ?? '', ['placeholder' => '+1.200 clientes atendidos', 'hint' => 'Aparece ao lado do selo, abaixo do avatar.']) ?>
         </div>
 
         <div class="admin-form__actions">
