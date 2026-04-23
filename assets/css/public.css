@@ -1816,9 +1816,9 @@ body { padding-bottom: env(safe-area-inset-bottom); }
     border-radius: 16px;
     text-decoration: none;
     font-family: var(--font-body);
-    background: rgba(20,241,149,.035);
-    border: 1px solid color-mix(in srgb, var(--brand) 42%, transparent);
-    color: #fff;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    color: var(--fg-0);
     transition:
         transform .22s var(--ease),
         box-shadow .3s var(--ease),
@@ -1826,32 +1826,22 @@ body { padding-bottom: env(safe-area-inset-bottom); }
         border-color .25s var(--ease),
         color .25s var(--ease);
     will-change: transform;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
 }
 .bio-link:active { transform: translateY(1px); }
-[data-theme="light"] .bio-link { color: #0A0A0B; background: rgba(15,184,120,.04); }
 
-/* Highlight = borda + glow verde mais intenso (reserva de destaque, sem quebrar a paleta) */
-.bio-link--highlight {
-    border-color: var(--brand);
-    box-shadow:
-        0 0 0 1px color-mix(in srgb, var(--brand) 40%, transparent),
-        0 18px 40px -22px rgba(20,241,149,.45);
-}
+/* Highlight = sutilmente mais "alto" (sombra card padrão) — mesma família visual */
+.bio-link--highlight { box-shadow: var(--shadow-card); }
 
-/* Default = borda verde suave */
-.bio-link--default {
-    border-color: color-mix(in srgb, var(--brand) 32%, transparent);
-}
+/* Default = card puro */
+.bio-link--default {}
 
-/* Hover unificado: verde preenche o quadro, texto preto da marca, seta/ícone preto */
+/* Hover unificado: verde preenche o quadro (mesmo glow dos cards do site) */
 .bio-link:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     background: var(--brand);
     border-color: var(--brand);
     color: var(--brand-ink);
-    box-shadow: 0 22px 45px -18px rgba(20,241,149,.55);
+    box-shadow: var(--shadow-glow);
 }
 .bio-link:hover .bio-link__icon {
     background: var(--brand-ink);
@@ -1859,24 +1849,23 @@ body { padding-bottom: env(safe-area-inset-bottom); }
     border-color: transparent;
 }
 .bio-link:hover .bio-link__title { color: var(--brand-ink); }
-.bio-link:hover .bio-link__sub   { color: color-mix(in srgb, var(--brand-ink) 82%, transparent); }
+.bio-link:hover .bio-link__sub   { color: color-mix(in srgb, var(--brand-ink) 80%, transparent); }
 .bio-link:hover .bio-link__arrow { color: var(--brand-ink); }
 
-/* Ícone box · repouso */
+/* Ícone box · repouso (tinta verde suave em cima do cinza do card) */
 .bio-link__icon {
     grid-column: 1;
     width: 56px; height: 56px;
     border-radius: 13px;
     display: grid; place-items: center;
     flex-shrink: 0;
-    background: rgba(20,241,149,.1);
-    border: 1px solid color-mix(in srgb, var(--brand) 32%, transparent);
+    background: var(--bg-3);
+    border: 1px solid var(--border);
     color: var(--brand);
     transition: background-color .22s var(--ease), color .22s var(--ease), border-color .22s var(--ease), transform .22s var(--ease);
 }
 .bio-link:hover .bio-link__icon { transform: scale(1.04); }
 .bio-link__icon svg { width: 24px; height: 24px; display: block; }
-[data-theme="light"] .bio-link__icon { background: rgba(15,184,120,.1); }
 
 /* Texto · repouso */
 .bio-link__title {
@@ -1885,7 +1874,7 @@ body { padding-bottom: env(safe-area-inset-bottom); }
     font-size: 17px;
     letter-spacing: -0.01em;
     line-height: 1.2;
-    color: #fff;
+    color: var(--fg-0);
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1896,15 +1885,13 @@ body { padding-bottom: env(safe-area-inset-bottom); }
     font-size: 13px;
     font-weight: 500;
     line-height: 1.35;
-    color: rgba(255,255,255,.6);
+    color: var(--fg-1);
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     transition: color .22s var(--ease);
 }
-[data-theme="light"] .bio-link__title { color: #0A0A0B; }
-[data-theme="light"] .bio-link__sub   { color: rgba(10,10,11,.6); }
 
 .bio-link__text {
     grid-column: 2;
@@ -1918,7 +1905,7 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 .bio-link__arrow {
     grid-column: 3;
     display: grid; place-items: center;
-    color: var(--brand);
+    color: var(--fg-2);
     opacity: .9;
     transition: transform .25s var(--ease), color .22s var(--ease);
 }
