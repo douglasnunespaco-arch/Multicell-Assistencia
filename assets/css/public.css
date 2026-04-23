@@ -1757,7 +1757,7 @@ body { padding-bottom: env(safe-area-inset-bottom); }
     color: var(--brand-ink);
     display: grid; place-items: center;
     box-shadow: 0 6px 14px -4px rgba(0,0,0,.35);
-    border: 3px solid #05070B;
+    border: 2px solid #05070B;
 }
 [data-theme="light"] .bio-avatar__badge { border-color: #F7F8FA; }
 .bio-avatar__badge svg { width: 14px; height: 14px; stroke-width: 3; }
