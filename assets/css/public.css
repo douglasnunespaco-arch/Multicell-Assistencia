@@ -1667,3 +1667,325 @@ body { padding-bottom: env(safe-area-inset-bottom); }
     .footer-bottom { justify-content: center; text-align: center; }
     .footer-bottom__right { justify-content: center; }
 }
+
+/* =====================================================================
+ * Links / Bio page · versão premium "loose links" (Jan 2026)
+ * Remove o card geral; cada link flutua com rótulo + subtítulo + seta.
+ * ===================================================================== */
+.bio-shell {
+    position: relative;
+    min-height: 100vh;
+    padding: clamp(48px, 8vw, 96px) 20px 32px;
+    background: #05070B;
+    color: var(--fg-0);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    isolation: isolate;
+}
+[data-theme="light"] .bio-shell { background: #F7F8FA; color: #0A0A0B; }
+
+.bio-bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+.bio-bg__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: .7;
+}
+.bio-bg__glow--1 {
+    top: -120px; left: -80px;
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(36,120,255,.55) 0%, transparent 70%);
+}
+.bio-bg__glow--2 {
+    bottom: -140px; right: -100px;
+    width: 520px; height: 520px;
+    background: radial-gradient(circle, rgba(20,241,149,.32) 0%, transparent 70%);
+}
+[data-theme="light"] .bio-bg__glow--1 { background: radial-gradient(circle, rgba(36,120,255,.22) 0%, transparent 70%); }
+[data-theme="light"] .bio-bg__glow--2 { background: radial-gradient(circle, rgba(15,184,120,.18) 0%, transparent 70%); }
+.bio-bg__grid {
+    position: absolute; inset: 0;
+    background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 40%, #000 30%, transparent 75%);
+}
+[data-theme="light"] .bio-bg__grid {
+    background-image:
+        linear-gradient(rgba(10,10,11,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,10,11,.05) 1px, transparent 1px);
+}
+
+.bio-inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 28px;
+}
+
+/* ---------- Header (avatar + brand) ---------- */
+.bio-head { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.bio-avatar {
+    position: relative;
+    width: 112px; height: 112px;
+    border-radius: 50%;
+    background: linear-gradient(140deg, #2B6FFF 0%, #1547C4 100%);
+    display: grid; place-items: center;
+    box-shadow:
+        0 20px 55px -18px rgba(36, 112, 255, .55),
+        0 0 0 8px rgba(36, 112, 255, .08);
+    overflow: visible;
+}
+.bio-avatar img {
+    width: 100%; height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+}
+.bio-avatar__text {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 38px;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+.bio-avatar__badge {
+    position: absolute;
+    right: -2px; bottom: -2px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #fff;
+    color: #1547C4;
+    display: grid; place-items: center;
+    box-shadow: 0 6px 14px -4px rgba(0,0,0,.35);
+    border: 3px solid #05070B;
+}
+[data-theme="light"] .bio-avatar__badge { border-color: #F7F8FA; }
+.bio-avatar__badge svg { width: 14px; height: 14px; stroke-width: 3; }
+
+.bio-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(26px, 5vw, 34px);
+    letter-spacing: -0.025em;
+    margin: 0;
+    color: #fff;
+}
+[data-theme="light"] .bio-title { color: #0A0A0B; }
+.bio-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,.68);
+    margin: 0;
+    max-width: 420px;
+    line-height: 1.45;
+}
+[data-theme="light"] .bio-sub { color: rgba(10,10,11,.62); }
+
+/* ---------- Stack de links soltos ---------- */
+.bio-stack { display: flex; flex-direction: column; gap: 14px; }
+
+/* Link padrão / highlight compartilham base */
+.bio-link {
+    --bio-h: 72px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 56px 1fr 28px;
+    align-items: center;
+    gap: 14px;
+    min-height: var(--bio-h);
+    padding: 10px 16px 10px 10px;
+    border-radius: 18px;
+    text-decoration: none;
+    font-family: var(--font-body);
+    transition:
+        transform .25s var(--ease),
+        box-shadow .3s var(--ease),
+        background-color .25s var(--ease),
+        border-color .25s var(--ease);
+    will-change: transform;
+}
+.bio-link:active { transform: translateY(1px); }
+
+/* Highlight (branco / destaque — como WhatsApp e Promoções na referência) */
+.bio-link--highlight {
+    background: #FFFFFF;
+    color: #0A0A0B;
+    box-shadow:
+        0 18px 40px -20px rgba(36,112,255,.5),
+        0 2px 6px rgba(0,0,0,.12);
+}
+.bio-link--highlight:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 24px 50px -18px rgba(36,112,255,.6),
+        0 4px 10px rgba(0,0,0,.18);
+    color: #0A0A0B;
+}
+.bio-link--highlight .bio-link__icon {
+    background: #1E55E6;
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.1);
+}
+.bio-link--highlight .bio-link__title { color: #0F2A5C; }
+.bio-link--highlight .bio-link__sub   { color: rgba(15,42,92,.65); }
+.bio-link--highlight .bio-link__arrow { color: #1E55E6; }
+
+/* Default (escuro translúcido — como Serviços / Instagram / Como chegar) */
+.bio-link--default {
+    background: rgba(255,255,255,.04);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+.bio-link--default:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,.07);
+    border-color: rgba(255,255,255,.18);
+    box-shadow: 0 22px 40px -22px rgba(0,0,0,.55);
+    color: #fff;
+}
+.bio-link--default .bio-link__icon {
+    background: rgba(255,255,255,.08);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.08);
+}
+.bio-link--default .bio-link__title { color: #fff; }
+.bio-link--default .bio-link__sub   { color: rgba(255,255,255,.62); }
+.bio-link--default .bio-link__arrow { color: rgba(255,255,255,.55); }
+
+[data-theme="light"] .bio-link--default {
+    background: rgba(10,10,11,.04);
+    color: #0A0A0B;
+    border-color: rgba(10,10,11,.08);
+}
+[data-theme="light"] .bio-link--default:hover { background: rgba(10,10,11,.06); border-color: rgba(10,10,11,.14); color: #0A0A0B; }
+[data-theme="light"] .bio-link--default .bio-link__icon { background: rgba(10,10,11,.06); color: #0A0A0B; border-color: rgba(10,10,11,.08); }
+[data-theme="light"] .bio-link--default .bio-link__title { color: #0A0A0B; }
+[data-theme="light"] .bio-link--default .bio-link__sub   { color: rgba(10,10,11,.6); }
+[data-theme="light"] .bio-link--default .bio-link__arrow { color: rgba(10,10,11,.55); }
+
+/* Ícone box */
+.bio-link__icon {
+    grid-column: 1;
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    transition: transform .25s var(--ease);
+}
+.bio-link:hover .bio-link__icon { transform: scale(1.04); }
+.bio-link__icon svg { width: 24px; height: 24px; display: block; }
+
+/* Texto */
+.bio-link__text {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-width: 0;
+}
+.bio-link__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.bio-link__sub {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.35;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.bio-link__arrow {
+    grid-column: 3;
+    display: grid; place-items: center;
+    opacity: .9;
+    transition: transform .25s var(--ease);
+}
+.bio-link:hover .bio-link__arrow { transform: translateX(3px); }
+
+/* ---------- Banner horizontal clicável ---------- */
+.bio-banner {
+    --bio-h: 140px;
+    display: block;
+    position: relative;
+    width: 100%;
+    min-height: var(--bio-h);
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.06);
+    box-shadow: 0 18px 40px -20px rgba(0,0,0,.55);
+    transition: transform .25s var(--ease), box-shadow .3s var(--ease);
+}
+.bio-banner:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 26px 50px -18px rgba(0,0,0,.65);
+}
+.bio-banner img {
+    width: 100%;
+    height: var(--bio-h);
+    object-fit: cover;
+    display: block;
+}
+[data-theme="light"] .bio-banner {
+    background: rgba(10,10,11,.03);
+    border-color: rgba(10,10,11,.08);
+    box-shadow: 0 18px 40px -22px rgba(10,10,11,.2);
+}
+
+/* ---------- Footer "Ir para o site" ---------- */
+.bio-foot {
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+    padding-top: 48px;
+    padding-bottom: 8px;
+    text-align: center;
+    width: 100%;
+}
+.bio-back {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0;
+    color: rgba(255,255,255,.72);
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 999px;
+    transition: color .2s var(--ease), background-color .2s var(--ease);
+}
+.bio-back:hover { color: #fff; background: rgba(255,255,255,.06); }
+[data-theme="light"] .bio-back { color: rgba(10,10,11,.62); }
+[data-theme="light"] .bio-back:hover { color: #0A0A0B; background: rgba(10,10,11,.04); }
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 520px) {
+    .bio-inner { max-width: 100%; }
+    .bio-avatar { width: 92px; height: 92px; }
+    .bio-avatar__text { font-size: 32px; }
+    .bio-link { padding: 8px 14px 8px 8px; grid-template-columns: 48px 1fr 24px; gap: 12px; }
+    .bio-link__icon { width: 48px; height: 48px; border-radius: 12px; }
+    .bio-link__icon svg { width: 22px; height: 22px; }
+    .bio-link__title { font-size: 15.5px; }
+    .bio-link__sub   { font-size: 12.5px; }
+}
+

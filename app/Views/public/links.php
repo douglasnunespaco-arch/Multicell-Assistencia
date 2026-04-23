@@ -1,69 +1,91 @@
 <?php
 /** @var ?array $branch */
-$ig       = \App\Models\Setting::get('instagram_url');
-$fb       = \App\Models\Setting::get('facebook_url');
-$tt       = \App\Models\Setting::get('tiktok_url');
-$reviews  = \App\Models\Setting::get('google_reviews_url');
+$siteName = \App\Models\Setting::get('site_name', 'Multi Cell');
+$tagline  = \App\Models\Setting::get('tagline', 'Assistência técnica + acessórios premium');
+$logoPath = \App\Models\Setting::get('logo_path', '');
 
 // Links dinâmicos do painel (Fase C1). Se a tabela ainda não existir, falha silenciosamente.
 $bioLinks = [];
 try { $bioLinks = \App\Models\BioLink::active(); } catch (\Throwable $e) { $bioLinks = []; }
-?>
-<main class="links-shell">
-    <div class="links-card" data-reveal>
-        <div class="links-avatar">MC</div>
-        <h1>Multi Cell</h1>
-        <p>Assistência Técnica de Celulares · Várzea Grande/MT</p>
 
-        <div class="links-list">
-            <?php if (!empty($bioLinks)): ?>
-                <?php foreach ($bioLinks as $bl):
-                    $iconSlug = trim((string) ($bl['icon'] ?? ''));
-                    $openNew  = !empty($bl['open_new_tab']);
-                    $isExt    = preg_match('~^https?://~i', (string) $bl['url']) === 1;
-                    $target   = $openNew || $isExt ? ' target="_blank" rel="noopener"' : '';
-                ?>
-                    <a href="<?= e($bl['url']) ?>" class="link-btn" data-track="cta_click" data-track-source="links_<?= e($iconSlug ?: 'item') ?>"<?= $target ?>>
-                        <span class="link-btn__icon" aria-hidden="true">
-                            <?php if ($iconSlug): ?><?= icon($iconSlug, 18) ?><?php endif; ?>
-                        </span>
-                        <span class="link-btn__label"><?= e($bl['title']) ?></span>
+// Extrai iniciais para avatar fallback (MC para Multi Cell)
+$initials = '';
+foreach (preg_split('/\s+/', trim((string) $siteName)) as $w) {
+    if ($w !== '' && mb_strlen($initials) < 2) $initials .= mb_strtoupper(mb_substr($w, 0, 1));
+}
+if ($initials === '') $initials = 'MC';
+?>
+<main class="bio-shell">
+    <div class="bio-bg" aria-hidden="true">
+        <span class="bio-bg__glow bio-bg__glow--1"></span>
+        <span class="bio-bg__glow bio-bg__glow--2"></span>
+        <span class="bio-bg__grid"></span>
+    </div>
+
+    <section class="bio-inner" data-reveal>
+        <header class="bio-head">
+            <div class="bio-avatar">
+                <?php if ($logoPath): ?>
+                    <img src="/<?= e(ltrim((string) $logoPath, '/')) ?>" alt="<?= e($siteName) ?>">
+                <?php else: ?>
+                    <span class="bio-avatar__text"><?= e($initials) ?></span>
+                <?php endif; ?>
+                <span class="bio-avatar__badge" aria-hidden="true"><?= icon('check', 12) ?></span>
+            </div>
+            <h1 class="bio-title"><?= e($siteName) ?></h1>
+            <p class="bio-sub"><?= e($tagline) ?></p>
+        </header>
+
+        <nav class="bio-stack" aria-label="Links principais">
+            <?php if (!empty($bioLinks)): foreach ($bioLinks as $bl):
+                $iconSlug = trim((string) ($bl['icon'] ?? ''));
+                $openNew  = !empty($bl['open_new_tab']);
+                $isExt    = preg_match('~^https?://~i', (string) $bl['url']) === 1;
+                $target   = $openNew || $isExt ? ' target="_blank" rel="noopener"' : '';
+                $type     = $bl['type'] ?? 'link';
+                $style    = $bl['style'] ?? 'default';
+                $h        = (int) ($bl['height_px'] ?? 0);
+                $img      = trim((string) ($bl['image_path'] ?? ''));
+                $trackSrc = 'links_' . preg_replace('~[^a-z0-9]+~', '_', strtolower($bl['title']));
+            ?>
+                <?php if ($type === 'banner' && $img): ?>
+                    <a href="<?= e($bl['url']) ?>"
+                       class="bio-banner"
+                       data-track="cta_click" data-track-source="<?= e($trackSrc) ?>"<?= $target ?>
+                       <?= $h > 0 ? 'style="--bio-h: ' . (int) $h . 'px"' : '' ?>>
+                        <img src="/<?= e(ltrim($img, '/')) ?>" alt="<?= e($bl['title']) ?>" loading="lazy">
                     </a>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <!-- Fallback estático -->
-                <a href="<?= whatsapp_link('links_whatsapp') ?>" class="link-btn" data-track="whatsapp_click" data-track-source="links_main">
-                    <span class="link-btn__icon" aria-hidden="true"><?= icon('whatsapp', 18) ?></span>
-                    <span class="link-btn__label">Falar no WhatsApp</span>
-                </a>
-                <a href="/produtos" class="link-btn" data-track="cta_click" data-track-source="links_products">
-                    <span class="link-btn__icon" aria-hidden="true"><?= icon('package', 18) ?></span>
-                    <span class="link-btn__label">Ver produtos e acessórios</span>
-                </a>
-                <a href="/promocoes" class="link-btn" data-track="cta_click" data-track-source="links_promos">
-                    <span class="link-btn__icon" aria-hidden="true"><?= icon('tag', 18) ?></span>
-                    <span class="link-btn__label">Promoções ativas</span>
-                </a>
-                <a href="/go/map" class="link-btn" data-track="map_click" data-track-source="links_map">
-                    <span class="link-btn__icon" aria-hidden="true"><?= icon('map', 18) ?></span>
-                    <span class="link-btn__label">Como chegar</span>
-                </a>
-                <?php if ($ig): ?>
-                    <a href="<?= e($ig) ?>" target="_blank" rel="noopener" class="link-btn" data-track="cta_click" data-track-source="links_instagram">
-                        <span class="link-btn__icon" aria-hidden="true"><?= icon('instagram', 18) ?></span>
-                        <span class="link-btn__label">Instagram</span>
+                <?php else: ?>
+                    <a href="<?= e($bl['url']) ?>"
+                       class="bio-link bio-link--<?= e($style === 'highlight' ? 'highlight' : 'default') ?>"
+                       data-track="cta_click" data-track-source="<?= e($trackSrc) ?>"<?= $target ?>
+                       <?= $h > 0 ? 'style="--bio-h: ' . (int) $h . 'px"' : '' ?>>
+                        <span class="bio-link__icon" aria-hidden="true">
+                            <?php if ($iconSlug): ?><?= icon($iconSlug, 22) ?><?php endif; ?>
+                        </span>
+                        <span class="bio-link__text">
+                            <strong class="bio-link__title"><?= e($bl['title']) ?></strong>
+                            <?php if (!empty($bl['subtitle'])): ?>
+                                <small class="bio-link__sub"><?= e($bl['subtitle']) ?></small>
+                            <?php endif; ?>
+                        </span>
+                        <span class="bio-link__arrow" aria-hidden="true"><?= icon('arrow-right', 16) ?></span>
                     </a>
                 <?php endif; ?>
+            <?php endforeach; else: ?>
+                <a href="<?= whatsapp_link('links_whatsapp') ?>" class="bio-link bio-link--highlight" data-track="whatsapp_click" data-track-source="links_main">
+                    <span class="bio-link__icon" aria-hidden="true"><?= icon('whatsapp', 22) ?></span>
+                    <span class="bio-link__text">
+                        <strong class="bio-link__title">WhatsApp direto</strong>
+                        <small class="bio-link__sub">Fale agora com a Multi Cell</small>
+                    </span>
+                    <span class="bio-link__arrow" aria-hidden="true"><?= icon('arrow-right', 16) ?></span>
+                </a>
             <?php endif; ?>
-        </div>
+        </nav>
+    </section>
 
-        <a href="/" class="link-btn link-btn--back" data-track="cta_click" data-track-source="links_back_to_site">
-            <span class="link-btn__icon" aria-hidden="true"><?= icon('arrow-right', 16) ?></span>
-            <span class="link-btn__label">Voltar ao site</span>
-        </a>
-
-        <div class="links-footer">
-            © <?= date('Y') ?> Multi Cell · <?= e($branch['city'] ?? 'Várzea Grande') ?>/<?= e($branch['state'] ?? 'MT') ?>
-        </div>
-    </div>
+    <footer class="bio-foot">
+        <a href="/" class="bio-back" data-track="cta_click" data-track-source="links_back_to_site">Ir para o site</a>
+    </footer>
 </main>

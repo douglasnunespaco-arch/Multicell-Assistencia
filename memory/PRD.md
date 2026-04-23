@@ -276,6 +276,35 @@ Hero estrutural · 5 slides · admin 3C · 3D (rankings/confetti) · grids home 
 
 ---
 
+
+---
+
+## ✅ Rodada cirúrgica · /links premium loose + banners admin (JAN 2026)
+
+### Entregas
+1. **Página pública `/links` redesenhada** — removido o card envolvente. Agora é uma **stack de links soltos** estilo referência:
+   avatar redondo com badge, nome + tagline, pílulas com ícone quadrado (fundo azul para destaque, fundo translúcido escuro padrão),
+   subtítulo em cada link e seta à direita. Rodapé com link discreto **"Ir para o site"**.
+   Tema escuro por padrão com glows azul/verde ambient + grid sutil.
+2. **Admin `/admin/links` expandido** — agora suporta:
+   - **Tipo**: `Botão` (ícone + título + subtítulo) ou `Banner` (imagem horizontal clicável).
+   - **Subtítulo** por link.
+   - **Estilo visual**: `Escuro translúcido` (padrão) ou `Destaque` (fundo claro).
+   - **Altura em px** por item (override da altura padrão).
+   - **Upload de imagem** (quando tipo = Banner), salva em `uploads/bio_links/`.
+3. **Migração aditiva** (sem dropar colunas): `bio_links` ganhou `subtitle`, `type`, `image_path`, `style`, `height_px`.
+
+### Arquivos alterados
+- `app/Views/public/links.php` (reescrito · novo markup bio-shell/bio-link/bio-banner)
+- `assets/css/public.css` (+~280 linhas: bloco `.bio-*` premium)
+- `app/Controllers/Admin/LinksController.php` (suporta upload + novos campos)
+- `app/Views/admin/links/form.php` (select de tipo com show/hide JS · upload · altura)
+- `app/Views/admin/links/index.php` (colunas tipo/estilo/altura + thumbnail de banner)
+- DB: `ALTER TABLE bio_links ADD COLUMN subtitle, type, image_path, style, height_px`
+
+### Preservado
+Home/hero/admin 3C/3D/CRUDs B2/Dashboard intactos. Schema original não tocado (aditivo).
+
 ## Próximas ações (prioridade)
 1. **Fase 3C primeiro** — ROI via leads (captura + fluxo WhatsApp otimizado)
 2. **Fase 3B depois** — Edição de conteúdo via painel admin (assume os slides sintéticos nativamente)
