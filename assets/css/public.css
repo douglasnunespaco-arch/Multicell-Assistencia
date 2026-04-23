@@ -1072,12 +1072,12 @@ button { font-family: inherit; }
 .links-list { display: grid; gap: 10px; }
 .link-btn {
     display: grid;
-    grid-template-columns: 24px 1fr 24px;  /* ícone à esquerda · label centralizado · slot simétrico à direita */
+    grid-template-columns: 24px 1fr 24px;
     align-items: center;
     gap: 12px;
     padding: 15px 18px;
     border-radius: 14px;
-    background: var(--bg-1);
+    background: transparent;
     border: 1px solid var(--border);
     color: var(--fg-0);
     font-weight: 600;
@@ -1120,7 +1120,7 @@ button { font-family: inherit; }
 }
 .link-btn--back .link-btn__icon svg { transform: rotate(180deg); }
 .link-btn--back:hover {
-    background: var(--bg-1);
+    background: transparent;
     border-style: solid;
     border-color: var(--brand);
     color: var(--brand);
@@ -1128,12 +1128,12 @@ button { font-family: inherit; }
 
 /* Compat: botão primário antigo (se existir no fallback) fica neutro como os demais */
 .link-btn--primary {
-    background: var(--bg-1);
+    background: transparent;
     color: var(--fg-0);
     border-color: var(--border);
 }
 .link-btn--primary:hover {
-    background: var(--bg-1);
+    background: transparent;
     color: var(--brand);
     border-color: var(--brand);
 }
