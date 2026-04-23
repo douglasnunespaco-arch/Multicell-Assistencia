@@ -81,7 +81,6 @@ $totalReviews = \App\Models\Setting::get('total_reviews', '120');
             <div class="hero__slide <?= $variantClass ?> <?= $i === 0 ? 'is-active' : '' ?>"
                  data-slide-index="<?= $i ?>"
                  style="<?= $bgStyle ?>">
-                <?= circuit_overlay('hero') ?>
                 <div class="container hero__content">
                     <div class="hero__text">
                         <span class="hero__eyebrow">Assistência técnica especializada</span>

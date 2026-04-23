@@ -242,6 +242,24 @@ Zero mexida em: CSS, controller, rotas, schema, seed, front público, home, hero
 
 ---
 
+## ✅ Bloco A · ajustes públicos (JAN 2026)
+
+### Entregas
+1. **Hero padding responsivo** — reserva segura para dots em qualquer viewport (width e height queries).
+2. **Brands strip com logos oficiais** — 8 SVGs Simple Icons CC0 monocromáticos em `currentColor` + 2 wordmarks premium (Realme, QCY).
+3. **Overlay PCB removido dos slides** — `circuit_overlay('hero')` retirado de `home.php`.
+4. **Footer pin** grid `20px 1fr` + svg 18×18 + baseline fina.
+
+### Arquivos (3)
+- `app/Views/public/home.php` · -1 linha (overlay)
+- `app/Views/partials/public/brands-strip.php` · reescrito com SVG paths
+- `assets/css/public.css` · 3 blocos refinados (hero, brands, footer-address)
+
+### Preservado
+Hero estrutural · 5 slides · admin 3C · 3D (rankings/confetti) · grids home · badge · schema/seed · rotas.
+
+---
+
 ## Próximas ações (prioridade)
 1. **Fase 3C primeiro** — ROI via leads (captura + fluxo WhatsApp otimizado)
 2. **Fase 3B depois** — Edição de conteúdo via painel admin (assume os slides sintéticos nativamente)
