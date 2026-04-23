@@ -1,15 +1,16 @@
 # Credenciais de teste — ambiente de preview
 
-## Admin
+## Admin (preview atual)
 - URL: `/admin/login`
 - Email: `admin@multicell.local`
-- Senha: `admin123` (bcrypt 12)
+- Senha: `Admin@2026`  (bcrypt, must_change_password=0)
 
-## MySQL (ambiente preview)
+## MySQL (ambiente preview container)
 - Host: 127.0.0.1:3306
 - DB: multicell
-- User: mc
-- Pass: mc
+- User: multicell
+- Pass: multicell_preview_2026
+- Socket local (CLI): /run/mysqld/mysqld.sock
 
 ## Rotas novas (Fase C1)
 - `/admin/about`   · `/admin/about/new`   · `/admin/about/{id}/edit`
