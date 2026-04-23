@@ -183,6 +183,24 @@ Ver `/app/memory/imagens-por-contexto.md` para catálogo completo.
 
 ---
 
+## ✅ Rodada cirúrgica · densificação home (JAN 2026)
+
+### Entregas
+1. **Brands strip refinada** — altura reduzida, Sora 500, cor `var(--fg-2)` neutra (elegante dark/light), separador `·` `opacity .28`, animação 60s.
+2. **Footer map** reescrito como `grid-template-columns: 18px 1fr` com `align-items: start` — alinhamento robusto e nativo.
+3. **Counts home**: services=6, products=8, promos=6, testimonials=6. Services/products migrados de `::featured()` (limitado por `is_featured=1`) para `::active()` + `array_slice`.
+4. **Grids densificados**: `.grid--promotions` agora 3 colunas no desktop; cards com padding/fonts enxutas em todos os blocos (card, promo-card, testimonial).
+
+### Arquivos (3)
+- `app/Controllers/Public/HomeController.php` · 3 linhas
+- `app/Views/partials/public/footer.php` · 2 microajustes
+- `assets/css/public.css` · refino promo-card + testimonial + brands-strip + footer-address + grids
+
+### Preservado
+Hero full-bleed · 5 slides · badge Promoção · Painel footer · admin 3C · schema · seed · rotas.
+
+---
+
 ## Próximas ações (prioridade)
 1. **Fase 3C primeiro** — ROI via leads (captura + fluxo WhatsApp otimizado)
 2. **Fase 3B depois** — Edição de conteúdo via painel admin (assume os slides sintéticos nativamente)

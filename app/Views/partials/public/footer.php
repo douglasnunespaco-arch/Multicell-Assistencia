@@ -62,11 +62,11 @@ $tt = \App\Models\Setting::get('tiktok_url');
             </a>
             <?php if ($branch): ?>
                 <a href="/go/map" class="footer-address" data-track="map_click" data-track-source="footer">
-                    <?= icon('pin', 14, 'inline-ic') ?>
-                    <span>
+                    <?= icon('pin', 16, 'inline-ic') ?>
+                    <div>
                         <?= e($branch['address']) ?><br>
                         <?= e($branch['city']) ?>/<?= e($branch['state']) ?>
-                    </span>
+                    </div>
                 </a>
             <?php endif; ?>
         </div>
