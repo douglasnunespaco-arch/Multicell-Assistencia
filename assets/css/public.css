@@ -1835,22 +1835,21 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 /* Default = card puro */
 .bio-link--default {}
 
-/* Hover unificado: verde preenche o quadro (mesmo glow dos cards do site) */
+/* Hover unificado: borda verde fina + glow (mesmo efeito dos cards do site) */
 .bio-link:hover {
     transform: translateY(-3px);
-    background: var(--brand);
+    background: var(--bg-2);
     border-color: var(--brand);
-    color: var(--brand-ink);
+    color: var(--fg-0);
     box-shadow: var(--shadow-glow);
 }
 .bio-link:hover .bio-link__icon {
-    background: var(--brand-ink);
     color: var(--brand);
-    border-color: transparent;
+    border-color: color-mix(in srgb, var(--brand) 40%, transparent);
 }
-.bio-link:hover .bio-link__title { color: var(--brand-ink); }
-.bio-link:hover .bio-link__sub   { color: color-mix(in srgb, var(--brand-ink) 80%, transparent); }
-.bio-link:hover .bio-link__arrow { color: var(--brand-ink); }
+.bio-link:hover .bio-link__title { color: var(--fg-0); }
+.bio-link:hover .bio-link__sub   { color: var(--fg-1); }
+.bio-link:hover .bio-link__arrow { color: var(--brand); }
 
 /* Ícone box · repouso (tinta verde suave em cima do cinza do card) */
 .bio-link__icon {
