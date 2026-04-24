@@ -528,7 +528,9 @@ textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit;
 
 /* ==========================================================================
    Troféus / Conquistas — banners no topo do dashboard
-   Cor âmbar (#F59E0B) para contraste premium com o verde da marca (#14F195).
+   Fundo cinza (surface) · acentos no verde da marca (#14F195).
+   X minimiza o card (colapsa corpo); sem persistência: recarregou o painel,
+   volta expandido. Recorde semanal/mensal fica sempre visível ao entrar.
    ========================================================================== */
 .admin-trophies {
     display: flex;
@@ -537,56 +539,71 @@ textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit;
     margin: 0 0 22px;
 }
 .trophy-card {
-    --gold:     #F59E0B;
-    --gold-2:   #FBBF24;
-    --gold-dim: rgba(245, 158, 11, .14);
+    --tc-bg:      #16181d;                 /* cinza surface (dark) */
+    --tc-bg-2:    #1c1f25;                 /* cinza um tom acima */
+    --tc-border:  rgba(255,255,255,.08);
+    --tc-border-2: rgba(20,241,149,.22);   /* verde sutil */
+    --tc-brand:   #14F195;
     position: relative;
     display: grid;
     grid-template-columns: 64px 1fr auto;
     gap: 18px;
     align-items: stretch;
     padding: 18px 22px 18px 18px;
-    border: 1px solid rgba(245, 158, 11, .32);
+    border: 1px solid var(--tc-border);
     border-radius: 14px;
     background:
-        radial-gradient(120% 180% at 0% 0%, rgba(245, 158, 11, .10) 0%, transparent 55%),
-        linear-gradient(180deg, rgba(245, 158, 11, .05), transparent 85%),
-        #111214;
+        radial-gradient(120% 180% at 0% 0%, rgba(20,241,149,.06) 0%, transparent 55%),
+        linear-gradient(180deg, var(--tc-bg-2), var(--tc-bg));
     box-shadow:
-        0 1px 0 rgba(245, 158, 11, .22) inset,
-        0 18px 40px -24px rgba(245, 158, 11, .35);
+        0 1px 0 rgba(255,255,255,.03) inset,
+        0 14px 34px -22px rgba(0,0,0,.6);
     overflow: hidden;
     animation: trophyFadeIn .35s ease both;
+    transition: padding .25s ease, gap .25s ease, border-color .25s ease;
 }
 .trophy-card::before {
     content: "";
-    position: absolute; inset: 0;
+    position: absolute; inset: 0 auto 0 0; width: 3px;
     pointer-events: none;
-    background: linear-gradient(120deg, transparent 45%, rgba(251, 191, 36, .10) 55%, transparent 70%);
-    mix-blend-mode: screen;
+    background: linear-gradient(180deg, var(--tc-brand), transparent 85%);
+    opacity: .9;
 }
 @keyframes trophyFadeIn {
     from { opacity: 0; transform: translateY(-6px); }
     to   { opacity: 1; transform: none; }
 }
 [data-theme="light"] .trophy-card {
-    background:
-        radial-gradient(120% 180% at 0% 0%, rgba(245, 158, 11, .14) 0%, transparent 55%),
-        #fff8ec;
-    border-color: rgba(245, 158, 11, .45);
-    box-shadow: 0 10px 28px -18px rgba(245, 158, 11, .55);
+    --tc-bg: #f3f4f7;
+    --tc-bg-2: #fafbfc;
+    --tc-border: rgba(10,10,11,.08);
+    background: linear-gradient(180deg, var(--tc-bg-2), var(--tc-bg));
+    box-shadow: 0 10px 26px -20px rgba(10,10,11,.25);
 }
 
-/* Ícone grande do troféu — tile âmbar à esquerda */
+/* Tile do troféu — cinza com ícone verde */
 .trophy-card__icon {
     width: 64px; height: 64px;
     display: inline-flex; align-items: center; justify-content: center;
     border-radius: 14px;
-    background: linear-gradient(180deg, var(--gold-2), var(--gold));
-    color: #111214;
-    box-shadow: 0 6px 14px -6px rgba(245, 158, 11, .6), 0 1px 0 rgba(255,255,255,.25) inset;
+    background: linear-gradient(180deg, #1f2229, #15171c);
+    color: var(--tc-brand);
+    box-shadow:
+        0 1px 0 rgba(255,255,255,.05) inset,
+        0 6px 16px -8px rgba(0,0,0,.6),
+        0 0 0 1px var(--tc-border-2) inset;
     flex: 0 0 auto;
+    transition: transform .3s ease;
 }
+[data-theme="light"] .trophy-card__icon {
+    background: linear-gradient(180deg, #ffffff, #eef0f3);
+    color: #0a8f5a;
+    box-shadow:
+        0 1px 0 rgba(255,255,255,1) inset,
+        0 6px 16px -10px rgba(10,10,11,.25),
+        0 0 0 1px rgba(20,241,149,.35) inset;
+}
+.trophy-card:hover .trophy-card__icon { transform: translateY(-1px) rotate(-2deg); }
 .trophy-card__icon svg { display: block; }
 
 .trophy-card__body { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
@@ -596,14 +613,17 @@ textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit;
     display: inline-flex; align-items: center; gap: 6px;
     padding: 4px 10px;
     border-radius: 999px;
-    background: var(--gold-dim);
-    color: var(--gold-2);
+    background: rgba(20,241,149,.10);
+    color: var(--tc-brand);
     font-size: 10px; font-weight: 700;
     letter-spacing: .14em;
     text-transform: uppercase;
     line-height: 1;
+    border: 1px solid rgba(20,241,149,.22);
 }
-.trophy-card__eyebrow svg { color: var(--gold-2); }
+.trophy-card__eyebrow svg { color: var(--tc-brand); }
+[data-theme="light"] .trophy-card__eyebrow { background: rgba(20,241,149,.12); color: #0a8f5a; border-color: rgba(20,241,149,.35); }
+[data-theme="light"] .trophy-card__eyebrow svg { color: #0a8f5a; }
 
 .trophy-card__title {
     margin: 0;
@@ -626,22 +646,25 @@ textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit;
 .trophy-card__stat {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 4px 10px;
-    border: 1px solid rgba(245, 158, 11, .35);
+    border: 1px solid rgba(20,241,149,.28);
     border-radius: 8px;
-    background: rgba(245, 158, 11, .08);
-    color: var(--gold-2);
+    background: rgba(20,241,149,.08);
+    color: var(--tc-brand);
     font-size: 12.5px;
     white-space: nowrap;
 }
+.trophy-card__stat svg { color: var(--tc-brand); }
 .trophy-card__stat strong { color: #fff; font-weight: 700; }
 [data-theme="light"] .trophy-card__stat strong { color: #1a1c22; }
 .trophy-card__stat small { color: var(--fg-2, #9aa0a6); font-size: 11.5px; }
-.trophy-card__delta {
-    color: var(--brand, #14F195) !important;
-    font-weight: 700;
-}
+.trophy-card__delta { color: var(--tc-brand) !important; font-weight: 700; }
 
-.trophy-card__actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.trophy-card__actions {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px;
+    overflow: hidden;
+    max-height: 80px;
+    transition: max-height .3s ease, opacity .25s ease, margin-top .25s ease;
+}
 .trophy-card__actions .admin-btn svg { color: inherit; }
 
 .trophy-card__close {
@@ -652,16 +675,39 @@ textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit;
     background: transparent;
     color: var(--fg-2, #9aa0a6);
     font-size: 20px; line-height: 1; cursor: pointer;
-    transition: background .2s ease, color .2s ease;
+    transition: background .2s ease, color .2s ease, transform .25s ease;
 }
 .trophy-card__close:hover {
-    background: rgba(245, 158, 11, .12);
-    color: var(--gold-2);
+    background: rgba(20,241,149,.10);
+    color: var(--tc-brand);
 }
+
+/* Estado minimizado — colapsa texto e ações, mantém ícone + título + stat pill */
+.trophy-card.is-minimized {
+    padding: 12px 16px 12px 14px;
+    gap: 14px;
+    grid-template-columns: 42px 1fr auto;
+}
+.trophy-card.is-minimized .trophy-card__icon { width: 42px; height: 42px; border-radius: 11px; }
+.trophy-card.is-minimized .trophy-card__icon svg { width: 20px; height: 20px; }
+.trophy-card.is-minimized .trophy-card__body { gap: 4px; }
+.trophy-card.is-minimized .trophy-card__head { gap: 8px; }
+.trophy-card.is-minimized .trophy-card__title { font-size: 14px; }
+.trophy-card.is-minimized .trophy-card__text {
+    font-size: 12px;
+    color: var(--fg-2, #9aa0a6);
+    gap: 8px;
+}
+.trophy-card.is-minimized .trophy-card__text > :not(.trophy-card__stat) { display: none; }
+.trophy-card.is-minimized .trophy-card__stat { padding: 2px 8px; font-size: 11.5px; }
+.trophy-card.is-minimized .trophy-card__actions { max-height: 0; opacity: 0; margin-top: 0; }
+.trophy-card.is-minimized .trophy-card__close { transform: rotate(45deg); }
 
 @media (max-width: 640px) {
     .trophy-card { grid-template-columns: 52px 1fr; padding: 14px; gap: 12px; }
     .trophy-card__icon { width: 52px; height: 52px; border-radius: 12px; }
     .trophy-card__close { position: absolute; top: 8px; right: 8px; }
     .trophy-card__body { grid-column: 2; }
+    .trophy-card.is-minimized { grid-template-columns: 38px 1fr; }
+    .trophy-card.is-minimized .trophy-card__icon { width: 38px; height: 38px; }
 }

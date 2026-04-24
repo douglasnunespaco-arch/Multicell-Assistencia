@@ -8,15 +8,13 @@
 <?php if (!empty($achievements)): ?>
 <section class="admin-trophies" data-testid="admin-trophies" aria-label="Conquistas recentes">
     <?php foreach ($achievements as $a):
-        $cookieName = 'ach_dismiss_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $a['key']);
-        if (!empty($_COOKIE[$cookieName])) continue;
         $delta = max(0, (int) $a['value'] - (int) $a['prev']);
     ?>
-    <article class="trophy-card" data-ach-key="<?= e($cookieName) ?>" data-testid="trophy-<?= e($a['key']) ?>">
-        <div class="trophy-card__icon" aria-hidden="true"><?= icon('award', 26) ?></div>
+    <article class="trophy-card" data-testid="trophy-<?= e($a['key']) ?>">
+        <div class="trophy-card__icon" aria-hidden="true"><?= icon('trophy', 26) ?></div>
         <div class="trophy-card__body">
             <header class="trophy-card__head">
-                <span class="trophy-card__eyebrow"><?= icon('award', 12) ?> <?= e(strtoupper($a['eyebrow'])) ?></span>
+                <span class="trophy-card__eyebrow"><?= icon('trophy', 12) ?> <?= e(strtoupper($a['eyebrow'])) ?></span>
                 <h3 class="trophy-card__title"><?= e($a['title']) ?></h3>
             </header>
             <p class="trophy-card__text">
@@ -34,14 +32,14 @@
             </p>
             <div class="trophy-card__actions">
                 <a class="admin-btn admin-btn--primary admin-btn--sm" href="/admin/leads" data-testid="trophy-analytics">
-                    <?= icon('award', 14) ?> Ver Analytics
+                    <?= icon('trophy', 14) ?> Ver Analytics
                 </a>
                 <a class="admin-btn admin-btn--sm" href="/admin/leads?status=novo" data-testid="trophy-leads">
                     <?= icon('calendar', 14) ?> Orçamentos
                 </a>
             </div>
         </div>
-        <button type="button" class="trophy-card__close" aria-label="Dispensar conquista" data-testid="trophy-dismiss">&times;</button>
+        <button type="button" class="trophy-card__close" aria-label="Minimizar conquista" data-testid="trophy-minimize" title="Minimizar">&times;</button>
     </article>
     <?php endforeach; ?>
 </section>
@@ -51,15 +49,12 @@
         btn.addEventListener('click', function () {
             var card = btn.closest('.trophy-card');
             if (!card) return;
-            var key = card.getAttribute('data-ach-key');
-            if (key) {
-                // cookie 90 dias, path site inteiro
-                document.cookie = key + '=1; max-age=' + (60 * 60 * 24 * 90) + '; path=/';
-            }
-            card.style.transition = 'opacity .25s ease, transform .25s ease';
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(-6px)';
-            setTimeout(function () { card.remove(); }, 260);
+            // Toggle minimize — NÃO persiste. Na próxima entrada no painel volta expandido.
+            card.classList.toggle('is-minimized');
+            btn.setAttribute('aria-label',
+                card.classList.contains('is-minimized') ? 'Expandir conquista' : 'Minimizar conquista');
+            btn.setAttribute('title',
+                card.classList.contains('is-minimized') ? 'Expandir' : 'Minimizar');
         });
     });
 })();
