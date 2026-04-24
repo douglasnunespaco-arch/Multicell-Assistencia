@@ -539,10 +539,8 @@ textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit;
     margin: 0 0 22px;
 }
 .trophy-card {
-    --tc-bg:      #16181d;                 /* cinza surface (dark) */
-    --tc-bg-2:    #1c1f25;                 /* cinza um tom acima */
+    --tc-bg:      #0E1013;                 /* cinza sólido — combina com Reservas totais */
     --tc-border:  rgba(255,255,255,.08);
-    --tc-border-2: rgba(20,241,149,.22);   /* verde sutil */
     --tc-brand:   #14F195;
     position: relative;
     display: grid;
@@ -552,22 +550,24 @@ textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit;
     padding: 18px 22px 18px 18px;
     border: 1px solid var(--tc-border);
     border-radius: 14px;
-    background:
-        radial-gradient(120% 180% at 0% 0%, rgba(20,241,149,.06) 0%, transparent 55%),
-        linear-gradient(180deg, var(--tc-bg-2), var(--tc-bg));
+    background: var(--tc-bg);
     box-shadow:
         0 1px 0 rgba(255,255,255,.03) inset,
         0 14px 34px -22px rgba(0,0,0,.6);
     overflow: hidden;
     animation: trophyFadeIn .35s ease both;
-    transition: padding .25s ease, gap .25s ease, border-color .25s ease;
+    transition: padding .25s ease, gap .25s ease, border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+.trophy-card:hover {
+    border-color: rgba(20, 241, 149, .55);
+    box-shadow:
+        0 1px 0 rgba(20,241,149,.08) inset,
+        0 14px 34px -22px rgba(0,0,0,.6),
+        0 0 0 1px rgba(20,241,149,.20);
+    transform: translateY(-1px);
 }
 .trophy-card::before {
-    content: "";
-    position: absolute; inset: 0 auto 0 0; width: 3px;
-    pointer-events: none;
-    background: linear-gradient(180deg, var(--tc-brand), transparent 85%);
-    opacity: .9;
+    content: none;
 }
 @keyframes trophyFadeIn {
     from { opacity: 0; transform: translateY(-6px); }
@@ -575,33 +575,36 @@ textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit;
 }
 [data-theme="light"] .trophy-card {
     --tc-bg: #f3f4f7;
-    --tc-bg-2: #fafbfc;
-    --tc-border: rgba(10,10,11,.08);
-    background: linear-gradient(180deg, var(--tc-bg-2), var(--tc-bg));
+    --tc-border: rgba(10,10,11,.10);
+    background: var(--tc-bg);
     box-shadow: 0 10px 26px -20px rgba(10,10,11,.25);
 }
+[data-theme="light"] .trophy-card:hover {
+    border-color: rgba(20, 141, 90, .55);
+    box-shadow:
+        0 10px 26px -20px rgba(10,10,11,.3),
+        0 0 0 1px rgba(20,141,90,.25);
+}
 
-/* Tile do troféu — cinza com ícone verde */
+/* Tile do troféu — preenchido de verde, ícone preto */
 .trophy-card__icon {
     width: 64px; height: 64px;
     display: inline-flex; align-items: center; justify-content: center;
     border-radius: 14px;
-    background: linear-gradient(180deg, #1f2229, #15171c);
-    color: var(--tc-brand);
+    background: var(--tc-brand);
+    color: #0A0A0B;
     box-shadow:
-        0 1px 0 rgba(255,255,255,.05) inset,
-        0 6px 16px -8px rgba(0,0,0,.6),
-        0 0 0 1px var(--tc-border-2) inset;
+        0 1px 0 rgba(255,255,255,.25) inset,
+        0 6px 14px -6px rgba(20,241,149,.55);
     flex: 0 0 auto;
     transition: transform .3s ease;
 }
 [data-theme="light"] .trophy-card__icon {
-    background: linear-gradient(180deg, #ffffff, #eef0f3);
-    color: #0a8f5a;
+    background: var(--tc-brand);
+    color: #0A0A0B;
     box-shadow:
-        0 1px 0 rgba(255,255,255,1) inset,
-        0 6px 16px -10px rgba(10,10,11,.25),
-        0 0 0 1px rgba(20,241,149,.35) inset;
+        0 1px 0 rgba(255,255,255,.45) inset,
+        0 6px 14px -6px rgba(20,241,149,.5);
 }
 .trophy-card:hover .trophy-card__icon { transform: translateY(-1px) rotate(-2deg); }
 .trophy-card__icon svg { display: block; }
@@ -710,4 +713,56 @@ textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit;
     .trophy-card__body { grid-column: 2; }
     .trophy-card.is-minimized { grid-template-columns: 38px 1fr; }
     .trophy-card.is-minimized .trophy-card__icon { width: 38px; height: 38px; }
+}
+
+/* ==========================================================================
+   Admin theme toggle (sol/lua no topbar) — replica comportamento do site público.
+   A aba /admin/theme continua existindo; este botão é atalho rápido.
+   ========================================================================== */
+.admin-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.10);
+    color: var(--fg-1, #c5c8cf);
+    cursor: pointer;
+    transition: background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+    position: relative;
+    overflow: hidden;
+}
+.admin-theme-toggle:hover {
+    border-color: rgba(20,241,149,.5);
+    color: var(--brand, #14F195);
+    background: rgba(20,241,149,.08);
+    transform: translateY(-1px);
+}
+.admin-theme-toggle__icon {
+    display: inline-flex;
+    transition: opacity .2s ease, transform .25s ease;
+}
+/* Dark ativo → mostra lua, esconde sol */
+[data-theme="dark"]  .admin-theme-toggle__icon--sun,
+:root:not([data-theme="light"]) .admin-theme-toggle__icon--sun {
+    position: absolute;
+    opacity: 0;
+    transform: rotate(-40deg) scale(.7);
+}
+/* Light ativo → mostra sol, esconde lua */
+[data-theme="light"] .admin-theme-toggle__icon--moon {
+    position: absolute;
+    opacity: 0;
+    transform: rotate(40deg) scale(.7);
+}
+[data-theme="light"] .admin-theme-toggle {
+    background: rgba(10,10,11,.04);
+    border-color: rgba(10,10,11,.12);
+    color: #1a1c22;
+}
+[data-theme="light"] .admin-theme-toggle:hover {
+    border-color: rgba(20,141,90,.55);
+    color: #0a8f5a;
+    background: rgba(20,241,149,.10);
 }

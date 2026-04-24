@@ -24,10 +24,10 @@ $v = fn(string $k, string $default = '') => (string) ($values[$k] ?? $default);
             </div>
         </div>
 
-        <?= F::select('default_theme', 'Tema padrão do site', $v('default_theme', 'dark'), [
+        <?= F::select('default_theme', 'Tema padrão do site', [
             'dark'  => 'Dark (escuro)',
             'light' => 'Light (claro)',
-        ]) ?>
+        ], $v('default_theme', 'dark')) ?>
 
         <?= F::text('display_font', 'Fonte display (informativo)', $v('display_font', 'Sora'), [
             'placeholder' => 'Sora · Manrope · Space Grotesk',
