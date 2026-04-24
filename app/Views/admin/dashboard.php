@@ -2,8 +2,70 @@
 /**
  * @var array $stats
  * @var array $recent
+ * @var array $achievements
  */
 ?>
+<?php if (!empty($achievements)): ?>
+<section class="admin-trophies" data-testid="admin-trophies" aria-label="Conquistas recentes">
+    <?php foreach ($achievements as $a):
+        $cookieName = 'ach_dismiss_' . preg_replace('/[^a-zA-Z0-9_]/', '_', $a['key']);
+        if (!empty($_COOKIE[$cookieName])) continue;
+        $delta = max(0, (int) $a['value'] - (int) $a['prev']);
+    ?>
+    <article class="trophy-card" data-ach-key="<?= e($cookieName) ?>" data-testid="trophy-<?= e($a['key']) ?>">
+        <div class="trophy-card__icon" aria-hidden="true"><?= icon('award', 26) ?></div>
+        <div class="trophy-card__body">
+            <header class="trophy-card__head">
+                <span class="trophy-card__eyebrow"><?= icon('award', 12) ?> <?= e(strtoupper($a['eyebrow'])) ?></span>
+                <h3 class="trophy-card__title"><?= e($a['title']) ?></h3>
+            </header>
+            <p class="trophy-card__text">
+                <?= e($a['body']) ?>
+                <span class="trophy-card__stat">
+                    <?= icon('bolt', 14) ?>
+                    <strong><?= number_format((int) $a['value'], 0, ',', '.') ?> <?= e($a['unit']) ?></strong>
+                    <?php if ((int) $a['prev'] > 0): ?>
+                        <small>· antes: <?= number_format((int) $a['prev'], 0, ',', '.') ?></small>
+                    <?php endif; ?>
+                    <?php if ($delta > 0): ?>
+                        <small class="trophy-card__delta">+<?= number_format($delta, 0, ',', '.') ?></small>
+                    <?php endif; ?>
+                </span>
+            </p>
+            <div class="trophy-card__actions">
+                <a class="admin-btn admin-btn--primary admin-btn--sm" href="/admin/leads" data-testid="trophy-analytics">
+                    <?= icon('award', 14) ?> Ver Analytics
+                </a>
+                <a class="admin-btn admin-btn--sm" href="/admin/leads?status=novo" data-testid="trophy-leads">
+                    <?= icon('calendar', 14) ?> Orçamentos
+                </a>
+            </div>
+        </div>
+        <button type="button" class="trophy-card__close" aria-label="Dispensar conquista" data-testid="trophy-dismiss">&times;</button>
+    </article>
+    <?php endforeach; ?>
+</section>
+<script>
+(function () {
+    document.querySelectorAll('.trophy-card__close').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var card = btn.closest('.trophy-card');
+            if (!card) return;
+            var key = card.getAttribute('data-ach-key');
+            if (key) {
+                // cookie 90 dias, path site inteiro
+                document.cookie = key + '=1; max-age=' + (60 * 60 * 24 * 90) + '; path=/';
+            }
+            card.style.transition = 'opacity .25s ease, transform .25s ease';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(-6px)';
+            setTimeout(function () { card.remove(); }, 260);
+        });
+    });
+})();
+</script>
+<?php endif; ?>
+
 <div class="admin-grid-stats" data-testid="stats-grid">
     <a class="admin-stat admin-stat--link" href="/admin/leads?status=novo" data-testid="stat-leads-new">
         <span class="admin-stat__label">Reservas novas</span>

@@ -86,11 +86,79 @@ final class DashboardController
         }
 
         return View::render('admin/dashboard', [
-            'page_title' => 'Painel • Admin Multi Cell',
-            'stats'      => $stats,
-            'recent'     => $recent,
-            'rankings'   => $rankings,
+            'page_title'   => 'Painel • Admin Multi Cell',
+            'stats'        => $stats,
+            'recent'       => $recent,
+            'rankings'     => $rankings,
+            'achievements' => $this->computeAchievements(),
         ], 'admin');
+    }
+
+    /**
+     * Detecta conquistas ativas: recorde semanal (7 dias) e mensal (mês corrente)
+     * vs melhor marca histórica em períodos comparáveis anteriores.
+     *
+     * Retorna array de banners prontos para render. Dismiss é via cookie no client.
+     */
+    private function computeAchievements(): array
+    {
+        $in = "'" . implode("','", self::CLICK_EVENTS) . "'";
+        $out = [];
+
+        // ── 1. Recorde semanal (últimos 7 dias vs melhor semana ISO anterior) ─────
+        $cur7 = (int) (Database::fetch(
+            "SELECT COUNT(*) AS c FROM analytics_events
+             WHERE event_type IN ($in) AND created_at >= (NOW() - INTERVAL 7 DAY)"
+        )['c'] ?? 0);
+        $bestWeek = (int) (Database::fetch(
+            "SELECT COALESCE(MAX(c), 0) AS c FROM (
+                SELECT COUNT(*) AS c
+                FROM analytics_events
+                WHERE event_type IN ($in)
+                  AND YEARWEEK(created_at, 1) < YEARWEEK(NOW(), 1)
+                GROUP BY YEARWEEK(created_at, 1)
+             ) t"
+        )['c'] ?? 0);
+        if ($cur7 > 0 && $cur7 > $bestWeek) {
+            $out[] = [
+                'key'     => 'record_week_' . date('oW'),   // 1 banner por semana ISO
+                'eyebrow' => 'Conquista',
+                'title'   => 'Novo recorde semanal',
+                'body'    => 'Últimos 7 dias superaram a melhor marca histórica.',
+                'value'   => $cur7,
+                'prev'    => $bestWeek,
+                'unit'    => 'cliques',
+            ];
+        }
+
+        // ── 2. Recorde mensal (mês corrente vs melhor mês anterior) ──────────────
+        $curMonth = (int) (Database::fetch(
+            "SELECT COUNT(*) AS c FROM analytics_events
+             WHERE event_type IN ($in)
+               AND DATE_FORMAT(created_at, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')"
+        )['c'] ?? 0);
+        $bestMonth = (int) (Database::fetch(
+            "SELECT COALESCE(MAX(c), 0) AS c FROM (
+                SELECT COUNT(*) AS c
+                FROM analytics_events
+                WHERE event_type IN ($in)
+                  AND DATE_FORMAT(created_at, '%Y-%m') < DATE_FORMAT(NOW(), '%Y-%m')
+                GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+             ) t"
+        )['c'] ?? 0);
+        if ($curMonth > 0 && $curMonth > $bestMonth) {
+            $out[] = [
+                'key'     => 'record_month_' . date('Y-m'),
+                'eyebrow' => 'Conquista',
+                'title'   => 'Novo recorde mensal',
+                'body'    => 'O mês atual superou a melhor marca histórica.',
+                'value'   => $curMonth,
+                'prev'    => $bestMonth,
+                'unit'    => 'cliques',
+            ];
+        }
+
+        return $out;
     }
 
     private function totalClicks(string $from): int
