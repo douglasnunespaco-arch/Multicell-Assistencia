@@ -276,6 +276,23 @@ Hero estrutural · 5 slides · admin 3C · 3D (rankings/confetti) · grids home 
 
 ---
 
+---
+
+## ✅ Fix cirúrgico · faixa de marcas sem buraco no loop (ABR 2026)
+
+### Entregas
+1. **Loop contínuo sem vão em qualquer largura de tela** — track com 6 cópias espelhadas animando `translateX(-100%/6)`. Robusto até 4K/dual-ultrawide.
+2. **Preview PHP local ativo** no ambiente (MariaDB + `config.php` + `storage/install.lock`). Site responde em HTTP 200 em `http://127.0.0.1:3000/` e na URL pública do preview.
+
+### Arquivos (2)
+- `app/Views/partials/public/brands-strip.php` · 1 linha (`$pass < 2` → `$pass < 6` via iterações 2→4→6)
+- `assets/css/public.css` · 1 linha (`translateX(-50%)` → `translateX(-25%)` → `translateX(-16.6667%)`)
+
+### Preservado
+Hero · admin · schema/seed · rotas · lista e ordem das 10 marcas · logos/cores/tamanhos · velocidade 42s · máscara de fade · hover/pause · temas dark e light.
+
+
+
 
 ---
 
