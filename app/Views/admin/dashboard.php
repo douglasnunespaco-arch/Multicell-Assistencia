@@ -162,7 +162,7 @@
         <strong class="admin-stat__value"><?= (int) $stats['leads_week'] ?></strong>
         <small class="admin-stat__hint">últimos 7 dias</small>
     </a>
-    <a class="admin-stat admin-stat--link" href="/admin/seo" data-testid="stat-pageviews-today">
+    <a class="admin-stat admin-stat--link" href="/admin/analytics" data-testid="stat-pageviews-today">
         <span class="admin-stat__label">Visualizações hoje</span>
         <strong class="admin-stat__value"><?= (int) $stats['pageviews_today'] ?></strong>
         <small class="admin-stat__hint">page views</small>

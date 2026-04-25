@@ -55,6 +55,10 @@ $current = $_SERVER['REQUEST_URI'] ?? '';
            href="/admin/units" data-testid="nav-units">
             <?= icon('pin', 18) ?> <span>Unidades</span>
         </a>
+        <a class="admin-nav__item<?= str_starts_with($current, '/admin/analytics') ? ' is-active' : '' ?>"
+           href="/admin/analytics" data-testid="nav-analytics">
+            <?= icon('bolt', 18) ?> <span>Analytics</span>
+        </a>
 
         <div class="admin-nav__section">Sistema</div>
 
