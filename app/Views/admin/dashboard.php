@@ -105,6 +105,36 @@
     </a>
 </div>
 
+<?php if (!empty($hot_path)):
+    $typeLabel = ['product' => 'Produto', 'service' => 'Serviço', 'promotion' => 'Promoção'];
+    $typeRoute = ['product' => '/admin/products', 'service' => '/admin/services', 'promotion' => '/admin/promotions'];
+?>
+<section class="admin-card hot-path" data-testid="hot-path-card">
+    <header class="admin-card__head">
+        <h2><?= icon('bolt', 16) ?> Hot path · 7 dias</h2>
+        <small class="admin-card__hint">o que mais converte agora — clique para editar</small>
+    </header>
+    <ol class="hot-path__list">
+        <?php foreach ($hot_path as $i => $h):
+            $type  = (string) ($h['type'] ?? '');
+            $title = (string) ($h['title'] ?? '—');
+            $clicks = (int) ($h['clicks'] ?? 0);
+            $href = $typeRoute[$type] ?? '/admin';
+            if (!empty($h['id'])) $href .= '/' . (int) $h['id'] . '/edit';
+        ?>
+            <li class="hot-path__item">
+                <span class="hot-path__rank">#<?= $i + 1 ?></span>
+                <a class="hot-path__link" href="<?= e($href) ?>" data-testid="hot-path-<?= $i + 1 ?>">
+                    <strong><?= e($title) ?></strong>
+                    <small><?= e($typeLabel[$type] ?? $type) ?></small>
+                </a>
+                <span class="hot-path__count"><?= number_format($clicks, 0, ',', '.') ?></span>
+            </li>
+        <?php endforeach; ?>
+    </ol>
+</section>
+<?php endif; ?>
+
 <section class="admin-card" data-testid="recent-leads-card">
     <header class="admin-card__head">
         <h2>Últimas reservas</h2>

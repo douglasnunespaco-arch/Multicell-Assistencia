@@ -5,38 +5,38 @@ PHP 8.2 + MariaDB 10.11 · vanilla HTML/CSS/JS · Sora/Manrope · paleta verde #
 
 ## Histórico
 
-### 24/Apr/2026 — Sessão 1: Bug fix admin
-Inputs brancos da Tema corrigidos. Light theme completo no admin via tokens `--admin-*`.
+### 25/Apr/2026 — Sessão 4: Retenção & gamification
+- **Hot path · 7 dias** — novo card no dashboard com top 5 produtos/serviços/promoções mais clicados, com link direto pra editar. Single SQL com LEFT JOIN nas 3 tabelas + GROUP BY + LIMIT 5 (bounded cost). `DashboardController::computeHotPath()`.
+- **Welcome personalizado com top bucket** — query no layout extrai o item mais clicado da semana e injeta como `data-welcome-top`. JS renderiza linha "★ Destaque da semana: **Capa Anti-impacto Premium**" no overlay.
+- **Modo Foco** — botão no topbar (ícone search) + atalho tecla `F` colapsam a sidebar (transform translateX -110%) e centralizam content (max-width 1240px). Persiste em localStorage `mc_focus_mode`. `applyFocus()` em `admin.js`.
+- **Notifications API + polling leve** (alternativa enxuta a Web Push) — endpoint `GET /admin/api/achievements` retorna JSON com `record_week`. `admin.js` pede permissão 1× por sessão (delay 4s pra não atropelar welcome), faz polling de 60s quando aba visível, dispara `new Notification()` com tag/sig anti-duplicata. Funciona em qualquer hospedagem (zero VAPID, zero Service Worker).
+- **Email semanal automático** — `app/Console/WeeklyDigest.php` (CLI) calcula stats da semana (cliques, delta vs anterior, leads, dias com meta batida, hot path top 5), monta HTML inline-styled em `Views/emails/weekly-digest.php`, envia via `mail()` nativo PHP para todos admins ativos. Idempotência: trava de 5 dias em settings (`weekly_digest_last_run`). Cron documentado em `README-PUBLICACAO.txt`.
 
-### 24/Apr/2026 — Sessão 2: UX upgrade
-Trofeus refinados, animação welcome 10s, theme cards Dark/Light/Auto, toggle 3-state.
-
-### 25/Apr/2026 — Sessão 3: Premium polish
-- **Persistência de tema por usuário no servidor** — `App\Models\AdminPref` (novo) usa a tabela `settings` (zero schema change) com chave `admin_pref_theme_user_{id}`. Login carrega para `$_SESSION['theme_pref']`. SSR em `layouts/admin.php` aplica tema correto antes do JS rodar (sem flash). Endpoint `POST /admin/theme/preference` (JSON, CSRF) chamado em background pelo topbar quando admin troca o tema.
-- **Streak counter** — `DashboardController::computeStreak()` calcula dias consecutivos batendo `goal_clicks_day`, limitado a 90 dias (bounded cost). Aparece como banner discreto no topo do dashboard quando streak >= 3, e como chip verde "⚡ N dias seguidos" no welcome.
-- **Maior conquista do mês** — `computeMonthlyLead()` retorna delta entre mês corrente e melhor mês passado. Renderizado como chip dourado "🏆 mês atual +X cliques acima do recorde" no welcome quando delta > 0.
-- **Welcome enriquecido** — título muda para "Você está em chamas!" se houver streak/delta/hit. Chips com stagger animation (delay 0.35s). Confete dispara em qualquer celebração.
-- **WCAG no light** — refinos de contraste em `.admin-tag--*` (5 status) e `.admin-flash--*` (4 níveis) atingindo 4.5:1+ via texto mais escuro (#075c3a, #5a3a00, #053f28, #173f80, #7a0a25). Foco visível em botões/filtros.
-- **Mini-CTAs no dashboard** — todos os 6 stat cards agora são `<a>` clicáveis: leads_new → `/admin/leads?status=novo`, leads_today/total/week → `/admin/leads`, pageviews → `/admin/seo`, wa_clicks → `/admin/leads?status=novo`. Streak banner tem CTA "→ ver leads".
-
-## Arquivos modificados / criados (sessão 3)
-- `app/Models/AdminPref.php` — **NOVO** (~32 linhas). Wrapper de pref por usuário sobre `settings`.
-- `app/Controllers/Admin/AuthController.php` — popula `$_SESSION['theme_pref']` no login
-- `app/Controllers/Admin/ThemeController.php` — método `preference()` JSON
-- `app/Controllers/Admin/DashboardController.php` — `computeStreak()` + `computeMonthlyLead()`
-- `app/routes.php` — rota `POST /admin/theme/preference`
-- `app/Views/layouts/admin.php` — SSR do tema + data-welcome-streak/delta no body + data-csrf
-- `app/Views/partials/admin/topbar.php` — fetch silencioso ao toggle, prioriza SSR sobre localStorage
-- `app/Views/admin/dashboard.php` — streak-banner + stats todos como `<a>`
-- `assets/js/admin-welcome.js` — chips de streak e delta com stagger
-- `assets/css/admin.css` — `.streak-banner*`, `.mc-welcome__chip*`, refinos WCAG light
+## Arquivos modificados / criados (sessão 4)
+- `app/Controllers/Admin/AchievementsApiController.php` — **NOVO** (~38 linhas)
+- `app/Console/WeeklyDigest.php` — **NOVO** (~110 linhas, CLI standalone)
+- `app/Views/emails/weekly-digest.php` — **NOVO** (~80 linhas, HTML email)
+- `app/Controllers/Admin/DashboardController.php` — `computeHotPath()` + `computeTopBucket()`
+- `app/Views/admin/dashboard.php` — bloco `.hot-path` antes de "Últimas reservas"
+- `app/Views/layouts/admin.php` — query top bucket + `data-welcome-top`
+- `app/Views/partials/admin/topbar.php` — botão `[data-focus-toggle]`
+- `assets/js/admin-welcome.js` — usa top bucket no welcome
+- `assets/js/admin.js` — focus mode + Notifications API + polling
+- `assets/css/admin.css` — `.hot-path*`, `.admin-shell--focus`, `.mc-welcome__top`
+- `app/routes.php` — rota `/admin/api/achievements`
+- `README-PUBLICACAO.txt` — linha de cron sugerida
 
 ## Backlog
-- P2 · Personalizar título do welcome com nome de produto/serviço top do mês
-- P2 · "Hot path" → mostrar no dashboard qual produto/serviço mais converte na semana
-- P2 · Notificação push quando novo recorde é batido (web push API)
-- P2 · Modo "foco" do dashboard (esconde sidebar e dá fullwidth aos cards)
+- P2 · Web Push API real (Service Worker + VAPID + web-push-php) — só vale se sair de hospedagem compartilhada.
+- P2 · Modo foco com tecla `?` mostrando atalhos disponíveis (cheatsheet)
+- P2 · Email semanal: opção de unsubscribe / changing frequency
+- P2 · Dashboard widget configurável (drag-drop dos cards)
 
 ## Login (preview)
 - URL: https://d7099f3a-94fe-4a54-a29e-10d9871d55c8.preview.emergentagent.com/admin/login
 - E-mail: `admin@multicell.local` · Senha: `ChangeMe123!`
+
+## Cron sugerido (Hostinger · hPanel → Avançado → Tarefas Cron)
+```
+0 9 * * 1 /usr/bin/php /home/USUARIO/public_html/app/Console/WeeklyDigest.php >> /home/USUARIO/public_html/storage/logs/digest.log 2>&1
+```

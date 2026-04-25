@@ -113,6 +113,7 @@ $router->post('/admin/units/{id}/delete',           'Admin\\UnitsController@dele
 $router->get ('/admin/theme',                       'Admin\\ThemeController@index');
 $router->post('/admin/theme/update',                'Admin\\ThemeController@update');
 $router->post('/admin/theme/preference',            'Admin\\ThemeController@preference');
+$router->get ('/admin/api/achievements',            'Admin\\AchievementsApiController@status');
 
 $router->get ('/admin/seo',                         'Admin\\SeoController@index');
 $router->post('/admin/seo/update',                  'Admin\\SeoController@update');

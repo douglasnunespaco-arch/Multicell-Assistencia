@@ -93,7 +93,49 @@ final class DashboardController
             'achievements' => $this->computeAchievements(),
             'streak'       => $this->computeStreak(),
             'monthly_lead' => $this->computeMonthlyLead(),
+            'hot_path'     => $this->computeHotPath(),
+            'top_bucket'   => $this->computeTopBucket(),
         ], 'admin');
+    }
+
+    /**
+     * Hot path · top 5 itens (produto/serviço/promo) mais clicados nos últimos 7 dias.
+     * Faz LEFT JOIN nas 3 tabelas pra resolver o título humano. Bounded por LIMIT.
+     */
+    private function computeHotPath(): array
+    {
+        $sql = "SELECT
+                    ref_type AS type,
+                    ref_id   AS id,
+                    COUNT(*) AS clicks,
+                    COALESCE(p.name, s.name, pr.title, CONCAT(ref_type,':',ref_id)) AS title,
+                    COALESCE(p.slug,  s.slug,  pr.slug,  '') AS slug
+                FROM analytics_events e
+                LEFT JOIN products   p  ON e.ref_type='product'   AND p.id  = e.ref_id
+                LEFT JOIN services   s  ON e.ref_type='service'   AND s.id  = e.ref_id
+                LEFT JOIN promotions pr ON e.ref_type='promotion' AND pr.id = e.ref_id
+                WHERE e.event_type IN ('product_click','service_click','promotion_click')
+                  AND e.ref_type IN ('product','service','promotion')
+                  AND e.created_at >= (NOW() - INTERVAL 7 DAY)
+                GROUP BY ref_type, ref_id
+                ORDER BY clicks DESC
+                LIMIT 5";
+        return Database::fetchAll($sql);
+    }
+
+    /**
+     * Top bucket dos últimos 7 dias para personalizar o welcome.
+     * Retorna ['title' => string|null, 'type' => string|null, 'clicks' => int].
+     */
+    private function computeTopBucket(): array
+    {
+        $rows = $this->computeHotPath();
+        if (empty($rows)) return ['title' => null, 'type' => null, 'clicks' => 0];
+        return [
+            'title'  => (string) $rows[0]['title'],
+            'type'   => (string) $rows[0]['type'],
+            'clicks' => (int) $rows[0]['clicks'],
+        ];
     }
 
     /**

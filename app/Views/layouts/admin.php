@@ -54,6 +54,22 @@ if ($welcomeShow) {
                 GROUP BY DATE_FORMAT(created_at, '%Y-%m')) t"
         )['c'] ?? 0);
         $welcomeDelta = max(0, $cur - $best);
+
+        // Top bucket dos últimos 7 dias (produto/serviço/promo) pra personalizar título
+        $top = \App\Core\Database::fetch(
+            "SELECT COALESCE(p.name, s.name, pr.title, CONCAT(e.ref_type,':',e.ref_id)) AS title
+             FROM analytics_events e
+             LEFT JOIN products   p  ON e.ref_type='product'   AND p.id  = e.ref_id
+             LEFT JOIN services   s  ON e.ref_type='service'   AND s.id  = e.ref_id
+             LEFT JOIN promotions pr ON e.ref_type='promotion' AND pr.id = e.ref_id
+             WHERE e.event_type IN ('product_click','service_click','promotion_click')
+               AND e.ref_type IN ('product','service','promotion')
+               AND e.created_at >= (NOW() - INTERVAL 7 DAY)
+             GROUP BY e.ref_type, e.ref_id
+             ORDER BY COUNT(*) DESC
+             LIMIT 1"
+        );
+        if (!empty($top['title'])) $welcomeTop = htmlspecialchars((string) $top['title'], ENT_QUOTES, 'UTF-8');
     } catch (\Throwable $e) { /* segue welcome simples */ }
     unset($_SESSION['_welcome_show']);
 }
@@ -74,6 +90,7 @@ if ($welcomeShow) {
       data-welcome-hit="<?= (int) $welcomeHit ?>"
       data-welcome-streak="<?= (int) $welcomeStreak ?>"
       data-welcome-delta="<?= (int) $welcomeDelta ?>"
+      data-welcome-top="<?= $welcomeTop ?>"
       data-csrf="<?= e(\App\Core\Csrf::token()) ?>">
 
 <div class="admin-shell">

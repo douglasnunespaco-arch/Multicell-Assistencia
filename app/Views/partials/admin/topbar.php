@@ -8,6 +8,15 @@
     </div>
     <div class="admin-topbar__actions">
         <button type="button"
+                class="admin-theme-toggle admin-theme-toggle--focus"
+                data-focus-toggle
+                aria-label="Modo foco (oculta sidebar)"
+                aria-pressed="false"
+                data-testid="admin-focus-toggle"
+                title="Modo foco · tecla F">
+            <span aria-hidden="true"><?= icon('search', 16) ?></span>
+        </button>
+        <button type="button"
                 class="admin-theme-toggle"
                 data-admin-theme-toggle
                 aria-label="Alternar tema"

@@ -98,6 +98,7 @@
         var hitGoal = document.body.getAttribute('data-welcome-hit') === '1';
         var streak = parseInt(document.body.getAttribute('data-welcome-streak') || '0', 10);
         var delta  = parseInt(document.body.getAttribute('data-welcome-delta')  || '0', 10);
+        var top    = document.body.getAttribute('data-welcome-top') || '';
 
         var subParts = ['Olá, <strong>' + name + '</strong> · seu painel está pronto.'];
         var extras = '';
@@ -125,6 +126,7 @@
                 '</div>' +
                 '<h2 class="mc-welcome__title">' + (celebrate ? 'Você está em chamas!' : 'Bem-vindo de volta') + '</h2>' +
                 '<p class="mc-welcome__sub">' + subParts.join(' ') + '</p>' +
+                (top ? '<p class="mc-welcome__top"><span>★</span> Destaque da semana: <strong>' + top.replace(/[<>]/g,'') + '</strong></p>' : '') +
                 (extras ? '<div class="mc-welcome__chips">' + extras + '</div>' : '') +
             '</div>' +
             '<div class="mc-welcome__rain" aria-hidden="true"></div>';

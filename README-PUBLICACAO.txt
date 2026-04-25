@@ -14,3 +14,7 @@ Observações:
 - Não há debug público.
 - O site funciona em modo fallback visual até o banco ser configurado.
 - Para produção real, substitua os placeholders de WhatsApp e revise os textos.
+
+Cron sugerido (resumo semanal por email · segunda 9h):
+0 9 * * 1 /usr/bin/php /home/USUARIO/public_html/app/Console/WeeklyDigest.php >> /home/USUARIO/public_html/storage/logs/digest.log 2>&1
+(adicione no Hostinger via hPanel → Avançado → Tarefas Cron)
