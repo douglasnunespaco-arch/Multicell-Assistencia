@@ -5,6 +5,7 @@ use App\Core\View;
 use App\Core\Auth;
 use App\Core\Csrf;
 use App\Core\Flash;
+use App\Models\AdminPref;
 use App\Models\Setting;
 
 /**
@@ -46,5 +47,28 @@ final class ThemeController
             Flash::success('Tema atualizado.');
         } catch (\Throwable $e) { Flash::error($e->getMessage()); }
         header('Location: /admin/theme'); exit;
+    }
+
+    /**
+     * Persiste a preferência de tema do usuário admin logado em
+     * `settings` (chave por user_id). Resposta JSON; chamado em background
+     * pelo topbar quando o admin clica no toggle. Idempotente.
+     */
+    public function preference(): string
+    {
+        Auth::requireLogin(); Csrf::verifyOrFail();
+        header('Content-Type: application/json; charset=utf-8');
+        $u = Auth::user();
+        if (empty($u['id'])) {
+            http_response_code(401);
+            return json_encode(['ok' => false, 'error' => 'unauthorized']);
+        }
+        $pref = trim((string) ($_POST['pref'] ?? ''));
+        if (!AdminPref::setTheme((int) $u['id'], $pref)) {
+            http_response_code(422);
+            return json_encode(['ok' => false, 'error' => 'invalid', 'allowed' => ['dark','light','auto']]);
+        }
+        $_SESSION['theme_pref'] = $pref;
+        return json_encode(['ok' => true, 'pref' => $pref]);
     }
 }

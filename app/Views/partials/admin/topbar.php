@@ -57,10 +57,15 @@
     }
 
     var saved;
-    try { saved = localStorage.getItem(PREF); } catch (e) {}
-    if (saved !== 'light' && saved !== 'dark' && saved !== 'auto') {
-        // Compat com versão anterior
-        try { saved = localStorage.getItem(KEY) === 'light' ? 'light' : 'dark'; } catch (e) { saved = 'dark'; }
+    // Prioridade: SSR (vindo do servidor, dado oficial) > localStorage > default
+    var ssr = root.getAttribute('data-theme-pref');
+    if (ssr === 'light' || ssr === 'dark' || ssr === 'auto') {
+        saved = ssr;
+    } else {
+        try { saved = localStorage.getItem(PREF); } catch (e) {}
+        if (saved !== 'light' && saved !== 'dark' && saved !== 'auto') {
+            try { saved = localStorage.getItem(KEY) === 'light' ? 'light' : 'dark'; } catch (e) { saved = 'dark'; }
+        }
     }
     applyEffective(saved);
 
@@ -77,6 +82,14 @@
         var cur = root.getAttribute('data-theme-pref') || 'dark';
         var next = cur === 'dark' ? 'light' : (cur === 'light' ? 'auto' : 'dark');
         applyEffective(next);
+        // Persiste no servidor (silencioso · não bloqueia UX)
+        try {
+            var csrf = document.body.getAttribute('data-csrf') || '';
+            var fd = new FormData();
+            fd.append('_csrf', csrf);
+            fd.append('pref', next);
+            fetch('/admin/theme/preference', { method: 'POST', body: fd, credentials: 'same-origin' });
+        } catch (err) { /* offline ou csrf indisponível: localStorage cobre */ }
     });
 
     // Eventos vindos da página /admin/theme (radios)

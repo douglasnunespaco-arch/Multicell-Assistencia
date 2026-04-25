@@ -91,7 +91,67 @@ final class DashboardController
             'recent'       => $recent,
             'rankings'     => $rankings,
             'achievements' => $this->computeAchievements(),
+            'streak'       => $this->computeStreak(),
+            'monthly_lead' => $this->computeMonthlyLead(),
         ], 'admin');
+    }
+
+    /**
+     * Streak = dias consecutivos (últimos 90) onde o total de cliques diários
+     * atingiu/superou a meta diária (`goal_clicks_day`). Retorna [days=>int].
+     * Anda de hoje pra trás, para no primeiro dia que não bate.
+     */
+    private function computeStreak(): array
+    {
+        $goal = max(1, (int) Setting::get('goal_clicks_day', '20'));
+        $in = "'" . implode("','", self::CLICK_EVENTS) . "'";
+        $rows = Database::fetchAll(
+            "SELECT DATE(created_at) AS d, COUNT(*) AS c
+             FROM analytics_events
+             WHERE event_type IN ($in)
+               AND created_at >= (CURDATE() - INTERVAL 90 DAY)
+             GROUP BY DATE(created_at)"
+        );
+        $map = [];
+        foreach ($rows as $r) $map[(string) $r['d']] = (int) $r['c'];
+
+        $days = 0;
+        $cursor = new \DateTimeImmutable('today');
+        for ($i = 0; $i < 90; $i++) {
+            $key = $cursor->format('Y-m-d');
+            $count = $map[$key] ?? 0;
+            // Permite começar streak hoje OU ontem (caso ainda não tenha cliques hoje).
+            if ($i === 0 && $count < $goal) {
+                $cursor = $cursor->modify('-1 day'); continue;
+            }
+            if ($count >= $goal) { $days++; $cursor = $cursor->modify('-1 day'); }
+            else break;
+        }
+        return ['days' => $days, 'goal' => $goal];
+    }
+
+    /**
+     * Biggest monthly delta = quantos cliques o mês corrente está acima
+     * (ou abaixo) do melhor mês histórico anterior. Se positivo, é uma
+     * conquista digna de mostrar no welcome.
+     */
+    private function computeMonthlyLead(): array
+    {
+        $in = "'" . implode("','", self::CLICK_EVENTS) . "'";
+        $cur = (int) (Database::fetch(
+            "SELECT COUNT(*) AS c FROM analytics_events
+             WHERE event_type IN ($in)
+               AND DATE_FORMAT(created_at, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')"
+        )['c'] ?? 0);
+        $best = (int) (Database::fetch(
+            "SELECT COALESCE(MAX(c), 0) AS c FROM (
+                SELECT COUNT(*) AS c FROM analytics_events
+                WHERE event_type IN ($in)
+                  AND DATE_FORMAT(created_at, '%Y-%m') < DATE_FORMAT(NOW(), '%Y-%m')
+                GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+             ) t"
+        )['c'] ?? 0);
+        return ['current' => $cur, 'best' => $best, 'delta' => $cur - $best];
     }
 
     /**

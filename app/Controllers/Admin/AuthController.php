@@ -69,6 +69,11 @@ final class AuthController
         if (Auth::attempt($email, $password)) {
             unset($_SESSION['_login_attempts'], $_SESSION['_login_lock_until']);
             $_SESSION['_welcome_show'] = 1; // flag consumida no Dashboard para disparar a animação
+            // Carrega preferência de tema persistida no servidor (k/v em settings)
+            $u = \App\Core\Auth::user();
+            if (!empty($u['id'])) {
+                $_SESSION['theme_pref'] = \App\Models\AdminPref::getTheme((int) $u['id'], 'auto');
+            }
             Flash::success('Bem-vindo(a) de volta.');
             header('Location: /admin');
             exit;

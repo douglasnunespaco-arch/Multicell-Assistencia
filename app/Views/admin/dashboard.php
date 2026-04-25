@@ -3,8 +3,19 @@
  * @var array $stats
  * @var array $recent
  * @var array $achievements
+ * @var array $streak
+ * @var array $monthly_lead
  */
 ?>
+<?php if (!empty($streak) && (int)$streak['days'] >= 3): ?>
+<aside class="streak-banner" data-testid="streak-banner" aria-label="Streak de metas">
+    <span class="streak-banner__flame" aria-hidden="true"><?= icon('bolt', 18) ?></span>
+    <div class="streak-banner__copy">
+        <strong><?= (int) $streak['days'] ?> dias seguidos</strong> batendo a meta diária de <?= (int) $streak['goal'] ?> cliques.
+    </div>
+    <a class="streak-banner__cta" href="/admin/leads"><?= icon('arrow-right', 14) ?> ver leads</a>
+</aside>
+<?php endif; ?>
 <?php if (!empty($achievements)): ?>
 <section class="admin-trophies" data-testid="admin-trophies" aria-label="Conquistas recentes">
     <?php foreach ($achievements as $a):
@@ -77,21 +88,21 @@
         <strong class="admin-stat__value"><?= (int) $stats['leads_total'] ?></strong>
         <small class="admin-stat__hint">desde o início</small>
     </a>
-    <div class="admin-stat" data-testid="stat-leads-week">
+    <a class="admin-stat admin-stat--link" href="/admin/leads" data-testid="stat-leads-week">
         <span class="admin-stat__label">Reservas (7 dias)</span>
         <strong class="admin-stat__value"><?= (int) $stats['leads_week'] ?></strong>
         <small class="admin-stat__hint">últimos 7 dias</small>
-    </div>
-    <div class="admin-stat" data-testid="stat-pageviews-today">
+    </a>
+    <a class="admin-stat admin-stat--link" href="/admin/seo" data-testid="stat-pageviews-today">
         <span class="admin-stat__label">Visualizações hoje</span>
         <strong class="admin-stat__value"><?= (int) $stats['pageviews_today'] ?></strong>
         <small class="admin-stat__hint">page views</small>
-    </div>
-    <div class="admin-stat" data-testid="stat-wa-today">
+    </a>
+    <a class="admin-stat admin-stat--link" href="/admin/leads?status=novo" data-testid="stat-wa-today">
         <span class="admin-stat__label">Cliques WhatsApp hoje</span>
         <strong class="admin-stat__value"><?= (int) $stats['wa_clicks_today'] ?></strong>
         <small class="admin-stat__hint">conversões diretas</small>
-    </div>
+    </a>
 </div>
 
 <section class="admin-card" data-testid="recent-leads-card">

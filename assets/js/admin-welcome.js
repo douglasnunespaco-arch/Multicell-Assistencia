@@ -96,17 +96,36 @@
     function start() {
         var name = document.body.getAttribute('data-welcome-name') || 'admin';
         var hitGoal = document.body.getAttribute('data-welcome-hit') === '1';
+        var streak = parseInt(document.body.getAttribute('data-welcome-streak') || '0', 10);
+        var delta  = parseInt(document.body.getAttribute('data-welcome-delta')  || '0', 10);
+
+        var subParts = ['Olá, <strong>' + name + '</strong> · seu painel está pronto.'];
+        var extras = '';
+        if (streak >= 3) {
+            extras += '<span class="mc-welcome__chip mc-welcome__chip--streak">' +
+                '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>' +
+                '<strong>' + streak + ' dias seguidos</strong> batendo a meta' +
+                '</span>';
+        }
+        if (delta > 0) {
+            extras += '<span class="mc-welcome__chip mc-welcome__chip--delta">' +
+                '<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M6 3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1h2.5a1 1 0 0 1 1 1V7a4 4 0 0 1-3.4 3.96A6 6 0 0 1 13 14.92V17h2a2 2 0 0 1 2 2v2H7v-2a2 2 0 0 1 2-2h2v-2.08A6 6 0 0 1 6.9 10.96 4 4 0 0 1 3.5 7V5a1 1 0 0 1 1-1H6V3Z"/></svg>' +
+                'mês atual <strong>+' + delta + ' cliques</strong> acima do recorde' +
+                '</span>';
+        }
+        var celebrate = hitGoal || streak >= 3 || delta > 0;
 
         var layer = document.createElement('div');
-        layer.className = 'mc-welcome' + (hitGoal ? ' is-celebrate' : '');
+        layer.className = 'mc-welcome' + (celebrate ? ' is-celebrate' : '');
         layer.setAttribute('aria-hidden', 'true');
         layer.innerHTML =
             '<div class="mc-welcome__hero">' +
                 '<div class="mc-welcome__badge">' +
                     '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1h2.5a1 1 0 0 1 1 1V7a4 4 0 0 1-3.4 3.96A6 6 0 0 1 13 14.92V17h2a2 2 0 0 1 2 2v2H7v-2a2 2 0 0 1 2-2h2v-2.08A6 6 0 0 1 6.9 10.96 4 4 0 0 1 3.5 7V5a1 1 0 0 1 1-1H6V3Zm0 3H5.5v1a2 2 0 0 0 1.5 1.94V6Zm12 0v2.94A2 2 0 0 0 19.5 7V6H18Z"/></svg>' +
                 '</div>' +
-                '<h2 class="mc-welcome__title">' + (hitGoal ? 'Meta batida! 🎉' : 'Bem-vindo de volta') + '</h2>' +
-                '<p class="mc-welcome__sub">Olá, <strong>' + name + '</strong> · seu painel está pronto.</p>' +
+                '<h2 class="mc-welcome__title">' + (celebrate ? 'Você está em chamas!' : 'Bem-vindo de volta') + '</h2>' +
+                '<p class="mc-welcome__sub">' + subParts.join(' ') + '</p>' +
+                (extras ? '<div class="mc-welcome__chips">' + extras + '</div>' : '') +
             '</div>' +
             '<div class="mc-welcome__rain" aria-hidden="true"></div>';
         document.body.appendChild(layer);
@@ -120,8 +139,8 @@
             if (spawned > Math.floor((DURATION - 1500) / SPAWN_INTERVAL)) clearInterval(iv);
         }, SPAWN_INTERVAL);
 
-        // Confete extra quando bateu meta
-        if (hitGoal) setTimeout(fireConfettiBurst, 400);
+        // Confete extra quando bateu meta OU tem streak/delta
+        if (celebrate) setTimeout(fireConfettiBurst, 400);
 
         // Permite dispensar com clique/Esc
         function dismiss() {

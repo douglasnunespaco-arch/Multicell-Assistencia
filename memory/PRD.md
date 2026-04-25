@@ -6,38 +6,37 @@ PHP 8.2 + MariaDB 10.11 · vanilla HTML/CSS/JS · Sora/Manrope · paleta verde #
 ## Histórico
 
 ### 24/Apr/2026 — Sessão 1: Bug fix admin
-- Inputs brancos da aba Tema corrigidos (use `.admin-input`).
-- Light theme completo no admin via tokens `--admin-*` em `[data-theme="light"]`.
-- Setup de PHP + MariaDB para preview vivo.
-- Login: `admin@multicell.local` / `ChangeMe123!`
+Inputs brancos da Tema corrigidos. Light theme completo no admin via tokens `--admin-*`.
 
 ### 24/Apr/2026 — Sessão 2: UX upgrade
-- **Trofeus**: novo ícone `trophy-solid` (SVG bem desenhado · alças + base + brilho), tile verde com efeito glass shine no hover, card cinza sólido com borda verde no hover, X minimiza (já existia).
-- **Welcome animation pós-login (10s)**: overlay com backdrop blur, badge troféu verde animado, emojis flutuantes (estrelas, troféus, sparkles, raios, coroa, medalha) caindo do topo. Confete extra disparado se a meta diária estiver batida no momento do login. Dispensável com clique/Esc. Respeita `prefers-reduced-motion`. Flag de sessão para mostrar 1× por login.
-- **Theme cards**: substituição do `<select>` por 3 cards visuais Dark/Light/Auto com mini-preview de sidebar + hero + chips. Aplica preview ao vivo ao clicar.
-- **3-state toggle no topbar**: alterna Dark → Light → Auto (segue SO via `prefers-color-scheme`). Persistido em localStorage (`mc_theme_pref`).
-- **Suporte server-side a "auto"**: ThemeController aceita o valor; layout público faz fallback para `dark` em SSR e respeita o tema do SO no client.
-- Settings já estava no padrão (FormField).
+Trofeus refinados, animação welcome 10s, theme cards Dark/Light/Auto, toggle 3-state.
 
-## Arquivos modificados / criados
-- `app/Views/partials/public/icons.php` — `trophy-solid`, `crown`, `sparkle-solid` (filled, sem stroke)
-- `app/Views/admin/dashboard.php` — usa `trophy-solid` no tile
-- `app/Views/admin/theme/index.php` — theme cards Dark/Light/Auto
-- `app/Views/partials/admin/topbar.php` — toggle 3-state com `data-theme-pref`
-- `app/Views/layouts/admin.php` — passa `data-welcome*` para o body, carrega `admin-welcome.js`
-- `app/Views/layouts/public.php` — suporte `data-theme-default="auto"`
-- `app/Controllers/Admin/AuthController.php` — flag `_welcome_show` no login
-- `app/Controllers/Admin/ThemeController.php` — aceita `auto`
-- `assets/css/admin.css` — `.mc-welcome*`, `.theme-cards*`, `.admin-theme-toggle__icon--auto`, refinos `.trophy-card__icon`
-- `assets/js/admin-welcome.js` (novo) — animação 10s com 6 emojis SVG
-- `assets/js/admin.js` — sync color picker
+### 25/Apr/2026 — Sessão 3: Premium polish
+- **Persistência de tema por usuário no servidor** — `App\Models\AdminPref` (novo) usa a tabela `settings` (zero schema change) com chave `admin_pref_theme_user_{id}`. Login carrega para `$_SESSION['theme_pref']`. SSR em `layouts/admin.php` aplica tema correto antes do JS rodar (sem flash). Endpoint `POST /admin/theme/preference` (JSON, CSRF) chamado em background pelo topbar quando admin troca o tema.
+- **Streak counter** — `DashboardController::computeStreak()` calcula dias consecutivos batendo `goal_clicks_day`, limitado a 90 dias (bounded cost). Aparece como banner discreto no topo do dashboard quando streak >= 3, e como chip verde "⚡ N dias seguidos" no welcome.
+- **Maior conquista do mês** — `computeMonthlyLead()` retorna delta entre mês corrente e melhor mês passado. Renderizado como chip dourado "🏆 mês atual +X cliques acima do recorde" no welcome quando delta > 0.
+- **Welcome enriquecido** — título muda para "Você está em chamas!" se houver streak/delta/hit. Chips com stagger animation (delay 0.35s). Confete dispara em qualquer celebração.
+- **WCAG no light** — refinos de contraste em `.admin-tag--*` (5 status) e `.admin-flash--*` (4 níveis) atingindo 4.5:1+ via texto mais escuro (#075c3a, #5a3a00, #053f28, #173f80, #7a0a25). Foco visível em botões/filtros.
+- **Mini-CTAs no dashboard** — todos os 6 stat cards agora são `<a>` clicáveis: leads_new → `/admin/leads?status=novo`, leads_today/total/week → `/admin/leads`, pageviews → `/admin/seo`, wa_clicks → `/admin/leads?status=novo`. Streak banner tem CTA "→ ver leads".
+
+## Arquivos modificados / criados (sessão 3)
+- `app/Models/AdminPref.php` — **NOVO** (~32 linhas). Wrapper de pref por usuário sobre `settings`.
+- `app/Controllers/Admin/AuthController.php` — popula `$_SESSION['theme_pref']` no login
+- `app/Controllers/Admin/ThemeController.php` — método `preference()` JSON
+- `app/Controllers/Admin/DashboardController.php` — `computeStreak()` + `computeMonthlyLead()`
+- `app/routes.php` — rota `POST /admin/theme/preference`
+- `app/Views/layouts/admin.php` — SSR do tema + data-welcome-streak/delta no body + data-csrf
+- `app/Views/partials/admin/topbar.php` — fetch silencioso ao toggle, prioriza SSR sobre localStorage
+- `app/Views/admin/dashboard.php` — streak-banner + stats todos como `<a>`
+- `assets/js/admin-welcome.js` — chips de streak e delta com stagger
+- `assets/css/admin.css` — `.streak-banner*`, `.mc-welcome__chip*`, refinos WCAG light
 
 ## Backlog
-- P1 · Persistir preferência de tema do admin **por usuário no servidor** (hoje: localStorage no client).
-- P1 · Validar WCAG real dos badges de status no light theme com ferramenta automática.
-- P2 · Personalizar mensagem do welcome com a maior conquista do mês ("você bateu o recorde mensal!").
-- P2 · Adicionar contador de "dias seguidos sem queda de cliques" no welcome (gamification).
-- P2 · Botão "Repetir animação" em desenvolvimento, escondido em produção.
+- P2 · Personalizar título do welcome com nome de produto/serviço top do mês
+- P2 · "Hot path" → mostrar no dashboard qual produto/serviço mais converte na semana
+- P2 · Notificação push quando novo recorde é batido (web push API)
+- P2 · Modo "foco" do dashboard (esconde sidebar e dá fullwidth aos cards)
 
-## URL preview
-https://d7099f3a-94fe-4a54-a29e-10d9871d55c8.preview.emergentagent.com/admin/login
+## Login (preview)
+- URL: https://d7099f3a-94fe-4a54-a29e-10d9871d55c8.preview.emergentagent.com/admin/login
+- E-mail: `admin@multicell.local` · Senha: `ChangeMe123!`
