@@ -12,15 +12,21 @@ $v = fn(string $k, string $default = '') => (string) ($values[$k] ?? $default);
         <?= \App\Core\Csrf::field() ?>
 
         <div class="admin-form__row">
-            <div class="admin-form__field">
+            <div class="admin-field">
                 <label for="brand_color">Cor primária (hex)</label>
-                <input type="text" id="brand_color" name="brand_color" value="<?= e($v('brand_color', '#14F195')) ?>" placeholder="#14F195" pattern="^#[0-9a-fA-F]{6}$">
-                <small>Ex.: <code>#14F195</code>. Aplicada como <code>--brand</code> no CSS.</small>
+                <div class="admin-color-field">
+                    <input type="color" class="admin-color-swatch" id="brand_color_picker" value="<?= e($v('brand_color', '#14F195')) ?>" data-color-target="brand_color" aria-label="Selecionar cor primária">
+                    <input type="text" class="admin-input" id="brand_color" name="brand_color" value="<?= e($v('brand_color', '#14F195')) ?>" placeholder="#14F195" pattern="^#[0-9a-fA-F]{6}$" data-color-input>
+                </div>
+                <small class="admin-field__hint">Ex.: <code>#14F195</code>. Aplicada como <code>--brand</code> no CSS.</small>
             </div>
-            <div class="admin-form__field">
+            <div class="admin-field">
                 <label for="brand_color_ink">Cor do texto sobre o brand</label>
-                <input type="text" id="brand_color_ink" name="brand_color_ink" value="<?= e($v('brand_color_ink', '#0A0A0B')) ?>" placeholder="#0A0A0B" pattern="^#[0-9a-fA-F]{6}$">
-                <small>Usado em botões primários (texto). Normalmente preto ou branco.</small>
+                <div class="admin-color-field">
+                    <input type="color" class="admin-color-swatch" id="brand_color_ink_picker" value="<?= e($v('brand_color_ink', '#0A0A0B')) ?>" data-color-target="brand_color_ink" aria-label="Selecionar cor de texto">
+                    <input type="text" class="admin-input" id="brand_color_ink" name="brand_color_ink" value="<?= e($v('brand_color_ink', '#0A0A0B')) ?>" placeholder="#0A0A0B" pattern="^#[0-9a-fA-F]{6}$" data-color-input>
+                </div>
+                <small class="admin-field__hint">Usado em botões primários (texto). Normalmente preto ou branco.</small>
             </div>
         </div>
 

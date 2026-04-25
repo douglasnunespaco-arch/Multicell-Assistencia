@@ -20,18 +20,18 @@ $row = $row ?? ['title'=>'','content'=>'','image_path'=>null,'layout'=>'image-le
             'full'        => 'Apenas texto (full width)',
         ]) ?>
         <?php if (!empty($row['image_path'])): ?>
-            <div class="admin-form__field">
+            <div class="admin-field">
                 <label>Imagem atual</label>
-                <div style="display:flex;align-items:center;gap:12px">
-                    <img src="<?= e($row['image_path']) ?>" alt="" style="width:120px;height:80px;object-fit:cover;border-radius:6px">
-                    <label style="font-size:13px"><input type="checkbox" name="image_remove" value="1"> Remover imagem</label>
+                <div class="admin-field__current">
+                    <img src="<?= e($row['image_path']) ?>" alt="" loading="lazy">
+                    <label class="admin-checkbox admin-checkbox--sm"><input type="checkbox" name="image_remove" value="1"><span>Remover imagem atual</span></label>
                 </div>
             </div>
         <?php endif; ?>
-        <div class="admin-form__field">
+        <div class="admin-field">
             <label for="image">Substituir/Enviar imagem</label>
-            <input type="file" id="image" name="image" accept="image/*">
-            <small>Opcional. JPG/PNG/WebP até 5 MB.</small>
+            <input type="file" class="admin-input admin-input--file" id="image" name="image" accept="image/*">
+            <small class="admin-field__hint">Opcional. JPG/PNG/WebP até 5 MB.</small>
         </div>
         <div class="admin-form__row">
             <?= F::number('sort_order', 'Ordem', $row['sort_order']) ?>

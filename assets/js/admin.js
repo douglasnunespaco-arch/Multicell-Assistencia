@@ -46,4 +46,16 @@
             reader.readAsDataURL(file);
         });
     });
+
+    // Sincroniza color picker <-> input hex (campos de tema)
+    document.querySelectorAll('input[type="color"][data-color-target]').forEach(function (picker) {
+        var targetId = picker.getAttribute('data-color-target');
+        var target = document.getElementById(targetId);
+        if (!target) return;
+        picker.addEventListener('input', function () { target.value = picker.value.toUpperCase(); });
+        target.addEventListener('input', function () {
+            var v = (target.value || '').trim();
+            if (/^#[0-9a-fA-F]{6}$/.test(v)) picker.value = v;
+        });
+    });
 })();
