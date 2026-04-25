@@ -150,6 +150,22 @@ final class DashboardController
         );
 
         $goal = max(1, (int) Setting::get('goal_clicks_day', '20'));
+
+        // Sparkline · 7 últimos dias de cliques (ordem cronológica)
+        $startWeek = date('Y-m-d 00:00:00', strtotime('-6 days'));
+        $rows = Database::fetchAll(
+            "SELECT DATE(created_at) d, COUNT(*) c FROM analytics_events
+             WHERE event_type IN ($in) AND created_at >= :s
+             GROUP BY DATE(created_at)",
+            [':s' => $startWeek]
+        );
+        $map = []; foreach ($rows as $r) $map[(string) $r['d']] = (int) $r['c'];
+        $spark = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $k = date('Y-m-d', strtotime("-$i days"));
+            $spark[] = (int) ($map[$k] ?? 0);
+        }
+
         return [
             'clicks'        => $clicks,
             'leads'         => $leads,
@@ -159,6 +175,7 @@ final class DashboardController
             'goal'          => $goal,
             'goal_hit'      => $clicks >= $goal,
             'show'          => ($clicks > 0 || $leads > 0),
+            'spark'         => $spark,
         ];
     }
 

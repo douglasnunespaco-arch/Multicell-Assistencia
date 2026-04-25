@@ -1606,3 +1606,23 @@ textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit;
 [data-theme="light"] .yesterday-recap__delta { background: rgba(10,10,11,.05); color: var(--admin-text-3); }
 [data-theme="light"] .yesterday-recap__delta--up   { background: rgba(15,184,120,.16); color: #0a7a4d; }
 [data-theme="light"] .yesterday-recap__delta--down { background: rgba(196,28,57,.10);  color: #a01030; }
+
+.yesterday-recap__spark {
+    display: inline-flex; align-items: center;
+    margin: 0 4px 0 -2px;
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: rgba(20,241,149,.06);
+    border: 1px solid rgba(20,241,149,.18);
+    transition: border-color .2s ease, transform .2s ease;
+}
+.yesterday-recap__spark:hover { border-color: rgba(20,241,149,.45); transform: translateY(-1px); }
+.yesterday-recap__spark svg { display: block; }
+[data-theme="light"] .yesterday-recap__spark {
+    background: rgba(15,184,120,.07);
+    border-color: rgba(15,184,120,.25);
+}
+[data-theme="light"] .yesterday-recap__spark svg polyline { stroke: #0fb878; }
+[data-theme="light"] .yesterday-recap__spark svg circle   { fill:   #0fb878; }
+[data-theme="light"] .yesterday-recap__spark svg polygon  { fill:   url(#sparkFill); }
+

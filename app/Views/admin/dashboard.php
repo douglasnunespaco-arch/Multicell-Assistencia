@@ -27,6 +27,33 @@
 ?>
 <aside class="yesterday-recap<?= $yesterday['goal_hit'] ? ' is-hit' : '' ?>" data-testid="yesterday-recap" aria-label="Recap de ontem">
     <span class="yesterday-recap__label" aria-hidden="true">📅 Ontem</span>
+    <?php if (!empty($yesterday['spark'])):
+        $vals = $yesterday['spark']; $max = max($vals); $max = $max < 1 ? 1 : $max;
+        $W = 84; $H = 24; $n = count($vals); $step = $n > 1 ? ($W / ($n - 1)) : 0;
+        $pts = []; $areaPts = ["0,$H"];
+        foreach ($vals as $i => $v) {
+            $x = round($i * $step, 2);
+            $y = round($H - (($v / $max) * ($H - 4)) - 2, 2);
+            $pts[] = "$x,$y"; $areaPts[] = "$x,$y";
+        }
+        $areaPts[] = "$W,$H";
+        $line = implode(' ', $pts);
+        $area = implode(' ', $areaPts);
+        $lastV = end($vals); $lastX = round(($n - 1) * $step, 2);
+        $lastY = round($H - (($lastV / $max) * ($H - 4)) - 2, 2);
+    ?>
+    <span class="yesterday-recap__spark" title="cliques nos últimos 7 dias">
+        <svg viewBox="0 0 <?= $W ?> <?= $H ?>" width="<?= $W ?>" height="<?= $H ?>" aria-hidden="true">
+            <defs><linearGradient id="sparkFill" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#14F195" stop-opacity=".35"/>
+                <stop offset="100%" stop-color="#14F195" stop-opacity="0"/>
+            </linearGradient></defs>
+            <polygon points="<?= e($area) ?>" fill="url(#sparkFill)"/>
+            <polyline points="<?= e($line) ?>" fill="none" stroke="#14F195" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="<?= $lastX ?>" cy="<?= $lastY ?>" r="2.2" fill="#14F195"/>
+        </svg>
+    </span>
+    <?php endif; ?>
     <span class="yesterday-recap__pill">
         <strong><?= (int) $yesterday['clicks'] ?></strong> cliques
         <span class="yesterday-recap__delta yesterday-recap__delta--<?= $deltaTone($yesterday['clicks_delta']) ?>" title="vs anteontem">
