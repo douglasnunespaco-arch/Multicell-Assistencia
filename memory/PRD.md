@@ -5,6 +5,9 @@ PHP 8.2 + MariaDB 10.11 · vanilla HTML/CSS/JS · Sora/Manrope · paleta verde #
 
 ## Histórico
 
+### 25/Apr/2026 — Sessão 5: Yesterday recap (hábito diário)
+- **Mini relatório de ontem** — faixa compacta no topo do dashboard com clicks + reservas + top item + status da meta. Single render, query bounded. Aparece só se houve atividade (clicks > 0 OU leads > 0). Estilo light/dark com pill verde quando meta batida. `DashboardController::computeYesterdayRecap()`.
+
 ### 25/Apr/2026 — Sessão 4: Retenção & gamification
 - **Hot path · 7 dias** — novo card no dashboard com top 5 produtos/serviços/promoções mais clicados, com link direto pra editar. Single SQL com LEFT JOIN nas 3 tabelas + GROUP BY + LIMIT 5 (bounded cost). `DashboardController::computeHotPath()`.
 - **Welcome personalizado com top bucket** — query no layout extrai o item mais clicado da semana e injeta como `data-welcome-top`. JS renderiza linha "★ Destaque da semana: **Capa Anti-impacto Premium**" no overlay.

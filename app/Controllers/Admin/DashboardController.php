@@ -95,7 +95,57 @@ final class DashboardController
             'monthly_lead' => $this->computeMonthlyLead(),
             'hot_path'     => $this->computeHotPath(),
             'top_bucket'   => $this->computeTopBucket(),
+            'yesterday'    => $this->computeYesterdayRecap(),
         ], 'admin');
+    }
+
+    /**
+     * Recap de ontem · clicks + leads + top item + meta. Aparece como faixa
+     * compacta no topo do dashboard pra reforçar hábito diário. Renderiza
+     * só se houver atividade (clicks>0 OU leads>0).
+     */
+    private function computeYesterdayRecap(): array
+    {
+        $in = "'" . implode("','", self::CLICK_EVENTS) . "'";
+        $start = date('Y-m-d 00:00:00', strtotime('-1 day'));
+        $end   = date('Y-m-d 23:59:59', strtotime('-1 day'));
+
+        $clicks = (int) (Database::fetch(
+            "SELECT COUNT(*) c FROM analytics_events
+             WHERE event_type IN ($in) AND created_at BETWEEN :a AND :b",
+            [':a' => $start, ':b' => $end]
+        )['c'] ?? 0);
+
+        $leads = (int) (Database::fetch(
+            "SELECT COUNT(*) c FROM lead_reservations
+             WHERE created_at BETWEEN :a AND :b",
+            [':a' => $start, ':b' => $end]
+        )['c'] ?? 0);
+
+        $top = Database::fetch(
+            "SELECT COALESCE(p.name, s.name, pr.title, CONCAT(e.ref_type,':',e.ref_id)) AS title
+             FROM analytics_events e
+             LEFT JOIN products   p  ON e.ref_type='product'   AND p.id  = e.ref_id
+             LEFT JOIN services   s  ON e.ref_type='service'   AND s.id  = e.ref_id
+             LEFT JOIN promotions pr ON e.ref_type='promotion' AND pr.id = e.ref_id
+             WHERE e.event_type IN ('product_click','service_click','promotion_click')
+               AND e.ref_type IN ('product','service','promotion')
+               AND e.created_at BETWEEN :a AND :b
+             GROUP BY e.ref_type, e.ref_id
+             ORDER BY COUNT(*) DESC
+             LIMIT 1",
+            [':a' => $start, ':b' => $end]
+        );
+
+        $goal = max(1, (int) Setting::get('goal_clicks_day', '20'));
+        return [
+            'clicks'   => $clicks,
+            'leads'    => $leads,
+            'top'      => $top['title'] ?? null,
+            'goal'     => $goal,
+            'goal_hit' => $clicks >= $goal,
+            'show'     => ($clicks > 0 || $leads > 0),
+        ];
     }
 
     /**

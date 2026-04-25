@@ -5,8 +5,24 @@
  * @var array $achievements
  * @var array $streak
  * @var array $monthly_lead
+ * @var array $yesterday
  */
 ?>
+<?php if (!empty($yesterday['show'])): ?>
+<aside class="yesterday-recap<?= $yesterday['goal_hit'] ? ' is-hit' : '' ?>" data-testid="yesterday-recap" aria-label="Recap de ontem">
+    <span class="yesterday-recap__label" aria-hidden="true">📅 Ontem</span>
+    <span class="yesterday-recap__pill"><strong><?= (int) $yesterday['clicks'] ?></strong> cliques</span>
+    <span class="yesterday-recap__pill"><strong><?= (int) $yesterday['leads'] ?></strong> reservas</span>
+    <?php if (!empty($yesterday['top'])): ?>
+        <span class="yesterday-recap__pill yesterday-recap__pill--top">top: <strong><?= e($yesterday['top']) ?></strong></span>
+    <?php endif; ?>
+    <?php if ($yesterday['goal_hit']): ?>
+        <span class="yesterday-recap__pill yesterday-recap__pill--hit">meta batida 🎯</span>
+    <?php else: ?>
+        <span class="yesterday-recap__pill yesterday-recap__pill--miss">meta: <?= (int) $yesterday['goal'] ?></span>
+    <?php endif; ?>
+</aside>
+<?php endif; ?>
 <?php if (!empty($streak) && (int)$streak['days'] >= 3): ?>
 <aside class="streak-banner" data-testid="streak-banner" aria-label="Streak de metas">
     <span class="streak-banner__flame" aria-hidden="true"><?= icon('bolt', 18) ?></span>

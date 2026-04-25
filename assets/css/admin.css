@@ -1510,3 +1510,80 @@ textarea.admin-input { resize: vertical; min-height: 80px; font-family: inherit;
 [data-theme="light"] .mc-welcome__top { color: #3a3f48; }
 [data-theme="light"] .mc-welcome__top strong { color: #0a7a4d; }
 
+
+/* =====================================================================
+ * Yesterday recap — faixa compacta no topo do dashboard
+ * Aparece só quando houve atividade ontem · reforça hábito diário
+ * ===================================================================== */
+.yesterday-recap {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+    padding: 10px 14px;
+    margin: 0 0 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.03);
+    border: 1px solid var(--border, #22252b);
+    font-size: 13px;
+    color: var(--fg-1, #c5c8cf);
+    animation: yrFade .45s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes yrFade {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: none; }
+}
+.yesterday-recap.is-hit {
+    background: linear-gradient(120deg, rgba(20,241,149,.10), rgba(20,241,149,.02));
+    border-color: rgba(20,241,149,.32);
+}
+.yesterday-recap__label {
+    font-weight: 700;
+    letter-spacing: .02em;
+    color: var(--fg-2, #9aa0a6);
+    margin-right: 4px;
+    flex: 0 0 auto;
+}
+.yesterday-recap__pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.06);
+    font-size: 12.5px; line-height: 1.4;
+    white-space: nowrap;
+}
+.yesterday-recap__pill strong { color: var(--fg-0, #e7e9ee); font-weight: 700; }
+.yesterday-recap__pill--top {
+    max-width: 280px; overflow: hidden; text-overflow: ellipsis;
+}
+.yesterday-recap__pill--top strong { color: var(--brand, #14F195); }
+.yesterday-recap__pill--hit {
+    background: rgba(20,241,149,.14);
+    border-color: rgba(20,241,149,.40);
+    color: #14F195; font-weight: 600;
+}
+.yesterday-recap__pill--miss {
+    color: var(--fg-2, #9aa0a6);
+    font-size: 12px;
+}
+[data-theme="light"] .yesterday-recap {
+    background: rgba(10,10,11,.02);
+    border-color: var(--admin-border);
+    color: var(--admin-text-2);
+}
+[data-theme="light"] .yesterday-recap.is-hit {
+    background: linear-gradient(120deg, rgba(15,184,120,.10), rgba(15,184,120,.02));
+    border-color: rgba(15,184,120,.42);
+}
+[data-theme="light"] .yesterday-recap__label { color: var(--admin-text-3); }
+[data-theme="light"] .yesterday-recap__pill {
+    background: #ffffff;
+    border-color: var(--admin-border);
+}
+[data-theme="light"] .yesterday-recap__pill strong { color: var(--admin-text); }
+[data-theme="light"] .yesterday-recap__pill--top strong { color: #0a7a4d; }
+[data-theme="light"] .yesterday-recap__pill--hit {
+    background: rgba(15,184,120,.14);
+    border-color: rgba(15,184,120,.45);
+    color: #0a7a4d;
+}
+[data-theme="light"] .yesterday-recap__pill--miss { color: var(--admin-text-3); }
+
