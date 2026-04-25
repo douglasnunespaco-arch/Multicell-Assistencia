@@ -109,6 +109,8 @@ final class DashboardController
         $in = "'" . implode("','", self::CLICK_EVENTS) . "'";
         $start = date('Y-m-d 00:00:00', strtotime('-1 day'));
         $end   = date('Y-m-d 23:59:59', strtotime('-1 day'));
+        $startPrev = date('Y-m-d 00:00:00', strtotime('-2 day'));
+        $endPrev   = date('Y-m-d 23:59:59', strtotime('-2 day'));
 
         $clicks = (int) (Database::fetch(
             "SELECT COUNT(*) c FROM analytics_events
@@ -121,6 +123,16 @@ final class DashboardController
              WHERE created_at BETWEEN :a AND :b",
             [':a' => $start, ':b' => $end]
         )['c'] ?? 0);
+
+        // Anteontem (pra delta)
+        $prev = Database::fetch(
+            "SELECT
+                (SELECT COUNT(*) FROM analytics_events
+                 WHERE event_type IN ($in) AND created_at BETWEEN :a1 AND :b1) AS clicks,
+                (SELECT COUNT(*) FROM lead_reservations
+                 WHERE created_at BETWEEN :a2 AND :b2) AS leads",
+            [':a1' => $startPrev, ':b1' => $endPrev, ':a2' => $startPrev, ':b2' => $endPrev]
+        ) ?: ['clicks' => 0, 'leads' => 0];
 
         $top = Database::fetch(
             "SELECT COALESCE(p.name, s.name, pr.title, CONCAT(e.ref_type,':',e.ref_id)) AS title
@@ -139,12 +151,14 @@ final class DashboardController
 
         $goal = max(1, (int) Setting::get('goal_clicks_day', '20'));
         return [
-            'clicks'   => $clicks,
-            'leads'    => $leads,
-            'top'      => $top['title'] ?? null,
-            'goal'     => $goal,
-            'goal_hit' => $clicks >= $goal,
-            'show'     => ($clicks > 0 || $leads > 0),
+            'clicks'        => $clicks,
+            'leads'         => $leads,
+            'clicks_delta'  => $clicks - (int) ($prev['clicks'] ?? 0),
+            'leads_delta'   => $leads - (int) ($prev['leads'] ?? 0),
+            'top'           => $top['title'] ?? null,
+            'goal'          => $goal,
+            'goal_hit'      => $clicks >= $goal,
+            'show'          => ($clicks > 0 || $leads > 0),
         ];
     }
 

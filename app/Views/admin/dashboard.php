@@ -8,11 +8,37 @@
  * @var array $yesterday
  */
 ?>
-<?php if (!empty($yesterday['show'])): ?>
+<?php if (!empty($yesterday['show'])):
+    $deltaTone = function (int $d): string {
+        if ($d > 0) return 'up';
+        if ($d < 0) return 'down';
+        return 'flat';
+    };
+    $deltaArrow = function (int $d): string {
+        if ($d > 0) return '↑';
+        if ($d < 0) return '↓';
+        return '·';
+    };
+    $deltaText = function (int $d): string {
+        if ($d > 0) return '+' . $d;
+        if ($d < 0) return (string) $d;
+        return '0';
+    };
+?>
 <aside class="yesterday-recap<?= $yesterday['goal_hit'] ? ' is-hit' : '' ?>" data-testid="yesterday-recap" aria-label="Recap de ontem">
     <span class="yesterday-recap__label" aria-hidden="true">📅 Ontem</span>
-    <span class="yesterday-recap__pill"><strong><?= (int) $yesterday['clicks'] ?></strong> cliques</span>
-    <span class="yesterday-recap__pill"><strong><?= (int) $yesterday['leads'] ?></strong> reservas</span>
+    <span class="yesterday-recap__pill">
+        <strong><?= (int) $yesterday['clicks'] ?></strong> cliques
+        <span class="yesterday-recap__delta yesterday-recap__delta--<?= $deltaTone($yesterday['clicks_delta']) ?>" title="vs anteontem">
+            <?= $deltaArrow($yesterday['clicks_delta']) ?> <?= $deltaText($yesterday['clicks_delta']) ?>
+        </span>
+    </span>
+    <span class="yesterday-recap__pill">
+        <strong><?= (int) $yesterday['leads'] ?></strong> reservas
+        <span class="yesterday-recap__delta yesterday-recap__delta--<?= $deltaTone($yesterday['leads_delta']) ?>" title="vs anteontem">
+            <?= $deltaArrow($yesterday['leads_delta']) ?> <?= $deltaText($yesterday['leads_delta']) ?>
+        </span>
+    </span>
     <?php if (!empty($yesterday['top'])): ?>
         <span class="yesterday-recap__pill yesterday-recap__pill--top">top: <strong><?= e($yesterday['top']) ?></strong></span>
     <?php endif; ?>
