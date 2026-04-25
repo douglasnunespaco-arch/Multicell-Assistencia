@@ -11,6 +11,12 @@
 $total = max(1, array_sum(array_map(fn($r) => (int)$r['c'], $by_type)));
 // helper donut · 1 anel por tipo
 $donutColors = ['#14F195','#0FD585','#FFD24A','#FFB547','#7fecc0','#2D6CD1','#A77BFF','#FF6B85','#FF9E66','#9aa0a6'];
+// helpers de delta KPI
+$deltaArrow = fn(?int $d): string => $d === null ? '·' : ($d > 0 ? '↑' : ($d < 0 ? '↓' : '·'));
+$deltaTone  = fn(?int $d): string => $d === null ? 'flat' : ($d > 0 ? 'up' : ($d < 0 ? 'down' : 'flat'));
+$deltaText  = fn(?int $d, bool $pp = false): string => $d === null
+    ? '—'
+    : (($d > 0 ? '+' : '') . $d . ($pp ? ' p.p.' : '%'));
 ?>
 <div class="analytics">
     <header class="analytics__head">
@@ -32,31 +38,53 @@ $donutColors = ['#14F195','#0FD585','#FFD24A','#FFB547','#7fecc0','#2D6CD1','#A7
     </header>
 
     <!-- KPI cards -->
+    <?php if (!empty($alert)): ?>
+        <aside class="analytics-alert analytics-alert--<?= e($alert['type']) ?>" role="alert" data-testid="analytics-alert">
+            <span class="analytics-alert__icon" aria-hidden="true"><?= $alert['type'] === 'drop' ? '⚠️' : '🚀' ?></span>
+            <span class="analytics-alert__msg"><?= e($alert['msg']) ?></span>
+        </aside>
+    <?php endif; ?>
+
     <div class="analytics__kpis">
         <article class="analytics-kpi">
             <span class="analytics-kpi__label">Cliques</span>
             <strong class="analytics-kpi__value"><?= number_format($kpis['clicks'], 0, ',', '.') ?></strong>
-            <span class="analytics-kpi__hint">eventos de interação</span>
+            <span class="analytics-kpi__row">
+                <span class="analytics-kpi__hint">eventos de interação</span>
+                <span class="analytics-kpi__delta analytics-kpi__delta--<?= $deltaTone($kpis_delta['clicks']) ?>" title="vs <?= (int) $range ?> dias anteriores"><?= $deltaArrow($kpis_delta['clicks']) ?> <?= e($deltaText($kpis_delta['clicks'])) ?></span>
+            </span>
         </article>
         <article class="analytics-kpi">
             <span class="analytics-kpi__label">Visualizações</span>
             <strong class="analytics-kpi__value"><?= number_format($kpis['pageviews'], 0, ',', '.') ?></strong>
-            <span class="analytics-kpi__hint">page views</span>
+            <span class="analytics-kpi__row">
+                <span class="analytics-kpi__hint">page views</span>
+                <span class="analytics-kpi__delta analytics-kpi__delta--<?= $deltaTone($kpis_delta['pageviews']) ?>" title="vs <?= (int) $range ?> dias anteriores"><?= $deltaArrow($kpis_delta['pageviews']) ?> <?= e($deltaText($kpis_delta['pageviews'])) ?></span>
+            </span>
         </article>
         <article class="analytics-kpi">
             <span class="analytics-kpi__label">Sessões</span>
             <strong class="analytics-kpi__value"><?= number_format($kpis['sessions'], 0, ',', '.') ?></strong>
-            <span class="analytics-kpi__hint">visitantes únicos</span>
+            <span class="analytics-kpi__row">
+                <span class="analytics-kpi__hint">visitantes únicos</span>
+                <span class="analytics-kpi__delta analytics-kpi__delta--<?= $deltaTone($kpis_delta['sessions']) ?>" title="vs <?= (int) $range ?> dias anteriores"><?= $deltaArrow($kpis_delta['sessions']) ?> <?= e($deltaText($kpis_delta['sessions'])) ?></span>
+            </span>
         </article>
         <article class="analytics-kpi">
             <span class="analytics-kpi__label">Leads</span>
             <strong class="analytics-kpi__value"><?= number_format($kpis['leads'], 0, ',', '.') ?></strong>
-            <span class="analytics-kpi__hint">reservas recebidas</span>
+            <span class="analytics-kpi__row">
+                <span class="analytics-kpi__hint">reservas recebidas</span>
+                <span class="analytics-kpi__delta analytics-kpi__delta--<?= $deltaTone($kpis_delta['leads']) ?>" title="vs <?= (int) $range ?> dias anteriores"><?= $deltaArrow($kpis_delta['leads']) ?> <?= e($deltaText($kpis_delta['leads'])) ?></span>
+            </span>
         </article>
         <article class="analytics-kpi analytics-kpi--accent">
             <span class="analytics-kpi__label">Taxa de conversão</span>
             <strong class="analytics-kpi__value"><?= number_format($kpis['conv_rate'], 1, ',', '.') ?>%</strong>
-            <span class="analytics-kpi__hint">leads / cliques</span>
+            <span class="analytics-kpi__row">
+                <span class="analytics-kpi__hint">leads / cliques</span>
+                <span class="analytics-kpi__delta analytics-kpi__delta--<?= $deltaTone((int) $kpis_delta['conv_rate']) ?>" title="vs <?= (int) $range ?> dias anteriores"><?= $deltaArrow((int) $kpis_delta['conv_rate']) ?> <?= e($deltaText((int) $kpis_delta['conv_rate'], true)) ?></span>
+            </span>
         </article>
     </div>
 
@@ -87,18 +115,18 @@ $donutColors = ['#14F195','#0FD585','#FFD24A','#FFB547','#7fecc0','#2D6CD1','#A7
                     <line x1="<?= $padL ?>" y1="<?= $y ?>" x2="<?= $W - 4 ?>" y2="<?= $y ?>" stroke="currentColor" stroke-opacity=".08" stroke-dasharray="3 4"/>
                     <text x="<?= $padL - 6 ?>" y="<?= $y + 3 ?>" text-anchor="end" font-size="10" fill="currentColor" opacity=".55"><?= (int) round($max * $g) ?></text>
                 <?php endforeach; ?>
-                <!-- bars -->
+                <!-- bars (clicáveis · drill-down do dia) -->
                 <?php foreach ($timeline as $i => $r):
                     $h = round(($r['c'] / $max) * $innerH, 1);
                     $x = round($padL + $i * (($innerW) / $n) + 2, 1);
                     $y = round($padT + $innerH - $h, 1);
                     $label = date('d/m', strtotime($r['d']));
                 ?>
-                    <g class="analytics-chart__bar">
+                    <a class="analytics-chart__bar" href="/admin/analytics/day?date=<?= e($r['d']) ?>">
                         <rect x="<?= $x ?>" y="<?= $y ?>" width="<?= round($bw, 1) ?>" height="<?= max($h, 0.5) ?>" rx="2" fill="url(#barFill)">
-                            <title><?= e($label) ?> · <?= (int) $r['c'] ?> cliques</title>
+                            <title><?= e($label) ?> · <?= (int) $r['c'] ?> cliques · clique p/ ver detalhes</title>
                         </rect>
-                    </g>
+                    </a>
                 <?php endforeach; ?>
                 <!-- x labels (sparse) -->
                 <?php
@@ -188,6 +216,55 @@ $donutColors = ['#14F195','#0FD585','#FFD24A','#FFB547','#7fecc0','#2D6CD1','#A7
 
         <!-- Top pages -->
         <section class="admin-card">
+            <header class="admin-card__head">
+                <h2>Top páginas</h2>
+                <small class="admin-card__hint">por page views</small>
+            </header>
+            <?php if (empty($pages)): ?>
+                <p class="admin-empty">Sem page views no período.</p>
+            <?php else:
+                $maxP = max(array_map(fn($r)=>(int)$r['c'], $pages)); ?>
+                <ol class="analytics-bars">
+                    <?php foreach ($pages as $r): $pct = round(((int)$r['c'] / max(1,$maxP)) * 100); ?>
+                        <li class="analytics-bars__row">
+                            <span class="analytics-bars__name" title="<?= e((string)$r['page_path']) ?>"><?= e((string)$r['page_path']) ?></span>
+                            <span class="analytics-bars__track"><span class="analytics-bars__fill" style="width: <?= $pct ?>%"></span></span>
+                            <span class="analytics-bars__val"><?= number_format((int)$r['c'], 0, ',', '.') ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+            <?php endif; ?>
+        </section>
+
+        <!-- Top items -->
+        <section class="admin-card">
+            <header class="admin-card__head">
+                <h2>Top produtos / serviços</h2>
+                <small class="admin-card__hint">cliques nos cards</small>
+            </header>
+            <?php if (empty($items)): ?>
+                <p class="admin-empty">Sem cliques em produtos/serviços/promoções no período.</p>
+            <?php else:
+                $maxI = max(array_map(fn($r)=>(int)$r['clicks'], $items));
+                $typeRoute = ['product' => '/admin/products', 'service' => '/admin/services', 'promotion' => '/admin/promotions'];
+            ?>
+                <ol class="analytics-bars">
+                    <?php foreach ($items as $r):
+                        $pct = round(((int)$r['clicks'] / max(1,$maxI)) * 100);
+                        $href = ($typeRoute[$r['type']] ?? '/admin') . (!empty($r['id']) ? '/' . (int)$r['id'] . '/edit' : '');
+                    ?>
+                        <li class="analytics-bars__row">
+                            <a class="analytics-bars__name" href="<?= e($href) ?>" title="editar"><?= e((string)$r['title']) ?> <small><?= e((string)$r['type']) ?></small></a>
+                            <span class="analytics-bars__track"><span class="analytics-bars__fill" style="width: <?= $pct ?>%"></span></span>
+                            <span class="analytics-bars__val"><?= number_format((int)$r['clicks'], 0, ',', '.') ?></span>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+            <?php endif; ?>
+        </section>
+    </div>
+</div>
+ <section class="admin-card">
             <header class="admin-card__head">
                 <h2>Top páginas</h2>
                 <small class="admin-card__hint">por page views</small>

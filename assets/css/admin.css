@@ -1769,3 +1769,107 @@ a.analytics-bars__name:hover { color: var(--brand,#14F195); }
 [data-theme="light"] .analytics-bars__fill  { background: linear-gradient(90deg, #0FB878, #0d9d66); }
 [data-theme="light"] .analytics-bars__val   { color: var(--admin-text); }
 
+
+/* =====================================================================
+ * Analytics · KPI deltas + alertas + heatmap
+ * ===================================================================== */
+.analytics-kpi__row {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    margin-top: 2px;
+}
+.analytics-kpi__delta {
+    display: inline-flex; align-items: center; gap: 2px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px; font-weight: 700;
+    background: rgba(255,255,255,.06);
+    color: var(--fg-2,#9aa0a6);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+.analytics-kpi__delta--up   { background: rgba(20,241,149,.18); color: #14F195; }
+.analytics-kpi__delta--down { background: rgba(255,107,133,.16); color: #FF6B85; }
+.analytics-kpi__delta--flat { opacity: .65; }
+[data-theme="light"] .analytics-kpi__delta { background: rgba(10,10,11,.05); color: var(--admin-text-3); }
+[data-theme="light"] .analytics-kpi__delta--up   { background: rgba(15,184,120,.16); color: #0a7a4d; }
+[data-theme="light"] .analytics-kpi__delta--down { background: rgba(196,28,57,.10); color: #a01030; }
+
+/* Alert banner */
+.analytics-alert {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    margin-bottom: 4px;
+    border: 1px solid transparent;
+    animation: yrFade .45s cubic-bezier(.22,1,.36,1) both;
+}
+.analytics-alert__icon { font-size: 22px; flex: 0 0 auto; }
+.analytics-alert__msg  { color: var(--fg-0,#e7e9ee); }
+.analytics-alert--drop {
+    background: rgba(255,107,133,.08);
+    border-color: rgba(255,107,133,.32);
+}
+.analytics-alert--spike {
+    background: rgba(20,241,149,.10);
+    border-color: rgba(20,241,149,.32);
+}
+[data-theme="light"] .analytics-alert__msg { color: var(--admin-text); }
+[data-theme="light"] .analytics-alert--drop {
+    background: rgba(196,28,57,.06);
+    border-color: rgba(196,28,57,.30);
+}
+[data-theme="light"] .analytics-alert--spike {
+    background: rgba(15,184,120,.08);
+    border-color: rgba(15,184,120,.40);
+}
+
+/* Bars clicáveis (drill-down) */
+a.analytics-chart__bar { cursor: pointer; transition: opacity .2s ease; }
+a.analytics-chart__bar:hover rect { opacity: .85; filter: drop-shadow(0 0 8px rgba(20,241,149,.55)); }
+a.analytics-chart__bar:focus { outline: none; }
+a.analytics-chart__bar:focus-visible rect { stroke: #14F195; stroke-width: 1.5; }
+
+/* Heatmap */
+.analytics-heatmap-card .admin-card__head { margin-bottom: 8px; }
+.analytics-heatmap {
+    color: var(--fg-1,#c5c8cf);
+    overflow-x: auto;
+}
+.analytics-heatmap svg rect { transition: filter .2s ease, transform .2s ease; transform-origin: center; transform-box: fill-box; }
+.analytics-heatmap svg rect:hover {
+    filter: drop-shadow(0 0 6px rgba(20,241,149,.6));
+    transform: scale(1.18);
+}
+.analytics-heatmap__legend {
+    display: flex; align-items: center; gap: 4px;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--fg-2,#9aa0a6);
+}
+.analytics-heatmap__legend .hm-leg {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,.06);
+}
+[data-theme="light"] .analytics-heatmap { color: var(--admin-text-2); }
+[data-theme="light"] .analytics-heatmap svg text { fill: var(--admin-text-2); }
+[data-theme="light"] .analytics-heatmap__legend .hm-leg { border-color: rgba(10,10,11,.10); }
+
+/* Tabela de drill-down · ajuste do estilo de tag default */
+.admin-table .admin-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    background: rgba(20,241,149,.10);
+    color: #14F195;
+    border: 1px solid rgba(20,241,149,.30);
+}
+[data-theme="light"] .admin-table .admin-tag {
+    background: rgba(15,184,120,.10);
+    color: #0a7a4d;
+    border-color: rgba(15,184,120,.35);
+}
+

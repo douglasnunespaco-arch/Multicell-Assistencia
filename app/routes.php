@@ -116,6 +116,7 @@ $router->post('/admin/theme/preference',            'Admin\\ThemeController@pref
 $router->get ('/admin/api/achievements',            'Admin\\AchievementsApiController@status');
 $router->get ('/admin/analytics',                   'Admin\\AnalyticsController@index');
 $router->get ('/admin/analytics/export.csv',        'Admin\\AnalyticsController@exportCsv');
+$router->get ('/admin/analytics/day',               'Admin\\AnalyticsController@day');
 
 $router->get ('/admin/seo',                         'Admin\\SeoController@index');
 $router->post('/admin/seo/update',                  'Admin\\SeoController@update');
