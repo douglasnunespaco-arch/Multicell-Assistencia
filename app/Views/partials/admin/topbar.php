@@ -13,9 +13,10 @@
                 aria-label="Alternar tema"
                 aria-pressed="false"
                 data-testid="admin-theme-toggle"
-                title="Alternar tema claro/escuro">
+                title="Alternar tema (claro / escuro / auto)">
             <span class="admin-theme-toggle__icon admin-theme-toggle__icon--moon" aria-hidden="true"><?= icon('moon', 16) ?></span>
             <span class="admin-theme-toggle__icon admin-theme-toggle__icon--sun"  aria-hidden="true"><?= icon('sun',  16) ?></span>
+            <span class="admin-theme-toggle__icon admin-theme-toggle__icon--auto" aria-hidden="true" title="Auto"><?= icon('sparkle', 16) ?></span>
         </button>
         <a href="/" target="_blank" rel="noopener" class="btn btn--ghost btn--sm" data-testid="view-public-site">
             <?= icon('globe', 16) ?> Ver site
@@ -30,26 +31,59 @@
 <script>
 (function () {
     var root = document.documentElement;
-    var KEY = 'mc_theme';
-    var saved = null;
-    try { saved = localStorage.getItem(KEY); } catch (e) {}
-    if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
-    function sync() {
-        var t = root.getAttribute('data-theme') || 'dark';
-        document.querySelectorAll('[data-admin-theme-toggle],[data-theme-toggle]').forEach(function (b) {
-            b.setAttribute('aria-pressed', t === 'light' ? 'true' : 'false');
-            b.setAttribute('aria-label', 'Alternar para tema ' + (t === 'light' ? 'escuro' : 'claro'));
+    var KEY  = 'mc_theme';      // valor efetivo: dark | light
+    var PREF = 'mc_theme_pref'; // preferência do usuário: dark | light | auto
+    var media = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+
+    function applyEffective(pref) {
+        var eff;
+        if (pref === 'auto') eff = (media && media.matches) ? 'dark' : 'light';
+        else eff = (pref === 'light' ? 'light' : 'dark');
+        root.setAttribute('data-theme', eff);
+        root.setAttribute('data-theme-pref', pref);
+        try {
+            localStorage.setItem(KEY, eff);
+            localStorage.setItem(PREF, pref);
+        } catch (e) {}
+        document.querySelectorAll('[data-admin-theme-toggle]').forEach(function (b) {
+            b.setAttribute('aria-pressed', eff === 'light' ? 'true' : 'false');
+            b.setAttribute('aria-label',
+                pref === 'auto' ? 'Tema automático (segue o sistema). Clique para alternar.' :
+                pref === 'light' ? 'Tema claro. Clique para alternar.' : 'Tema escuro. Clique para alternar.');
+            b.setAttribute('title',
+                pref === 'auto' ? 'Auto · segue o SO' :
+                pref === 'light' ? 'Claro' : 'Escuro');
         });
     }
-    sync();
+
+    var saved;
+    try { saved = localStorage.getItem(PREF); } catch (e) {}
+    if (saved !== 'light' && saved !== 'dark' && saved !== 'auto') {
+        // Compat com versão anterior
+        try { saved = localStorage.getItem(KEY) === 'light' ? 'light' : 'dark'; } catch (e) { saved = 'dark'; }
+    }
+    applyEffective(saved);
+
+    if (media && media.addEventListener) {
+        media.addEventListener('change', function () {
+            var cur = root.getAttribute('data-theme-pref') || 'dark';
+            if (cur === 'auto') applyEffective('auto');
+        });
+    }
+
     document.addEventListener('click', function (e) {
         var btn = e.target.closest('[data-admin-theme-toggle]');
         if (!btn) return;
-        var cur = root.getAttribute('data-theme') || 'dark';
-        var next = cur === 'dark' ? 'light' : 'dark';
-        root.setAttribute('data-theme', next);
-        try { localStorage.setItem(KEY, next); } catch (err) {}
-        sync();
+        var cur = root.getAttribute('data-theme-pref') || 'dark';
+        var next = cur === 'dark' ? 'light' : (cur === 'light' ? 'auto' : 'dark');
+        applyEffective(next);
+    });
+
+    // Eventos vindos da página /admin/theme (radios)
+    document.addEventListener('change', function (e) {
+        var input = e.target.closest('input[name="theme_preference"]');
+        if (!input || !input.checked) return;
+        applyEffective(input.value);
     });
 })();
 </script>

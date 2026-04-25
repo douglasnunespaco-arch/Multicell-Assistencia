@@ -11,7 +11,7 @@
         $delta = max(0, (int) $a['value'] - (int) $a['prev']);
     ?>
     <article class="trophy-card" data-testid="trophy-<?= e($a['key']) ?>">
-        <div class="trophy-card__icon" aria-hidden="true"><?= icon('trophy', 26) ?></div>
+        <div class="trophy-card__icon" aria-hidden="true"><?= icon('trophy-solid', 32) ?></div>
         <div class="trophy-card__body">
             <header class="trophy-card__head">
                 <span class="trophy-card__eyebrow"><?= icon('trophy', 12) ?> <?= e(strtoupper($a['eyebrow'])) ?></span>

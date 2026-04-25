@@ -68,6 +68,7 @@ final class AuthController
         // 3. Tenta autenticar
         if (Auth::attempt($email, $password)) {
             unset($_SESSION['_login_attempts'], $_SESSION['_login_lock_until']);
+            $_SESSION['_welcome_show'] = 1; // flag consumida no Dashboard para disparar a animação
             Flash::success('Bem-vindo(a) de volta.');
             header('Location: /admin');
             exit;

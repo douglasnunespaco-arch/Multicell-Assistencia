@@ -60,6 +60,9 @@ if (!function_exists('icon')) {
             'image'      => '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>',
             'award'      => '<circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>',
             'trophy'     => '<path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M17 4h3v3a3 3 0 0 1-3 3M7 4H4v3a3 3 0 0 0 3 3"/>',
+            'trophy-solid' => '<path d="M6 2.75A.75.75 0 0 1 6.75 2h10.5a.75.75 0 0 1 .75.75V4h2.25c.69 0 1.25.56 1.25 1.25V7.5c0 2.45-1.76 4.49-4.08 4.92a6.01 6.01 0 0 1-3.42 3.41V18h2a2 2 0 0 1 2 2v1.25a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V20a2 2 0 0 1 2-2h2v-2.17a6.01 6.01 0 0 1-3.42-3.41C4.26 11.99 2.5 9.95 2.5 7.5V5.25C2.5 4.56 3.06 4 3.75 4H6V2.75ZM6 5.5H4v2c0 1.4.91 2.59 2.17 3.02A6.04 6.04 0 0 1 6 9V5.5Zm14 0h-2V9c0 .52-.06 1.03-.17 1.52A3.18 3.18 0 0 0 20 7.5v-2Z" fill="currentColor"/><path d="M9.25 6.5a.75.75 0 0 1 .75.75c0 .55.32 1.05.84 1.32a.75.75 0 1 1-.68 1.34A2.94 2.94 0 0 1 8.5 7.25a.75.75 0 0 1 .75-.75Z" fill="rgba(255,255,255,.45)"/>',
+            'crown' => '<path d="M3 18h18l-1.5-9-4.5 4.5L12 7l-3 6.5L4.5 9 3 18Z"/><path d="M3 21h18"/>',
+            'sparkle-solid' => '<path d="M12 2 13.6 8.4 20 10l-6.4 1.6L12 18l-1.6-6.4L4 10l6.4-1.6L12 2Zm7 12 .8 3.2 3.2.8-3.2.8L19 22l-.8-3.2L15 18l3.2-.8.8-3.2Z" fill="currentColor"/>',
             'users'      => '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
             'user'       => '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
             'heart'      => '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
@@ -85,10 +88,12 @@ if (!function_exists('icon')) {
         }
 
         // Lucide-style → stroke
-        $isFilled = in_array($name, ['star'], true);
+        $isFilled = in_array($name, ['star', 'trophy-solid', 'sparkle-solid'], true);
         $body = $strokePaths[$name] ?? $strokePaths['sparkle'];
-        $fill = $isFilled ? 'currentColor' : 'none';
-        return '<svg class="' . $class . '" width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="' . $fill . '" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $body . '</svg>';
+        if ($isFilled) {
+            return '<svg class="' . $class . '" width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">' . $body . '</svg>';
+        }
+        return '<svg class="' . $class . '" width="' . $size . '" height="' . $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $body . '</svg>';
     }
 }
 

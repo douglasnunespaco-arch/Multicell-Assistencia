@@ -1,38 +1,43 @@
 # Multi Cell — PRD
 
-## Problema original
-Projeto PHP/MariaDB conectado via GitHub. Pedidos:
-1. No painel admin, padronizar os inputs (não deixar com fundo branco do navegador) — alinhar com o resto do sistema.
-2. Fazer o modo Light funcionar **por completo** no painel admin (e não só em pedaços como trophy-cards).
-3. Disponibilizar preview do site rodando.
-
 ## Stack
-- PHP 8.2 (server embutido) · MariaDB 10.11
-- Frontend: HTML/CSS/JS vanilla (público) + admin com `admin.css`, tokens via `[data-theme]`
-- Sem build step
+PHP 8.2 + MariaDB 10.11 · vanilla HTML/CSS/JS · Sora/Manrope · paleta verde #14F195
 
-## O que foi entregue (24/Apr/2026)
-- **Bug 1 (inputs brancos)** corrigido em `app/Views/admin/theme/index.php` — campos `brand_color` e `brand_color_ink` migrados de `<input>` cru para `<input class="admin-input">` dentro de `.admin-field`. Adicionado color picker nativo (`<input type="color">`) sincronizado via JS.
-- Mesmo tratamento aplicado em `app/Views/admin/about/form.php` (estilos inline migrados para o padrão).
-- **Bug 2 (light theme incompleto)** resolvido em `assets/css/admin.css`:
-  - Tokens locais `--admin-*` declarados em `:root` e sobrescritos em `[data-theme="light"]` (shell, surface, elevate, border, text, input-bg, shadow, row-hover).
-  - Overrides explícitos para sidebar, topbar, cards, stats, tabela, inputs/selects/textareas/file, botões (default/primary/wa/danger), filtros, tags de status, flash, form sections, login, lead detail, period card, roadmap, thumb, paginação.
-  - Tema Light usa paleta verde escurecida (#0fb878) para garantir contraste sobre fundo claro.
-- **Preview vivo**: PHP server na porta 3000 + MariaDB local via supervisor (`/etc/supervisor/conf.d/php-app.conf`). Banco importado de `database/schema.sql` + seeds.
+## Histórico
 
-## Arquivos modificados
-- `app/Views/admin/theme/index.php` — inputs com `.admin-input` + color picker
-- `app/Views/admin/about/form.php` — campos image migrados para padrão `.admin-field`
-- `assets/css/admin.css` — bloco final com tokens `--admin-*` e overrides `[data-theme="light"]`
-- `assets/js/admin.js` — sync color picker ↔ input hex
-- `config/config.php` — gerado para apontar pro MariaDB local
-- `/etc/supervisor/conf.d/php-app.conf` — supervisor para PHP + MariaDB
+### 24/Apr/2026 — Sessão 1: Bug fix admin
+- Inputs brancos da aba Tema corrigidos (use `.admin-input`).
+- Light theme completo no admin via tokens `--admin-*` em `[data-theme="light"]`.
+- Setup de PHP + MariaDB para preview vivo.
+- Login: `admin@multicell.local` / `ChangeMe123!`
 
-## URL de preview
+### 24/Apr/2026 — Sessão 2: UX upgrade
+- **Trofeus**: novo ícone `trophy-solid` (SVG bem desenhado · alças + base + brilho), tile verde com efeito glass shine no hover, card cinza sólido com borda verde no hover, X minimiza (já existia).
+- **Welcome animation pós-login (10s)**: overlay com backdrop blur, badge troféu verde animado, emojis flutuantes (estrelas, troféus, sparkles, raios, coroa, medalha) caindo do topo. Confete extra disparado se a meta diária estiver batida no momento do login. Dispensável com clique/Esc. Respeita `prefers-reduced-motion`. Flag de sessão para mostrar 1× por login.
+- **Theme cards**: substituição do `<select>` por 3 cards visuais Dark/Light/Auto com mini-preview de sidebar + hero + chips. Aplica preview ao vivo ao clicar.
+- **3-state toggle no topbar**: alterna Dark → Light → Auto (segue SO via `prefers-color-scheme`). Persistido em localStorage (`mc_theme_pref`).
+- **Suporte server-side a "auto"**: ThemeController aceita o valor; layout público faz fallback para `dark` em SSR e respeita o tema do SO no client.
+- Settings já estava no padrão (FormField).
+
+## Arquivos modificados / criados
+- `app/Views/partials/public/icons.php` — `trophy-solid`, `crown`, `sparkle-solid` (filled, sem stroke)
+- `app/Views/admin/dashboard.php` — usa `trophy-solid` no tile
+- `app/Views/admin/theme/index.php` — theme cards Dark/Light/Auto
+- `app/Views/partials/admin/topbar.php` — toggle 3-state com `data-theme-pref`
+- `app/Views/layouts/admin.php` — passa `data-welcome*` para o body, carrega `admin-welcome.js`
+- `app/Views/layouts/public.php` — suporte `data-theme-default="auto"`
+- `app/Controllers/Admin/AuthController.php` — flag `_welcome_show` no login
+- `app/Controllers/Admin/ThemeController.php` — aceita `auto`
+- `assets/css/admin.css` — `.mc-welcome*`, `.theme-cards*`, `.admin-theme-toggle__icon--auto`, refinos `.trophy-card__icon`
+- `assets/js/admin-welcome.js` (novo) — animação 10s com 6 emojis SVG
+- `assets/js/admin.js` — sync color picker
+
+## Backlog
+- P1 · Persistir preferência de tema do admin **por usuário no servidor** (hoje: localStorage no client).
+- P1 · Validar WCAG real dos badges de status no light theme com ferramenta automática.
+- P2 · Personalizar mensagem do welcome com a maior conquista do mês ("você bateu o recorde mensal!").
+- P2 · Adicionar contador de "dias seguidos sem queda de cliques" no welcome (gamification).
+- P2 · Botão "Repetir animação" em desenvolvimento, escondido em produção.
+
+## URL preview
 https://d7099f3a-94fe-4a54-a29e-10d9871d55c8.preview.emergentagent.com/admin/login
-
-## Próximos itens (backlog)
-- P1 · Persistir preferência de tema do admin no servidor (hoje só em localStorage).
-- P1 · Validar contraste WCAG dos badges de status no light theme.
-- P2 · Mesmo passe nos forms em `app/Views/admin/settings/index.php`.
-- P2 · Opção "Auto" (segue OS) no toggle do tema.

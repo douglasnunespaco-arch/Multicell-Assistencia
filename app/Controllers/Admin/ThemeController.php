@@ -37,7 +37,7 @@ final class ThemeController
             foreach (self::KEYS as $k) {
                 if (!array_key_exists($k, $_POST)) continue;
                 $v = trim((string) $_POST[$k]);
-                if ($k === 'default_theme' && !in_array($v, ['dark','light'], true)) $v = 'dark';
+                if ($k === 'default_theme' && !in_array($v, ['dark','light','auto'], true)) $v = 'dark';
                 if (($k === 'brand_color' || $k === 'brand_color_ink') && $v !== '' && !preg_match('/^#[0-9a-fA-F]{6}$/', $v)) {
                     throw new \RuntimeException("Cor inválida em {$k}: use formato #RRGGBB");
                 }
