@@ -25,6 +25,9 @@ $donutColors = ['#14F195','#0FD585','#FFD24A','#FFB547','#7fecc0','#2D6CD1','#A7
                 <option value="30" <?= $range === 30 ? 'selected' : '' ?>>Últimos 30 dias</option>
                 <option value="90" <?= $range === 90 ? 'selected' : '' ?>>Últimos 90 dias</option>
             </select>
+            <a class="admin-btn admin-btn--sm" href="/admin/analytics/export.csv?range=<?= (int) $range ?>" data-testid="analytics-export-csv" title="Baixa os eventos brutos do período em CSV (limite 10k linhas)">
+                <?= icon('download', 14) ?> Baixar CSV
+            </a>
         </form>
     </header>
 

@@ -120,4 +120,59 @@ final class AnalyticsController
             'items'      => $items,
         ], 'admin');
     }
+
+    /**
+     * Export CSV — eventos brutos do período (limitado a 10k linhas pra
+     * evitar timeout em hospedagem compartilhada). Charset BOM UTF-8 pra
+     * abrir limpo no Excel pt-BR.
+     */
+    public function exportCsv(): void
+    {
+        Auth::requireLogin();
+        $range = (int) ($_GET['range'] ?? 30);
+        if (!in_array($range, self::ALLOWED_RANGES, true)) $range = 30;
+        $start = date('Y-m-d 00:00:00', strtotime("-" . ($range - 1) . " days"));
+
+        $rows = Database::fetchAll(
+            "SELECT
+                e.created_at        AS data_hora,
+                e.event_type        AS evento,
+                e.page_path         AS pagina,
+                e.ref_type          AS tipo_ref,
+                COALESCE(p.name, s.name, pr.title, '')          AS item,
+                COALESCE(NULLIF(e.source,''), '(direto)')        AS fonte,
+                e.session_id        AS sessao
+             FROM analytics_events e
+             LEFT JOIN products   p  ON e.ref_type='product'   AND p.id  = e.ref_id
+             LEFT JOIN services   s  ON e.ref_type='service'   AND s.id  = e.ref_id
+             LEFT JOIN promotions pr ON e.ref_type='promotion' AND pr.id = e.ref_id
+             WHERE e.created_at >= :s
+             ORDER BY e.created_at DESC
+             LIMIT 10000",
+            [':s' => $start]
+        );
+
+        $filename = 'multicell-analytics-' . $range . 'd-' . date('Ymd-His') . '.csv';
+        header('Content-Type: text/csv; charset=UTF-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Cache-Control: no-store');
+
+        $out = fopen('php://output', 'w');
+        // BOM UTF-8 (Excel pt-BR)
+        fwrite($out, "\xEF\xBB\xBF");
+        fputcsv($out, ['data_hora','evento','pagina','tipo_ref','item','fonte','sessao'], ';');
+        foreach ($rows as $r) {
+            fputcsv($out, [
+                (string) ($r['data_hora'] ?? ''),
+                (string) ($r['evento']    ?? ''),
+                (string) ($r['pagina']    ?? ''),
+                (string) ($r['tipo_ref']  ?? ''),
+                (string) ($r['item']      ?? ''),
+                (string) ($r['fonte']     ?? ''),
+                (string) ($r['sessao']    ?? ''),
+            ], ';');
+        }
+        fclose($out);
+        exit;
+    }
 }

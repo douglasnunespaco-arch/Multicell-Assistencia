@@ -21,6 +21,8 @@ if (!function_exists('icon')) {
             'shield'     => '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
             'shield-check' => '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>',
             'bolt'       => '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+            'chart'      => '<line x1="3" y1="20" x2="21" y2="20"/><rect x="6" y="12" width="3" height="8" rx="1"/><rect x="11" y="6" width="3" height="14" rx="1"/><rect x="16" y="9" width="3" height="11" rx="1"/>',
+            'download'   => '<path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/>',
             'zap'        => '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
             // Navegação / UI
             'menu'       => '<line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/>',
